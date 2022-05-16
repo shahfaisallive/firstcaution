@@ -13,7 +13,8 @@ const Breadcrumbs = ({ level }) => {
                     <ul className="navbar-nav mt-3 ml-2">
                         <li className="nav-item d-flex">
                             <div className='breadcrumb-mark-active justify-content-center d-flex'>
-                                <img src={"/images/check.png"} className="checkicon" alt='check' />
+                                {/* <img src={"/images/check.png"} className="checkicon" alt='check' /> */}
+                                <p className={`${level > 1 ? 'bc-num-active text-center' : 'bc-num-inactive text-center'}`}>1</p>
                             </div>
                             <Link to={"/signup"}><p className='text1'>Introduction</p></Link>
                         </li>

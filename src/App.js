@@ -7,6 +7,7 @@ import Introduction from './components/signup/Introduction';
 import Guarantee from './components/signup/Guarantee';
 import Information from './components/signup/Information';
 import Confirmation from './components/signup/Confirmation';
+import Payment from './components/signup/Payment';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/signup/information" element={<Information />} />
           <Route path="/signup/guarantee" element={<Guarantee />} />
           <Route path="/signup/confirmation" element={<Confirmation />} />
+          <Route path="/signup/payment" element={<Payment />} />
         </Routes>
       </BrowserRouter>
     </div>

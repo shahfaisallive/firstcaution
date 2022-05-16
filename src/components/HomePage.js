@@ -7,7 +7,7 @@ const HomePage = () => {
         <>
             <Navbar />
             <div className='homescreen-wrapper d-flex justify-content-center'>
-                Landing Page content here
+                <p className='display-4 text-center'>Landing Page Content</p>
             </div>
         </>
     )
