@@ -1,0 +1,19 @@
+{
+    "en": {
+        "homepage": {
+            "titletext": "The flexible rental deposit for everyone",
+            "promotext": "*Discount on the 2022 bounty until April 15 2022 with the promo code 'ForABetter2022'",
+            "registerbutton": "Register and Save",
+            "stepstitle": "In just 3 minutes to the rental deposit",
+            "step1": "Enter your current details (address and telephone number).",
+            "step2": "Enter new address, rental deposit, move-in date, promo code",
+            "step3": "Enter new address, rental deposit, move-in date, promo code",
+            "reviewheading": "Reviews",
+            "customerreviews": "Customer Reviews",
+            "getstarted": "Get Started and Save"
+        },
+        "signup":{
+            "heading": "Online Application Rental Guarantee"
+        }
+    }
+}

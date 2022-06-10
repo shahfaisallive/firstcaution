@@ -8,11 +8,13 @@ import { ReactComponent as IG } from "../media/ig.svg";
 import { ReactComponent as LD } from "../media/ld.svg";
 import { ReactComponent as FB } from "../media/fb.svg";
 import { ReactComponent as Presentation } from "../media/presentation.svg";
+import Navbar from './Navbar';
 
 
-const HomePage = () => {
+const HomePage = ({ changeLanguage, language }) => {
     return (
         <div className='homescreen-wrapper justify-content-center'>
+            <Navbar changeLanguage={changeLanguage} />
             <div className='left-design-curve'></div>
             <div className='right-design-curve'></div>
             <div className='container'>
@@ -128,15 +130,15 @@ const HomePage = () => {
                 </div>
 
                 <div className='row d-flex justify-content-center mt-5'>
-                    <IG className='ml-5 mr-5'/>
-                    <LD  className='ml-5 mr-5'/>
-                    <FB className='ml-5 mr-5'/>
+                    <IG className='ml-5 mr-5' />
+                    <LD className='ml-5 mr-5' />
+                    <FB className='ml-5 mr-5' />
                 </div>
             </div>
 
             <div className='row footer-note bg-primary mt-4 d-flex justify-content-center'>
-                    <p className='text-light text-center mt-1'>*This discount cannot be combined with other Firstcaution offers. </p>
-                </div>
+                <p className='text-light text-center mt-1'>*This discount cannot be combined with other Firstcaution offers. </p>
+            </div>
         </div>
     )
 }

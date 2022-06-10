@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 
-const Navbar = () => {
+const Navbar = ({ changeLanguage }) => {
 
     return (
         <nav className={`navbar navbar-expand-lg navbar-light fixed-top navbar-wrap`}>
@@ -13,12 +13,18 @@ const Navbar = () => {
                 </button>
                 <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul className="navbar-nav mt-3">
+                        <li className="nav-item mr-3">
+                            <NavLink to='' className="text-dark"><p>About Us</p></NavLink>
+                        </li>
+                        <li className="nav-item mr-3">
+                            <NavLink to='' className="text-dark"><p>Partner</p></NavLink>
+                        </li>
                         <li className="nav-item">
-                            <select name="language" id="language">
-                                <option value="english" selected>EN</option>
-                                <option value="german">DE</option>
-                                <option value="italian">IT</option>
-                                <option value="french">FR</option>
+                            <select name="language" id="language" onChange={(e) => changeLanguage(e.target.value)}>
+                                <option value="en">EN</option>
+                                <option value="de">DE</option>
+                                <option value="it">IT</option>
+                                <option value="fr">FR</option>
                             </select>
                         </li>
                         <li className="nav-item">
