@@ -6,10 +6,10 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Information = ({ setFormData }) => {
+    const urlParams = new URLSearchParams(window.location.search)
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
-    const [data, setData] = useState(null)
     // Data stored from APIs
     const [civilities, setCivilities] = useState([])
     const [countries, setCountries] = useState([])
@@ -29,6 +29,8 @@ const Information = ({ setFormData }) => {
     const [mobile, setMobile] = useState()
     const [number, setNumber] = useState("")
     const [email, setEmail] = useState("")
+    const [utmSource, setUtmSource] = useState("")
+    const [utmMedium, setUtmMedium] = useState("")
 
 
     const nextPageHandler = () => {
@@ -45,6 +47,8 @@ const Information = ({ setFormData }) => {
         localStorage.setItem('mobile', mobile);
         localStorage.setItem('number', number);
         localStorage.setItem('email', email);
+        localStorage.setItem('utmSource', utmSource);
+        localStorage.setItem('utmMedium', utmMedium);
 
         navigate("/signup/guarantee")
     }
@@ -63,6 +67,10 @@ const Information = ({ setFormData }) => {
 
         getFormData()
 
+        setUtmSource(urlParams.get('utm_source'))
+        setUtmMedium(urlParams.get('utm_medium'))
+        console.log(urlParams.get('utm_source'))
+
     }, [])
 
 
@@ -72,95 +80,104 @@ const Information = ({ setFormData }) => {
             <Link to={"/signup"}><p className='previous-text'>&lt;  Previous </p></Link>
 
             <div className='row'>
-                <div className='col-sm-8 form-div mt-3'>
-                    <p className='form-text1'>We just need some information</p>
-                    <div className="form-group mt-4">
-                        <label htmlFor="civility" className='form-label'>Civility</label>
-                        <select className="form-control" id="civility" onChange={(e => setCivility(e.target.value))}>
-                            {civilities.map((civility) => <option value={civility.value} key={civility.value}>{civility.label}</option>
-                            )}
-                        </select>
+                {loading ? <div className='col-sm-8 d-flex justify-content-center form-div mt-3'>
+                    <div className="spinner-border" role="status">
+                        <span className="sr-only">Loading...</span>
                     </div>
-                    <div className='row d-flex justify-content-start mt-1'>
-                        <div className="form-group col-6">
-                            <label htmlFor="firstname" className='form-label'>First Name</label>
-                            <input type="text" className="form-control" id="firstname" onChange={(e => setFirstName(e.target.value))} />
-                        </div>
-                        <div className="form-group col-6">
-                            <label htmlFor="lastname" className='form-label'>Last Name</label>
-                            <input type="text" className="form-control" id="lastname" onChange={(e => setLastName(e.target.value))} />
-                        </div>
+                </div> :
+                    <div className='col-sm-8 form-div mt-3'>
+                        <p className='form-text1'>We just need some information</p>
+
+                        <form onSubmit={nextPageHandler}>
+                            <div className="form-group mt-4">
+                                <label htmlFor="civility" className='form-label'>Civility</label>
+                                <select className="form-control" id="civility" onChange={(e => setCivility(e.target.value))}>
+                                    {civilities.map((civility) => <option value={civility.value} key={civility.value}>{civility.label}</option>
+                                    )}
+                                </select>
+                            </div>
+                            <div className='row d-flex justify-content-start mt-1'>
+                                <div className="form-group col-6">
+                                    <label htmlFor="firstname" className='form-label'>First Name</label>
+                                    <input type="text" className="form-control" id="firstname" onChange={(e => setFirstName(e.target.value))} required />
+                                </div>
+                                <div className="form-group col-6">
+                                    <label htmlFor="lastname" className='form-label'>Last Name</label>
+                                    <input type="text" className="form-control" id="lastname" onChange={(e => setLastName(e.target.value))} required />
+                                </div>
+                            </div>
+                            <div className='row d-flex justify-content-start mt-1'>
+                                <div className="form-group col-6">
+                                    <label htmlFor="dob" className='form-label'>Date of Birth</label>
+                                    <input type="date" className="form-control" id="dob" onChange={(e => setDob(e.target.value))} required />
+                                </div>
+                                <div className="form-group col-6">
+                                    <label htmlFor="nationality" className='form-label'>Nationality</label>
+                                    <select className="form-control" id="nationality" onChange={(e => setNationality(e.target.value))}>
+                                        {countries.map((country) => <option value={country.value} key={country.value}>{country.label}</option>
+                                        )}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <p className='form-text1 mt-5'>What is your current address?</p>
+
+                            <div className='row d-flex justify-content-start mt-1'>
+                                <div className="form-group col-8">
+                                    <label htmlFor="street" className='form-label' >Street</label>
+                                    <input type="text" className="form-control" id="street" onChange={(e => setStreet(e.target.value))} required />
+                                </div>
+                                <div className="form-group col-4">
+                                    <label htmlFor="number" className='form-label'>No.</label>
+                                    <input type="number" className="form-control" id="number" onChange={(e => setNo(e.target.value))} required />
+                                </div>
+                            </div>
+
+                            <div className='row d-flex justify-content-start mt-1'>
+                                <div className="form-group col-6">
+                                    <label htmlFor="zip" className='form-label'>Zip Code</label>
+                                    <input type="text" className="form-control" id="zip" onChange={(e => setZipCode(e.target.value))} required />
+                                </div>
+                                <div className="form-group col-6">
+                                    <label htmlFor="locality" className='form-label'>Locality</label>
+                                    <input type="text" className="form-control" id="locality" onChange={(e => setLocality(e.target.value))} required />
+                                </div>
+                            </div>
+
+                            <div className="form-group mt-1">
+                                <label htmlFor="country" className='form-label'>Country</label>
+                                <select className="form-control" id="country" onChange={(e => setCountry(e.target.value))} required>
+                                    {countries.map((country) => <option value={country.value} key={country.value}>{country.label}</option>
+                                    )}
+                                </select>
+                            </div>
+
+                            <p className='form-text1 mt-5'>How to contact you?</p>
+
+                            <div className='row d-flex justify-content-start mt-1'>
+                                <div className="form-group col-4">
+                                    <label htmlFor="mobile" className='form-label'>Mobile</label>
+                                    <input type="number" className="form-control" id="mobile" onChange={(e => setMobile(e.target.value))} required />
+                                </div>
+                                <div className="form-group col-8">
+                                    <label htmlFor="num" className='form-label'>Number</label>
+                                    <input type="text" className="form-control" id="num" onChange={(e => setNumber(e.target.value))} required />
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="email" className='form-label'>Email</label>
+                                <input type="email" className="form-control" id="email" onChange={(e => setEmail(e.target.value))} required />
+                            </div>
+
+                            <div className='row d-flex justify-content-center mt-4'>
+                                <button className='btn next-btn' type='submit'>NEXT</button>
+                            </div>
+
+                        </form>
                     </div>
-                    <div className='row d-flex justify-content-start mt-1'>
-                        <div className="form-group col-6">
-                            <label htmlFor="dob" className='form-label'>Date of Birth</label>
-                            <input type="date" className="form-control" id="dob" onChange={(e => setDob(e.target.value))} />
-                        </div>
-                        <div className="form-group col-6">
-                            <label htmlFor="nationality" className='form-label'>Nationality</label>
-                            <select className="form-control" id="nationality" onChange={(e => setNationality(e.target.value))}>
-                                {countries.map((country) => <option value={country.value} key={country.value}>{country.label}</option>
-                                )}
-                            </select>
-                        </div>
-                    </div>
+                }
 
-                    <p className='form-text1 mt-5'>What is your current address?</p>
-
-                    <div className='row d-flex justify-content-start mt-1'>
-                        <div className="form-group col-8">
-                            <label htmlFor="street" className='form-label' >Street</label>
-                            <input type="text" className="form-control" id="street" onChange={(e => setStreet(e.target.value))} />
-                        </div>
-                        <div className="form-group col-4">
-                            <label htmlFor="number" className='form-label'>No.</label>
-                            <input type="number" className="form-control" id="number" onChange={(e => setNo(e.target.value))} />
-                        </div>
-                    </div>
-
-                    <div className='row d-flex justify-content-start mt-1'>
-                        <div className="form-group col-6">
-                            <label htmlFor="zip" className='form-label'>Zip Code</label>
-                            <input type="text" className="form-control" id="zip" onChange={(e => setZipCode(e.target.value))} />
-                        </div>
-                        <div className="form-group col-6">
-                            <label htmlFor="locality" className='form-label'>Locality</label>
-                            <input type="text" className="form-control" id="locality" onChange={(e => setLocality(e.target.value))} />
-                        </div>
-                    </div>
-
-                    <div className="form-group mt-1">
-                        <label htmlFor="country" className='form-label'>Country</label>
-                        <select className="form-control" id="country" onChange={(e => setCountry(e.target.value))}>
-                            {countries.map((country) => <option value={country.value} key={country.value}>{country.label}</option>
-                            )}
-                        </select>
-                    </div>
-
-                    <p className='form-text1 mt-5'>How to contact you?</p>
-
-                    <div className='row d-flex justify-content-start mt-1'>
-                        <div className="form-group col-4">
-                            <label htmlFor="mobile" className='form-label'>Mobile</label>
-                            <input type="number" className="form-control" id="mobile" onChange={(e => setMobile(e.target.value))} />
-                        </div>
-                        <div className="form-group col-8">
-                            <label htmlFor="num" className='form-label'>Number</label>
-                            <input type="text" className="form-control" id="num" onChange={(e => setNumber(e.target.value))} />
-                        </div>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="email" className='form-label'>Email</label>
-                        <input type="email" className="form-control" id="email" onChange={(e => setEmail(e.target.value))} />
-                    </div>
-
-                    <div className='row d-flex justify-content-center mt-4'>
-                        <button className='btn next-btn' onClick={nextPageHandler}>NEXT</button>
-                    </div>
-
-
-                </div>
             </div>
         </div>
     )

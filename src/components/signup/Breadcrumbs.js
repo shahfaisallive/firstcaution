@@ -16,31 +16,36 @@ const Breadcrumbs = ({ level }) => {
                                 {/* <img src={"/images/check.png"} className="checkicon" alt='check' /> */}
                                 <p className={`${level > 1 ? 'bc-num-active text-center' : 'bc-num-inactive text-center'}`}>1</p>
                             </div>
-                            <Link to={"/signup"}><p className='text1'>Introduction</p></Link>
+                            {/* <Link to={"/signup"}><p className='text1'>Introduction</p></Link> */}
+                            <p className='text1'>Introduction</p>
                         </li>
                         <li className="nav-item d-flex">
                             <div className={`' justify-content-center d-flex' + ${level >= 2 ? 'breadcrumb-mark-active' : 'breadcrumb-mark-inactive'}`}>
                                 <p className={`${level > 2 ? 'bc-num-active text-center' : 'bc-num-inactive text-center'}`}>2</p>
                             </div>
-                            <Link to={"/signup/information"}><p className='text1'>Your Information</p></Link>
+                            {/* <Link to={"/signup/information"}><p className='text1'>Your Information</p></Link> */}
+                            <p className='text1'>Your Information</p>
                         </li>
                         <li className="nav-item d-flex">
                             <div className={`' justify-content-center d-flex' + ${level >=  3 ? 'breadcrumb-mark-active' : 'breadcrumb-mark-inactive'}`}>
                                 <p className={`${level > 3 ? 'bc-num-active text-center' : 'bc-num-inactive text-center'}`}>3</p>
                             </div>
-                            <Link to={"/signup/guarantee"}><p className='text1'>Guarantee</p></Link>
+                            {/* <Link to={"/signup/guarantee"}><p className='text1'>Guarantee</p></Link> */}
+                            <p className='text1'>Guarantee</p>
                         </li>
                         <li className="nav-item d-flex">
                             <div className={`' justify-content-center d-flex' + ${level >=  4 ? 'breadcrumb-mark-active' : 'breadcrumb-mark-inactive'}`}>
                                 <p className={`${level > 4 ? 'bc-num-active text-center' : 'bc-num-inactive text-center'}`}>4</p>
                             </div>
-                            <Link to={"/signup/confirmation"}><p className='text1'>Confirmation</p></Link>
+                            {/* <Link to={"/signup/confirmation"}><p className='text1'>Confirmation</p></Link> */}
+                            <p className='text1'>Confirmation</p>
                         </li>
                         <li className="nav-item d-flex">
                             <div className={`' justify-content-center d-flex' + ${level >=  5 ? 'breadcrumb-mark-active' : 'breadcrumb-mark-inactive'}`}>
                                 <p className={`${level > 5 ? 'bc-num-active text-center' : 'bc-num-inactive text-center'}`}>5</p>
                             </div>
-                            <Link to={"/signup/payment"}><p className='text1'>Payment</p></Link>
+                            {/* <Link to={"/signup/payment"}><p className='text1'>Payment</p></Link> */}
+                            <p className='text1'>Payment</p>
                         </li>
                         {/* <li className="nav-item endtext">
                             <p className='text1'>Exit</p>
