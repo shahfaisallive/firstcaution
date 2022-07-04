@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Breadcrumbs from './Breadcrumbs'
 import { ReactComponent as UploadIcon } from "../../media/upload-icon.svg";
 import { useNavigate } from 'react-router-dom';
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+import ContactBox from '../ContactBox';
 
-
-const Guarantee = ({ data }) => {
+const Guarantee = ({ language, content }) => {
     const navigate = useNavigate()
 
     // Form Input states
+    const [data, setData] = useState()
     const [guaranteeStreet, setGuaranteeStreet] = useState("")
     const [guaranteeNo, setGuaranteeNo] = useState(0)
     const [guaranteeZipCode, setGuaranteeZipCode] = useState("")
@@ -23,6 +26,12 @@ const Guarantee = ({ data }) => {
 
     // Tenant States
     const [tenants, setTenants] = useState([])
+
+    useEffect(() => {
+        if (!data) {
+            setData(JSON.parse(localStorage.getItem("data")))
+        }
+    }, [])
 
 
     const nextPageHandler = () => {
@@ -41,7 +50,7 @@ const Guarantee = ({ data }) => {
         localStorage.setItem('IdFileName', IdFileName);
         localStorage.setItem('tenants', JSON.stringify(tenants));
 
-        navigate('/signup/confirmation')
+        navigate('/' + language + '/signup/confirmation')
     }
 
 
@@ -95,6 +104,16 @@ const Guarantee = ({ data }) => {
         console.log(tenants)
     }
 
+
+    const handleTenantNumberChange = (index, name) => {
+        // let data = [...tenants];
+        // data[index][e.target.name] = e.target.value;
+        // setTenants(data);
+        // console.log(tenants)
+        console.log('index:', index)
+        console.log('name:', name)
+    }
+
     const onDocFileChange = async (index, e) => {
         let data = [...tenants];
         if (e.target.files && e.target.files[0]) {
@@ -141,8 +160,9 @@ const Guarantee = ({ data }) => {
 
     return (
         <div className='info-wrapper container'>
-            <Breadcrumbs level={3} />
-            <Link to={"/signup/information"}><p className='previous-text'>&lt;  Previous </p></Link>
+            <ContactBox />
+            <Breadcrumbs level={3} content={content} />
+            <Link to={`/${language}/signup/information`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
 
             <div className='row'>
                 <div className='col-sm-8 form-div mt-3'>
@@ -150,27 +170,27 @@ const Guarantee = ({ data }) => {
                     {/* ADDRESS SECTION */}
 
                     <form onSubmit={nextPageHandler}>
-                        <p className='form-text1'>What is the address for which you want to make a guarantee?</p>
+                        <p className='form-text1'>{content.guar_head1}</p>
 
                         <div className='row d-flex justify-content-start mt-4'>
                             <div className="form-group col-8">
-                                <label htmlFor="street" className='form-label'>Street</label>
-                                <input required type="text" className="form-control" id="street" onChange={(e => setGuaranteeStreet(e.target.value))} />
+                                <label htmlFor="street" className='form-label'>{content.street}</label>
+                                <input type="text" className="form-control" id="street" onChange={(e => setGuaranteeStreet(e.target.value))} />
                             </div>
                             <div className="form-group col-4">
-                                <label htmlFor="number" className='form-label'>No.</label>
-                                <input required type="number" className="form-control" id="number" onChange={(e => setGuaranteeNo(e.target.value))} />
+                                <label htmlFor="number" className='form-label'>{content.no}</label>
+                                <input type="number" className="form-control" id="number" onChange={(e => setGuaranteeNo(e.target.value))} />
                             </div>
                         </div>
 
                         <div className='row d-flex justify-content-start mt-1'>
                             <div className="form-group col-6">
-                                <label htmlFor="zip" className='form-label'>Zip Code</label>
-                                <input required type="text" className="form-control" id="zip" onChange={(e => setGuaranteeZipCode(e.target.value))} />
+                                <label htmlFor="zip" className='form-label'>{content.zip_code}</label>
+                                <input type="text" className="form-control" maxLength={4} id="zip" onChange={(e => setGuaranteeZipCode(e.target.value))} />
                             </div>
                             <div className="form-group col-6">
-                                <label htmlFor="locality" className='form-label'>Locality</label>
-                                <input required type="text" className="form-control" id="locality" onChange={(e => setGuaranteeLocality(e.target.value))} />
+                                <label htmlFor="locality" className='form-label'>{content.locality}</label>
+                                <input type="text" className="form-control" id="locality" onChange={(e => setGuaranteeLocality(e.target.value))} />
                             </div>
                         </div>
 
@@ -183,44 +203,44 @@ const Guarantee = ({ data }) => {
 </div> */}
 
                         {/* RENTAL PRICE SECTION */}
-                        <p className='form-text1 mt-5'>Check the price of your rental agreement.</p>
+                        <p className='form-text1 mt-5'>{content.guar_head2}</p>
 
                         <div className="form-group">
-                            <label htmlFor="guaranteeAmount" className='form-label'>Amount in guarantee</label>
-                            <input required type="number" className="form-control" id="guaranteeAmount" onChange={(e => setGuaranteeAmount(e.target.value))} />
+                            <label htmlFor="guaranteeAmount" className='form-label'>{content.amount_in_guarantee}</label>
+                            <input type="number" className="form-control" id="guaranteeAmount" onChange={(e => setGuaranteeAmount(e.target.value))} />
                         </div>
 
                         <div className="form-group mt-1">
-                            <label htmlFor="moveDate" className='form-label'>Move in Date</label>
-                            <input required type="date" className="form-control" id="moveDate" onChange={(e => setMoveInDate(e.target.value))} />
+                            <label htmlFor="moveDate" className='form-label'>{content.mone_in_date}</label>
+                            <input type="date" className="form-control" id="moveDate" onChange={(e => setMoveInDate(e.target.value))} />
                         </div>
 
                         <div className="form-group mt-1 mb-5">
-                            <label htmlFor="guaranteeAmount" className='form-label'>Promo Code ( Optional )</label>
-                            <input type="number" className="form-control" id="guaranteeAmount" onChange={(e => setPromoCode(e.target.value))} />
-                            <label className='form-label'>If your promo code is validated, it will be applied to your invoice</label>
+                            <label htmlFor="guaranteeAmount" className='form-label'>{content.promo_code}</label>
+                            <input type="text" className="form-control" id="guaranteeAmount" onChange={(e => setPromoCode(e.target.value))} />
+                            <label className='form-label'>{content.promo_validated}</label>
                         </div>
 
                         {/* DOCUMENTS SECTIONS */}
-                        <p className='form-text1 mt-5'>Documents</p>
-                        <p className='form-text2'>Add your documents now and send them later by post, email or WhatsApp.</p>
+                        <p className='form-text1 mt-5'>{content.guar_head3}</p>
+                        <p className='form-text2'>{content.doc_subtext}</p>
 
                         <div className='row d-flex justify-content-start mt-1'>
                             <div className="form-group col-6">
                                 <div className="upload-btn-wrapper">
-                                    <button className="upload-btn text-left">ADD A LEASE</button>
+                                    <button className="upload-btn text-left">{content.lease_btn}</button>
                                     <UploadIcon className='upload-icon' />
-                                    <input required type="file" name="myfile" onChange={onLeaseFileChange} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
+                                    <input type="file" name="myfile" onChange={onLeaseFileChange} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
                                 </div>
-                                {leaseFileName ? <p>{leaseFileName}</p> : <p>No file selected</p>}
+                                {leaseFileName ? <p>{leaseFileName}</p> : <p>{content.no_file_selected}</p>}
                             </div>
                             <div className="form-group col-6">
                                 <div className="upload-btn-wrapper">
-                                    <button className="upload-btn text-left">ADD AN IDENTITY DOCUMENT</button>
+                                    <button className="upload-btn text-left">{content.id_doc}</button>
                                     <UploadIcon className='upload-icon' />
-                                    <input required type="file" name="myfile" onChange={onIDFileChange} accept="image/jpg, image/jpeg, image/png, file_extension/pdf"/>
+                                    <input type="file" name="myfile" onChange={onIDFileChange} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
                                 </div>
-                                {IdFileName ? <p>{IdFileName}</p> : <p>No file selected</p>}
+                                {IdFileName ? <p>{IdFileName}</p> : <p>{content.no_file_selected}</p>}
 
                             </div>
                         </div>
@@ -230,21 +250,21 @@ const Guarantee = ({ data }) => {
                         {/* TENANTS */}
                         {/* TENANTS */}
                         {/* TENANTS */}
-                        <p className='form-text1 mt-5'>Do you have a flatmate or a guarantor?</p>
+                        <p className='form-text1 mt-5'>{content.guar_head4}</p>
                         {/* <Tenants data={data} /> */}
                         {tenants.map((tenant, index) => {
                             return (
                                 <div key={index}>
                                     <div className='row d-flex justify-content-start mt-5'>
                                         <div className="form-group col-6">
-                                            <label htmlFor="type" className='form-label'>Type</label>
+                                            <label htmlFor="type" className='form-label'>{content.type}</label>
                                             <select className="form-control" defaultValue={'Tenant'} id="type" name='t_type' onChange={e => handleFormChange(index, e)}>
                                                 <option value="Guarantor">Guarantor</option>
                                                 <option value="Tenant">Tenant</option>
                                             </select>
                                         </div>
                                         <div className="form-group col-6">
-                                            <label htmlFor="civility" className='form-label'>Civility</label>
+                                            <label htmlFor="civility" className='form-label'>{content.civility}</label>
                                             <select className="form-control" id="civility" name='t_civility' defaultValue={'Mr.'} onChange={e => handleFormChange(index, e)}>
                                                 {data.civilities.map((civility) => <option value={civility.value} key={civility.value}>{civility.label}</option>
                                                 )}
@@ -254,22 +274,22 @@ const Guarantee = ({ data }) => {
 
                                     <div className='row d-flex justify-content-start mt-1'>
                                         <div className="form-group col-6">
-                                            <label htmlFor="firstname" className='form-label'>First Name</label>
+                                            <label htmlFor="firstname" className='form-label'>{content.first_name}</label>
                                             <input required type="text" className="form-control" id="type" name='t_firstName' onChange={e => handleFormChange(index, e)} />
                                         </div>
                                         <div className="form-group col-6">
-                                            <label htmlFor="lasttime" className='form-label'>Last Name</label>
+                                            <label htmlFor="lasttime" className='form-label'>{content.last_name}</label>
                                             <input required type="text" className="form-control" id="lasttime" name='t_lastName' onChange={e => handleFormChange(index, e)} />
                                         </div>
                                     </div>
 
                                     <div className='row d-flex justify-content-start mt-1'>
                                         <div className="form-group col-6">
-                                            <label htmlFor="dob" className='form-label'>Date of Birth</label>
-                                            <input required type="date" className="form-control" id="dob" name='t_dob' onChange={e => handleFormChange(index, e)} />
+                                            <label htmlFor="dob" className='form-label'>{content.date_of_birth}</label>
+                                            <input type="date" className="form-control" id="dob" name='t_dob' onChange={e => handleFormChange(index, e)} />
                                         </div>
                                         <div className="form-group col-6">
-                                            <label htmlFor="nationality" className='form-label'>Nationality</label>
+                                            <label htmlFor="nationality" className='form-label'>{content.nationality}</label>
                                             <select className="form-control" id="nationality" name='t_nationality' onChange={e => handleFormChange(index, e)}>
                                                 {data.countries.map((country) => <option value={country.value} key={country.value}>{country.label}</option>
                                                 )}
@@ -278,32 +298,42 @@ const Guarantee = ({ data }) => {
                                     </div>
 
                                     <div className='row d-flex justify-content-start mt-1'>
-                                        <div className="form-group col-4">
-                                            <label htmlFor="mobile" className='form-label'>Mobile</label>
-                                            <input required type="number" className="form-control" id="mobile" name='t_mobile' onChange={e => handleFormChange(index, e)} />
+                                        {/* <div className="form-group col-4">
+                                            <label htmlFor="mobile" className='form-label'>{content.mobile}</label>
+                                            <input type="number" className="form-control" id="mobile" name='t_mobile' onChange={e => handleFormChange(index, e)} />
                                         </div>
                                         <div className="form-group col-8">
-                                            <label htmlFor="num" className='form-label'>Number</label>
-                                            <input required type="text" className="form-control" id="num" name='t_number' onChange={e => handleFormChange(index, e)} />
+                                            <label htmlFor="num" className='form-label'>{content.number}</label>
+                                            <input type="text" className="form-control" id="num" name='t_number' onChange={e => handleFormChange(index, e)} />
+                                        </div> */}
+
+                                        <div className="form-group col-12">
+                                            <label htmlFor="num" className='form-label'>{content.number}</label>
+                                            <PhoneInput
+                                                name='t_mobile'
+                                                defaultCountry='CH'
+                                                placeholder="Enter phone number"
+                                                // value={number}
+                                                onChange={() => handleTenantNumberChange(index, 't_mobile')} className="phone-input-field" />
                                         </div>
                                     </div>
 
                                     <div className="form-group">
-                                        <label htmlFor="email" className='form-label'>Email</label>
-                                        <input required type="email" className="form-control" id="email" name='t_email' onChange={e => handleFormChange(index, e)} />
+                                        <label htmlFor="email" className='form-label'>{content.email}</label>
+                                        <input type="email" className="form-control" id="email" name='t_email' onChange={e => handleFormChange(index, e)} />
                                     </div>
 
                                     <div className="upload-btn-wrapper mt-3">
-                                        <button className="upload-btn text-left ">ADD AN IDENTITY DOCUMENT</button>
+                                        <button className="upload-btn text-left ">{content.id_doc}</button>
                                         <UploadIcon className='upload-icon' />
-                                        <input required type="file" name="t_docFile" onChange={(e) => onDocFileChange(index, e)} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
+                                        <input type="file" name="t_docFile" onChange={(e) => onDocFileChange(index, e)} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
                                     </div>
 
-                                    <p className='delete-text mt-4' onClick={() => deleteTenant(index)}>Delete</p>
+                                    <p className='delete-text mt-4' onClick={() => deleteTenant(index)}>{content.delete}</p>
                                 </div>
                             )
                         })}
-                        <button className="btn toggle-btn mt-3" onClick={addNewTenant}>YES I ADD A FLATMATE OR A GUARANTOR</button>
+                        <button className="btn toggle-btn mt-3" onClick={addNewTenant}>{content.yes_flatmate}</button>
 
 
                         <div className='row d-flex justify-content-center mt-4'>

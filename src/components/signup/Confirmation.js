@@ -4,20 +4,24 @@ import { ReactComponent as EditIcon } from "../../media/edit.svg";
 import { ReactComponent as HouseIcon } from "../../media/house.svg";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import ContactBox from '../ContactBox';
 
-const Confirmation = () => {
+const Confirmation = ({ language, content }) => {
     const [submitLoader, setSubmitLoader] = useState(false)
 
+    const [data, setData] = useState()
     const [civility, setCivility] = useState("")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [dob, setDob] = useState()
     const [nationality, setNationality] = useState("")
+    const [nationalityName, setNationalityName] = useState("")
     const [street, setStreet] = useState("")
     const [no, setNo] = useState()
     const [zipCode, setZipCode] = useState()
     const [locality, setLocality] = useState("")
     const [country, setCountry] = useState("")
+    const [countryName, setCountryName] = useState("")
     const [mobile, setMobile] = useState()
     const [number, setNumber] = useState("")
     const [email, setEmail] = useState("")
@@ -35,14 +39,14 @@ const Confirmation = () => {
     const [tenants, setTenants] = useState([])
     const [utmSource, setUtmSource] = useState("")
     const [utmMedium, setUtmMedium] = useState("")
+    const [utmCompaign, setUtmCompaign] = useState("")
 
     const [confirmAuthenticity, setConfirmAuthenticity] = useState(false)
     const [confirmTOC, setConfirmTOC] = useState(false)
 
 
-
-
     useEffect(() => {
+        setData(JSON.parse(localStorage.getItem("data")))
         setCivility(localStorage.getItem("civility"))
         setFirstName(localStorage.getItem("firstName"))
         setLastName(localStorage.getItem("lastName"))
@@ -68,8 +72,8 @@ const Confirmation = () => {
         setIdFile(localStorage.getItem("IdFile"))
         setIdFileName(localStorage.getItem("IdFileName"))
         setUtmSource(localStorage.getItem("utmSource"))
+        setUtmCompaign(localStorage.getItem("utmCompaign"))
         setUtmMedium(localStorage.getItem("utmMedium"))
-        // setTenants(JSON.parse(localStorage.getItem("tenants")))
         const tenantsArray = JSON.parse(localStorage.getItem("tenants"))
 
         let allTenants = tenantsArray.map((obj) => {
@@ -86,15 +90,26 @@ const Confirmation = () => {
         setTenants(allTenants)
     }, [])
 
+    useEffect(() => {
+        if (data) {
+            console.log(data)
+            const countryName = data.countries.find(c => c.value == country)
+            const nationalityName = data.countries.find(c => c.value == nationality)
+            setCountryName(countryName.label)
+            setNationalityName(nationalityName.label)
+        }
+    }, [data])
+
     const dataSubmitHandler = async () => {
         if (confirmAuthenticity && confirmTOC) {
             setSubmitLoader(true)
-            // const token = await axios.post("https://firstcaution-oauth2-provider-api-dev.de-c1.cloudhub.io/api/oauth2/token?client_id=CD342AFBAA01E0861D5E5646AD8A43B8&client_secret=8113264D3CD56EDD4F62D61B06A326A8&scope=USER&grant_type=CLIENT_CREDENTIALS",
-            //     {
-            //         'Content-Type': 'application/json'
-            //     })
-                const token = "qfnjNOiam6lYjyiYdiRBXobhATjWCGM-NcZycQLR-zHNTBVd2NaPQswHWLiHIE8VZLgTk_wq_ZCgSeqxLNtbQg"
-                console.log(token)
+            const token = await axios.get("https://backendlanding.firstcaution.ch/api/auth-token",
+                {
+                    Headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+            console.log(token.data.access_token)
             const response = await axios.post("https://firstcaution-partner-service-eapi-dev.de-c1.cloudhub.io/api/provisional-certificate",
                 {
                     request_nature: "certificate",
@@ -112,22 +127,26 @@ const Confirmation = () => {
                     address_zip_code: zipCode,
                     address_city: locality,
                     address_country_id: country,
-                    lease_type: "residential",
-                    real_estate_name: "test",
-                    real_estate_address: "test street 11",
-                    real_estate_zip_code: "21342134",
-                    real_estate_city: "Islamabad",
-                    premise_street: "streep1",
-                    premise_house_nr: "55a",
-                    premise_zip_code: "1006",
-                    premise_city: "Lausanne",
-                    premise_country_id: "CH",
+                    lease_type: "commercial",
+                    real_estate_name: "",
+                    real_estate_address: "",
+                    real_estate_zip_code: "",
+                    real_estate_city: "",
+                    premise_street: "",
+                    premise_house_nr: "",
+                    premise_zip_code: "",
+                    premise_city: "",
+                    premise_country_id: "",
                     guarantee_amount: guaranteeAmount,
                     rent_amount: 3000,
                     promotional_code: promoCode,
-                    tenants: tenants
+                    tenants: tenants,
+                    utm_source: utmSource,
+                    utm_compaign: utmCompaign,
+                    utm_medium: utmMedium
+
                 },
-                { headers: { "Authorization": `Bearer ${token}` } })
+                { headers: { "Authorization": `Bearer ${token.data.access_token}` } })
 
             console.log(response.data.data.token)
             // console.log(leaseFile)
@@ -145,34 +164,34 @@ const Confirmation = () => {
 
             if (response.data.data.status == "accepted") {
                 const fileRes = await axios.post(`https://firstcaution-partner-service-eapi-dev.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
-                    { headers: { "Authorization": `Bearer ${token}` } })
+                    { headers: { "Authorization": `Bearer ${token.data.access_token}` } })
 
                 console.log(fileRes)
                 setSubmitLoader(false)
-                alert("Data submitted successfully!")
-                // navigate('/signup/payment')
+                document.getElementById("form-submit-alert").style.display = "block"
 
             } else {
                 alert("Data not correct")
             }
 
         } else {
-            alert('Please confirm the authenticity and check the Terms of Conditions')
+            document.getElementById("form-submit-authenticate").style.display = "block"
         }
     }
 
     return (
         <div className='info-wrapper container'>
-            <Breadcrumbs level={4} />
-            <Link to={"/signup/guarantee"}><p className='previous-text'>&lt;  Previous </p></Link>
+            <ContactBox />
+            <Breadcrumbs level={4} content={content} />
+            <Link to={`/${language}/signup/guarantee`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
 
             <div className='row'>
                 <div className='col-sm-8 mt-3'>
-                    <p className='detail-text1 text-center'>We are almost there. Is everything OK?</p>
+                    <p className='detail-text1 text-center'>{content.conf_head1}</p>
 
                     <div className='detail-div pl-5'>
                         <div className='row'>
-                            <p className='form-text1'>Services Requested</p>
+                            <p className='form-text1'>{content.conf_head2}</p>
                             {/* <span className='edit-btn mt-1'>
                                 <p>Edit<EditIcon className='ml-2' /></p>
                             </span> */}
@@ -185,7 +204,7 @@ const Confirmation = () => {
 
                     <div className='detail-div mt-4 pl-5'>
                         <div className='row'>
-                            <p className='form-text1'>Your Information</p>
+                            <p className='form-text1'>{content.conf_head3}</p>
                             {/* <span className='edit-btn mt-1'>
                                 <p>Edit<EditIcon className='ml-2' /></p>
                             </span> */}
@@ -193,44 +212,44 @@ const Confirmation = () => {
 
                         <div className='row'>
                             <div className='col-md-4'>
-                                <p className='detail-text3'>About You</p>
+                                <p className='detail-text3'>{content.about_you}</p>
 
-                                <p className='detail-text4'>Civility</p>
+                                <p className='detail-text4'>{content.civility}</p>
                                 <p className='detail-text5'>{civility}</p>
 
-                                <p className='detail-text4'>First Name</p>
+                                <p className='detail-text4'>{content.first_name}</p>
                                 <p className='detail-text5'>{firstName}</p>
 
-                                <p className='detail-text4'>Last Name</p>
+                                <p className='detail-text4'>{content.last_name}</p>
                                 <p className='detail-text5'>{lastName}</p>
 
-                                <p className='detail-text4'>Date of Birth</p>
+                                <p className='detail-text4'>{content.date_of_birth}</p>
                                 <p className='detail-text5'>{dob}</p>
 
-                                <p className='detail-text4'>Nationality</p>
-                                <p className='detail-text5'>{nationality}</p>
+                                <p className='detail-text4'>{content.nationality}</p>
+                                <p className='detail-text5'>{nationalityName}</p>
                             </div>
 
                             <div className='col-md-4'>
-                                <p className='detail-text3'>Current Address </p>
+                                <p className='detail-text3'>{content.current_address}</p>
 
-                                <p className='detail-text4'>Street No.</p>
+                                <p className='detail-text4'>{content.street}</p>
                                 <p className='detail-text5'>{street}</p>
 
-                                <p className='detail-text4'>Locality</p>
+                                <p className='detail-text4'>{content.locality}</p>
                                 <p className='detail-text5'>{locality}</p>
 
-                                <p className='detail-text4'>Country</p>
-                                <p className='detail-text5'>{country}</p>
+                                <p className='detail-text4'>{content.country}</p>
+                                <p className='detail-text5'>{countryName}</p>
                             </div>
 
                             <div className='col-md-4'>
-                                <p className='detail-text3'>Contact Details</p>
+                                <p className='detail-text3'>{content.contact_details}</p>
 
-                                <p className='detail-text4'>Mobile</p>
+                                <p className='detail-text4'>{content.mobile}</p>
                                 <p className='detail-text5'>{mobile}</p>
 
-                                <p className='detail-text4'>Email Address</p>
+                                <p className='detail-text4'>{content.email}</p>
                                 <p className='detail-text5'>{email}</p>
                             </div>
                         </div>
@@ -238,7 +257,7 @@ const Confirmation = () => {
 
                     <div className='detail-div mt-4 pl-5'>
                         <div className='row'>
-                            <p className='form-text1'>Your Information</p>
+                            <p className='form-text1'>{content.conf_head3}</p>
                             {/* <span className='edit-btn mt-1'>
                                 <p>Edit<EditIcon className='ml-2' /></p>
                             </span> */}
@@ -246,22 +265,22 @@ const Confirmation = () => {
 
                         <div className='row'>
                             <div className='col-md-4'>
-                                <p className='detail-text3'>Price Calculation</p>
+                                <p className='detail-text3'>{content.price_calc}</p>
 
-                                <p className='detail-text4'>Amount of a guarantee</p>
+                                <p className='detail-text4'>{content.amount_in_guarantee}</p>
                                 <p className='detail-text5'>{guaranteeAmount}</p>
 
-                                <p className='detail-text4'>From the</p>
+                                <p className='detail-text4'>{content.mobile}</p>
                                 <p className='detail-text5'>{guaranteeNo}</p>
                             </div>
 
                             <div className='col-md-4'>
-                                <p className='detail-text3'>Address of a guarantee</p>
+                                <p className='detail-text3'>{content.address_of_guar}</p>
 
-                                <p className='detail-text4'>Street No.</p>
+                                <p className='detail-text4'>{content.street}</p>
                                 <p className='detail-text5'>{guaranteeStreet}</p>
 
-                                <p className='detail-text4'>Locality</p>
+                                <p className='detail-text4'>{content.locality}</p>
                                 <p className='detail-text5'>{guaranteeLocality}</p>
                             </div>
                         </div>
@@ -277,7 +296,7 @@ const Confirmation = () => {
                         <div className='ml-5'>
                             <input className="form-check-input" type="checkbox" value="" id="confirmToc" onChange={() => setConfirmTOC(!confirmTOC)} />
                             <label className="form-check-label" htmlFor="confirmToc">
-                                I confirm that I have read and accept the Term and Condition.
+                                I confirm that I have read and accept the <a href='https://www.firstcaution.ch/en/about-us/general-terms-and-conditions/'>Terms and Condition.</a>
                             </label>
                         </div>
                     </div>
@@ -286,8 +305,15 @@ const Confirmation = () => {
                     <div className='row d-flex justify-content-center mt-5'>
                         {!submitLoader ? <button className='btn next-btn' onClick={dataSubmitHandler}>Submit</button> :
                             <button className='btn next-btn'><div class="spinner-border spinner-border-sm" role="status">
-                                <span class="sr-only">Loading...</span>
+                                <span className="sr-only">Loading...</span>
                             </div></button>}
+                    </div>
+
+                    <div className="alert alert-success mt-2" role="alert" id='form-submit-alert'>
+                        You have submitted request successfully!
+                    </div>
+                    <div className="alert alert-danger mt-2" role="alert" id='form-submit-authenticate'>
+                        Please confirm the terms and conditions!
                     </div>
 
 
