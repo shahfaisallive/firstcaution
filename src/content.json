@@ -3,6 +3,7 @@
         "about_us": "About Us",
         "Partner": "Partner",
         "sign_up": "SIGN UP NOW",
+        "intro_text": "Online Application Rental Guarantee",
         "introduction": "Introduction",
         "your_information": "Your Information",
         "guarantee": "Guarantee",
@@ -43,6 +44,7 @@
         "conf_head1": "We are almost there. Is everything OK?",
         "conf_head2": "Services Requested",
         "conf_head3": "Your Information",
+        "conf_head4": "Guarantee",
         "about_you": "About You",
         "current_address": "Current Address",
         "contact_details": "Contact Details",
@@ -52,12 +54,14 @@
         "checklabel2": "I confirm that I have read and accept the Terms and Condition.",
         "btn_submit": "Submit",
         "btn_next": "NEXT",
-        "success_msg": "Data submitted successfully!"
+        "success_msg": "Data submitted successfully!",
+        "confirmed_msg" : "Congratulations! Your registration is almost complete. Now choose your payment method"
     },
     "de": {
         "about_us": "Über uns",
         "Partner": "Partner",
         "sign_up": "JETZT REGISTRIEREN",
+        "intro_text": "Mietgarantie für Online-Anwendungen",
         "introduction": "Einführung",
         "your_information": "Ihre Informationen",
         "guarantee": "Garantie",
@@ -98,6 +102,7 @@
         "conf_head1": "Wir sind fast da. Ist alles in Ordnung?",
         "conf_head2": "Angeforderte Dienstleistungen",
         "conf_head3": "Ihre Informationen",
+        "conf_head4": "Garantie",
         "about_you": "Über dich",
         "current_address": "Momentane Adresse",
         "contact_details": "Kontaktdetails",
@@ -107,12 +112,14 @@
         "checklabel2": "Ich bestätige, dass ich die Allgemeinen Geschäftsbedingungen gelesen habe und akzeptiere.",
         "btn_submit": "Einreichen",
         "btn_next": "NÄCHSTE",
-        "success_msg": "Daten erfolgreich übermittelt!"
+        "success_msg": "Daten erfolgreich übermittelt!",
+        "confirmed_msg": "Gratulation! lhre Anmeldung ist fast fertig. Wahlen Sie nun lhre Zahlungsart"
     },
     "fr": {
         "about_us": "À propos de nous",
         "Partner": "Partenaire",
         "sign_up": "S'INSCRIRE MAINTENANT",
+        "intro_text": "Application en ligne Garantie de loyer",
         "introduction": "Introduction",
         "your_information": "Vos informations",
         "guarantee": "Garantie",
@@ -153,6 +160,7 @@
         "conf_head1": "Nous y sommes presque. Est-ce que tout va bien?",
         "conf_head2": "Services demandés",
         "conf_head3": "Vos informations",
+        "conf_head4": "Garantie",
         "about_you": "Au propos de vous",
         "current_address": "Adresse actuelle",
         "contact_details": "Détails du contact",
@@ -162,12 +170,14 @@
         "checklabel2": "Je confirme avoir lu et accepté les termes et conditions.",
         "btn_submit": "Soumettre",
         "btn_next": "SUIVANT",
-        "success_msg": "Données soumises avec succès !"
+        "success_msg": "Données soumises avec succès !",
+        "confirmed_msg": "Toutes nos félicitations! Votre inscription est presque terminée. Choisissez maintenant votre mode de paiement"
     },
     "it": {
         "about_us": "Chi siamo",
         "Partner": "Compagno",
         "sign_up": "ISCRIVITI ORA",
+        "intro_text": "Garanzia di noleggio dell'applicazione online",
         "introduction": "introduzione",
         "your_information": "La tua informazione",
         "guarantee": "Garanzia",
@@ -208,6 +218,7 @@
         "conf_head1": "Siamo quasi li. È tutto ok?",
         "conf_head2": "Servizi richiesti",
         "conf_head3": "La tua informazione",
+        "conf_head4": "Garanzia",
         "about_you": "A proposito di te",
         "current_address": "Indirizzo corrente",
         "contact_details": "Dettagli del contatto",
@@ -217,6 +228,7 @@
         "checklabel2": "Confermo di aver letto e di accettare i Termini e condizioni.",
         "btn_submit": "Invia",
         "btn_next": "PROSSIMO",
-        "success_msg": "Dati inviati con successo!"
+        "success_msg": "Dati inviati con successo!",
+        "confirmed_msg": "Congratulazioni! La tua registrazione è quasi completa. Ora scegli il tuo metodo di pagamento"
     }
 }

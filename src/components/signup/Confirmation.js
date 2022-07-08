@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import Breadcrumbs from './Breadcrumbs'
 import { ReactComponent as EditIcon } from "../../media/edit.svg";
 import { ReactComponent as HouseIcon } from "../../media/house.svg";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ContactBox from '../ContactBox';
 
 const Confirmation = ({ language, content }) => {
+    const navigate = useNavigate()
     const [submitLoader, setSubmitLoader] = useState(false)
 
     const [data, setData] = useState()
@@ -168,8 +169,7 @@ const Confirmation = ({ language, content }) => {
 
                 console.log(fileRes)
                 setSubmitLoader(false)
-                document.getElementById("form-submit-alert").style.display = "block"
-
+                navigate("/" + language + "/signup/confirmed")
             } else {
                 alert("Data not correct")
             }
@@ -198,7 +198,7 @@ const Confirmation = ({ language, content }) => {
                         </div>
                         <div className='row'>
                             <HouseIcon />
-                            <p className='detail-text2 ml-2'>Residential</p>
+                            <p className='detail-text2 ml-2'>Commercial</p>
                         </div>
                     </div>
 
@@ -247,7 +247,7 @@ const Confirmation = ({ language, content }) => {
                                 <p className='detail-text3'>{content.contact_details}</p>
 
                                 <p className='detail-text4'>{content.mobile}</p>
-                                <p className='detail-text5'>{mobile}</p>
+                                <p className='detail-text5'>{number}</p>
 
                                 <p className='detail-text4'>{content.email}</p>
                                 <p className='detail-text5'>{email}</p>
@@ -257,7 +257,7 @@ const Confirmation = ({ language, content }) => {
 
                     <div className='detail-div mt-4 pl-5'>
                         <div className='row'>
-                            <p className='form-text1'>{content.conf_head3}</p>
+                            <p className='form-text1'>{content.conf_head4}</p>
                             {/* <span className='edit-btn mt-1'>
                                 <p>Edit<EditIcon className='ml-2' /></p>
                             </span> */}
@@ -270,8 +270,8 @@ const Confirmation = ({ language, content }) => {
                                 <p className='detail-text4'>{content.amount_in_guarantee}</p>
                                 <p className='detail-text5'>{guaranteeAmount}</p>
 
-                                <p className='detail-text4'>{content.mobile}</p>
-                                <p className='detail-text5'>{guaranteeNo}</p>
+                                <p className='detail-text4'>{content.mone_in_date}</p>
+                                <p className='detail-text5'>{moveInDate}</p>
                             </div>
 
                             <div className='col-md-4'>
@@ -309,9 +309,6 @@ const Confirmation = ({ language, content }) => {
                             </div></button>}
                     </div>
 
-                    <div className="alert alert-success mt-2" role="alert" id='form-submit-alert'>
-                        You have submitted request successfully!
-                    </div>
                     <div className="alert alert-danger mt-2" role="alert" id='form-submit-authenticate'>
                         Please confirm the terms and conditions!
                     </div>

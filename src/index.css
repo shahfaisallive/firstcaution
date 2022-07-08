@@ -168,16 +168,20 @@ body {
   max-height: 35px;
   font-size: 14px;
   margin-top: -5px;
+  width: max-content;
 }
-.nav-contact-icon{
+
+.nav-contact-icon {
   width: 18px;
   height: 18px;
   margin-right: 5px;
 }
-.nav-contact-text{
+
+.nav-contact-text {
   font-size: 14px;
   color: #C2C2C2;
 }
+
 .signup-btn:hover {
   background-color: #263b67;
 }
@@ -319,6 +323,10 @@ input[type=number]::-webkit-outer-spin-button {
   border: none;
 }
 
+.upload-input:hover {
+  cursor: pointer;
+}
+
 .upload-btn-wrapper input[type=file] {
   position: absolute;
   left: 0;
@@ -330,6 +338,10 @@ input[type=number]::-webkit-outer-spin-button {
   position: absolute;
   right: 20px;
   top: 10px;
+}
+
+.upload-icon:hover {
+  cursor: pointer;
 }
 
 .toggle-btn {
@@ -395,11 +407,26 @@ input[type=number]::-webkit-outer-spin-button {
   width: 80%;
 }
 
-#form-submit-alert{
+#form-submit-alert {
   display: none;
 }
-#form-submit-authenticate{
+
+#form-submit-authenticate {
   display: none;
+}
+
+/* Confirmed styles */
+.confirmed-wrapper {
+  margin-top: 100px;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 2px 2px 10px grey;
+}
+
+.con-text1 {
+  font-size: 24px;
+  color: #0f397c;
 }
 
 /* Contact Box Styles */
@@ -410,8 +437,9 @@ input[type=number]::-webkit-outer-spin-button {
   width: 400px;
   border: 1px solid #d5d5e2;
   padding: 10px 30px 30px 30px;
-  background: rgb(231, 229, 229);
+  background: #3876DA;
   z-index: 10;
+  border-radius: 5px;
 }
 
 .contact-wrapper-none {
@@ -426,8 +454,8 @@ input[type=number]::-webkit-outer-spin-button {
 
 .contact-close-btn {
   border: none;
-  color: #0000ff;
-  background: rgb(231, 229, 229);
+  color: #fff;
+  background: #3876DA;
 }
 
 @media only screen and (max-width: 600px) {

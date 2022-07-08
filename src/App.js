@@ -9,6 +9,7 @@ import Guarantee from './components/signup/Guarantee';
 import Information from './components/signup/Information';
 import Confirmation from './components/signup/Confirmation';
 import Payment from './components/signup/Payment';
+import ConfirmedPage from './components/signup/ConfirmedPage';
 
 function App() {
   const [data, setData] = useState();
@@ -52,7 +53,7 @@ function App() {
           <Route path={`${language}/signup/information`} element={<Information setFormData={setFormData} data={data} language={language} content={content} />} />
           <Route path={`${language}/signup/guarantee`} element={<Guarantee data={data} language={language} content={content} />} />
           <Route path={`${language}/signup/confirmation`} element={<Confirmation language={language} content={content}/>} />
-          <Route path={`${language}/signup/payment`} element={<Payment language={language} content={content} />} />
+          <Route path={`${language}/signup/confirmed`} element={<ConfirmedPage language={language} content={content} />} />
         </Routes>
       </BrowserRouter>
     </div>

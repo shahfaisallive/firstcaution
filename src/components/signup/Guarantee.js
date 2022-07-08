@@ -135,12 +135,12 @@ const Guarantee = ({ language, content }) => {
         //     alert("please fill out the data")
         // } else {
         let newTenant = {
-            t_type: "",
-            t_civility: "",
+            t_type: "Tenant",
+            t_civility: "Mr.",
             t_firstName: "",
             t_lastName: "",
             t_dob: "",
-            t_nationality: "",
+            t_nationality: "CH",
             t_mobile: 0,
             t_number: 0,
             t_email: "",
@@ -231,17 +231,17 @@ const Guarantee = ({ language, content }) => {
                         <div className='row d-flex justify-content-start mt-1'>
                             <div className="form-group col-6">
                                 <div className="upload-btn-wrapper">
-                                    <button className="upload-btn text-left">{content.lease_btn}</button>
+                                    <button type='button' className="upload-btn text-left">{content.lease_btn}</button>
                                     <UploadIcon className='upload-icon' />
-                                    <input type="file" name="myfile" onChange={onLeaseFileChange} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
+                                    <input type="file" className='upload-input' name="myfile" onChange={onLeaseFileChange} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
                                 </div>
                                 {leaseFileName ? <p>{leaseFileName}</p> : <p>{content.no_file_selected}</p>}
                             </div>
                             <div className="form-group col-6">
                                 <div className="upload-btn-wrapper">
-                                    <button className="upload-btn text-left">{content.id_doc}</button>
+                                    <button type='button' className="upload-btn text-left">{content.id_doc}</button>
                                     <UploadIcon className='upload-icon' />
-                                    <input type="file" name="myfile" onChange={onIDFileChange} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
+                                    <input type="file" className='upload-input' name="myfile" onChange={onIDFileChange} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
                                 </div>
                                 {IdFileName ? <p>{IdFileName}</p> : <p>{content.no_file_selected}</p>}
 
@@ -263,7 +263,7 @@ const Guarantee = ({ language, content }) => {
                                             <label htmlFor="type" className='form-label'>{content.type}</label>
                                             <select className="form-control" defaultValue={'Tenant'} id="type" name='t_type' onChange={e => handleFormChange(index, e)}>
                                                 <option value="Guarantor">Guarantor</option>
-                                                <option value="Tenant">Tenant</option>
+                                                <option value="Tenant" selected>Tenant</option>
                                             </select>
                                         </div>
                                         <div className="form-group col-6">
@@ -293,7 +293,7 @@ const Guarantee = ({ language, content }) => {
                                         </div>
                                         <div className="form-group col-6">
                                             <label htmlFor="nationality" className='form-label'>{content.nationality}</label>
-                                            <select className="form-control" id="nationality" name='t_nationality' onChange={e => handleFormChange(index, e)}>
+                                            <select defaultValue="CH" className="form-control" id="nationality" name='t_nationality' onChange={e => handleFormChange(index, e)}>
                                                 {data.countries.map((country) => <option value={country.value} key={country.value}>{country.label}</option>
                                                 )}
                                             </select>
@@ -317,7 +317,7 @@ const Guarantee = ({ language, content }) => {
                                                 placeholder="Enter phone number"
                                                 value={tNum}
                                                 onChange={setTNum} className="phone-input-field" onFocus={() => setIndexForTNum(index)}
-                                                 />
+                                            />
                                         </div>
                                     </div>
 
@@ -327,9 +327,9 @@ const Guarantee = ({ language, content }) => {
                                     </div>
 
                                     <div className="upload-btn-wrapper mt-3">
-                                        <button className="upload-btn text-left ">{content.id_doc}</button>
+                                        <button type='button' className="upload-btn text-left ">{content.id_doc}</button>
                                         <UploadIcon className='upload-icon' />
-                                        <input type="file" name="t_docFile" onChange={(e) => onDocFileChange(index, e)} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
+                                        <input type="file" className='upload-input' name="t_docFile" onChange={(e) => onDocFileChange(index, e)} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
                                     </div>
 
                                     <p className='delete-text mt-4' onClick={() => deleteTenant(index)}>{content.delete}</p>
