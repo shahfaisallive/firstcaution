@@ -10,6 +10,7 @@ import { ReactComponent as LD } from "../media/ld.svg";
 import { ReactComponent as FB } from "../media/fb.svg";
 import { ReactComponent as Presentation } from "../media/presentation.svg";
 import Navbar from './Navbar';
+import LandingContent from "../landingContent.json"
 
 
 const HomePage = ({ changeLanguage, language, content }) => {
@@ -17,9 +18,13 @@ const HomePage = ({ changeLanguage, language, content }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            let content = await axios.get("http://localhost:1337/api/landing")
-            setLandingContent(content.data.data.attributes)
-            console.log(content.data.data.attributes)
+            try {
+                let content = await axios.get("http://localhost:1337/api/landing")
+                setLandingContent(content.data.data.attributes)
+                console.log(content.data.data.attributes)
+            } catch (error) {
+                setLandingContent(LandingContent)
+            }
         }
         fetchData()
     }, [])
