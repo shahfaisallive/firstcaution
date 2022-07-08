@@ -26,6 +26,8 @@ const Guarantee = ({ language, content }) => {
 
     // Tenant States
     const [tenants, setTenants] = useState([])
+    const [tNum, setTNum] = useState()
+    const [indexForTNum, setIndexForTNum] = useState()
 
     useEffect(() => {
         if (!data) {
@@ -105,14 +107,15 @@ const Guarantee = ({ language, content }) => {
     }
 
 
-    const handleTenantNumberChange = (index, name) => {
-        // let data = [...tenants];
-        // data[index][e.target.name] = e.target.value;
-        // setTenants(data);
-        // console.log(tenants)
-        console.log('index:', index)
-        console.log('name:', name)
-    }
+    useEffect(() => {
+        if (tenants.length !== 0) {
+            let data = [...tenants];
+            data[indexForTNum]['t_mobile'] = tNum;
+            setTenants(data);
+            console.log(tenants)
+        }
+    }, [tNum])
+
 
     const onDocFileChange = async (index, e) => {
         let data = [...tenants];
@@ -310,11 +313,11 @@ const Guarantee = ({ language, content }) => {
                                         <div className="form-group col-12">
                                             <label htmlFor="num" className='form-label'>{content.number}</label>
                                             <PhoneInput
-                                                name='t_mobile'
                                                 defaultCountry='CH'
                                                 placeholder="Enter phone number"
-                                                // value={number}
-                                                onChange={() => handleTenantNumberChange(index, 't_mobile')} className="phone-input-field" />
+                                                value={tNum}
+                                                onChange={setTNum} className="phone-input-field" onFocus={() => setIndexForTNum(index)}
+                                                 />
                                         </div>
                                     </div>
 
