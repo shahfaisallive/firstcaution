@@ -8,7 +8,6 @@ import PhoneInput from 'react-phone-number-input'
 import ContactBox from '../ContactBox';
 
 const Information = ({ setFormData, language, data, content }) => {
-    const urlParams = new URLSearchParams(window.location.search)
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
@@ -40,9 +39,9 @@ const Information = ({ setFormData, language, data, content }) => {
     const [country, setCountry] = useState("CH")
     const [number, setNumber] = useState("")
     const [email, setEmail] = useState("")
-    const [utmSource, setUtmSource] = useState("")
-    const [utmCompaign, setUtmCompaign] = useState("")
-    const [utmMedium, setUtmMedium] = useState("")
+    // const [utmSource, setUtmSource] = useState("")
+    // const [utmCompaign, setUtmCompaign] = useState("")
+    // const [utmMedium, setUtmMedium] = useState("")
 
 
     const nextPageHandler = () => {
@@ -58,9 +57,6 @@ const Information = ({ setFormData, language, data, content }) => {
         localStorage.setItem('country', country);
         localStorage.setItem('number', number);
         localStorage.setItem('email', email);
-        localStorage.setItem('utmSource', utmSource);
-        localStorage.setItem('utmCompaign', utmCompaign);
-        localStorage.setItem('utmMedium', utmMedium);
 
         navigate("/" + language + "/signup/guarantee")
     }
@@ -83,10 +79,6 @@ const Information = ({ setFormData, language, data, content }) => {
         }
 
         getFormData()
-
-        setUtmSource(urlParams.get('utm_source'))
-        setUtmCompaign(urlParams.get('utm_compaign'))
-        setUtmMedium(urlParams.get('utm_medium'))
 
     }, [])
 

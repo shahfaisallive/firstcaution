@@ -34,15 +34,15 @@ const Navbar = ({ changeLanguage, language, content }) => {
                     <ul className="navbar-nav mt-3">
                         <li className="nav-item d-flex mr-3">
                             <img className='nav-contact-icon' src="https://img.icons8.com/ios-glyphs/50/C2C2C2/phone-disconnected.png" />
-                            <p className='nav-contact-text'>0840 78 78 77</p>
+                            <a href="tel:0840 78 78 77"> <p className='nav-contact-text'>0840 78 78 77</p></a>
                         </li>
                         <li className="nav-item d-flex mr-3">
                             <img className='nav-contact-icon' src="https://img.icons8.com/ios-glyphs/50/C2C2C2/whatsapp.png" />
-                            <p className='nav-contact-text'>022 318 59 39</p>
+                            <a href="tel:022 318 59 39"> <p className='nav-contact-text'>022 318 59 39</p></a>
                         </li>
                         <li className="nav-item mr-5 d-flex mr-3">
                             <img className='nav-contact-icon' src="https://img.icons8.com/material-sharp/50/C2C2C2/mail.png" />
-                            <p className='nav-contact-text'>business@firstcaution.ch</p>
+                            <a href="mailto:business@firstcaution.ch"><p className='nav-contact-text'>business@firstcaution.ch</p></a>
                         </li>
                         <li className="nav-item mr-3">
                             <a href={aboutLink} target={"_blank"} className="text-dark"><p>{content.about_us}</p></a>

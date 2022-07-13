@@ -111,42 +111,44 @@ const Confirmation = ({ language, content }) => {
                     }
                 })
             console.log(token.data.access_token)
-            const response = await axios.post("https://firstcaution-partner-service-eapi-dev.de-c1.cloudhub.io/api/provisional-certificate",
-                {
-                    request_nature: "certificate",
-                    language: "en",
-                    civility_id: civility,
-                    first_name: firstName,
-                    last_name: lastName,
-                    birthday: dob,
-                    nationality_id: nationality,
-                    residence_permit_id: "RESID0709",
-                    email: email,
-                    mobile_phone: mobile,
-                    address_street: street,
-                    address_house_nr: no,
-                    address_zip_code: zipCode,
-                    address_city: locality,
-                    address_country_id: country,
-                    lease_type: "commercial",
-                    real_estate_name: "",
-                    real_estate_address: "",
-                    real_estate_zip_code: "",
-                    real_estate_city: "",
-                    premise_street: "",
-                    premise_house_nr: "",
-                    premise_zip_code: "",
-                    premise_city: "",
-                    premise_country_id: "",
-                    guarantee_amount: guaranteeAmount,
-                    rent_amount: 3000,
-                    promotional_code: promoCode,
-                    tenants: tenants,
-                    utm_source: utmSource,
-                    utm_compaign: utmCompaign,
-                    utm_medium: utmMedium
 
-                },
+            const bodyObj = {
+                request_nature: "certificate",
+                language: "en",
+                civility_id: civility,
+                first_name: firstName,
+                last_name: lastName,
+                birthday: dob,
+                nationality_id: nationality,
+                residence_permit_id: "RESID0709",
+                email: email,
+                mobile_phone: number,
+                address_street: street,
+                address_house_nr: no,
+                address_zip_code: zipCode,
+                address_city: locality,
+                address_country_id: country,
+                lease_type: "commercial",
+                real_estate_name: "",
+                real_estate_address: "",
+                real_estate_zip_code: "",
+                real_estate_city: "",
+                premise_street: "",
+                premise_house_nr: "",
+                premise_zip_code: "",
+                premise_city: "",
+                premise_country_id: "",
+                guarantee_amount: guaranteeAmount,
+                rent_amount: 3000,
+                promotional_code: promoCode,
+                tenants: tenants,
+                utm_source: utmSource,
+                utm_compaign: utmCompaign,
+                utm_medium: utmMedium
+
+            }
+            const response = await axios.post("https://firstcaution-partner-service-eapi-dev.de-c1.cloudhub.io/api/provisional-certificate",
+                bodyObj,
                 { headers: { "Authorization": `Bearer ${token.data.access_token}` } })
 
             console.log(response.data.data.token)
@@ -164,6 +166,7 @@ const Confirmation = ({ language, content }) => {
             ]
 
             if (response.data.data.status == "accepted") {
+                console.log(fileData)
                 const fileRes = await axios.post(`https://firstcaution-partner-service-eapi-dev.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
                     { headers: { "Authorization": `Bearer ${token.data.access_token}` } })
 
@@ -233,8 +236,8 @@ const Confirmation = ({ language, content }) => {
                             <div className='col-md-4'>
                                 <p className='detail-text3'>{content.current_address}</p>
 
-                                <p className='detail-text4'>{content.street}</p>
-                                <p className='detail-text5'>{street}</p>
+                                <p className='detail-text4'>{content.street + " & " + content.no}</p>
+                                <p className='detail-text5'>{street + " " + no}</p>
 
                                 <p className='detail-text4'>{content.locality}</p>
                                 <p className='detail-text5'>{locality}</p>
@@ -268,7 +271,7 @@ const Confirmation = ({ language, content }) => {
                                 <p className='detail-text3'>{content.price_calc}</p>
 
                                 <p className='detail-text4'>{content.amount_in_guarantee}</p>
-                                <p className='detail-text5'>{guaranteeAmount}</p>
+                                <p className='detail-text5'>CHF {guaranteeAmount}</p>
 
                                 <p className='detail-text4'>{content.mone_in_date}</p>
                                 <p className='detail-text5'>{moveInDate}</p>
@@ -277,8 +280,8 @@ const Confirmation = ({ language, content }) => {
                             <div className='col-md-4'>
                                 <p className='detail-text3'>{content.address_of_guar}</p>
 
-                                <p className='detail-text4'>{content.street}</p>
-                                <p className='detail-text5'>{guaranteeStreet}</p>
+                                <p className='detail-text4'>{content.street + " & " + content.no}</p>
+                                <p className='detail-text5'>{guaranteeStreet + " " + guaranteeNo}</p>
 
                                 <p className='detail-text4'>{content.locality}</p>
                                 <p className='detail-text5'>{guaranteeLocality}</p>

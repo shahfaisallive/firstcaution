@@ -26,6 +26,7 @@ const Guarantee = ({ language, content }) => {
 
     // Tenant States
     const [tenants, setTenants] = useState([])
+    const [tenantsDocs, setTenantsDocs] = useState([])
     const [tNum, setTNum] = useState()
     const [indexForTNum, setIndexForTNum] = useState()
 
@@ -121,6 +122,7 @@ const Guarantee = ({ language, content }) => {
         let data = [...tenants];
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0]
+            setTenantsDocs([...tenantsDocs, file.name])
             data[index]['t_docName'] = file.name
             const base64 = await getBase64(file)
             data[index]['t_docFile'] = base64.slice(27)
@@ -144,7 +146,7 @@ const Guarantee = ({ language, content }) => {
             t_mobile: 0,
             t_number: 0,
             t_email: "",
-            t_docName: "",
+            t_docName: null,
             t_docFile: ""
         }
         setTenants([...tenants, newTenant])
@@ -330,6 +332,7 @@ const Guarantee = ({ language, content }) => {
                                         <button type='button' className="upload-btn text-left ">{content.id_doc}</button>
                                         <UploadIcon className='upload-icon' />
                                         <input type="file" className='upload-input' name="t_docFile" onChange={(e) => onDocFileChange(index, e)} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
+                                        {tenantsDocs[index] ? <p>{tenantsDocs[index]}</p> : <p>{content.no_file_selected}</p>}
                                     </div>
 
                                     <p className='delete-text mt-4' onClick={() => deleteTenant(index)}>{content.delete}</p>

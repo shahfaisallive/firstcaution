@@ -74,7 +74,12 @@ body {
   margin-left: 100px;
   margin-right: 100px;
 }
-
+.steps-single-box{
+  display: block;
+}
+.step-icon{
+  min-width: 30px;
+}
 .reviews-container {
   margin-top: 120px;
 }
@@ -175,11 +180,16 @@ body {
   width: 18px;
   height: 18px;
   margin-right: 5px;
+  margin-top: 2px; 
 }
 
 .nav-contact-text {
   font-size: 14px;
-  color: #C2C2C2;
+  color: #817b7b;
+  margin-top: 2px;
+}
+.nav-contact-text:hover{
+  cursor: pointer;
 }
 
 .signup-btn:hover {
@@ -434,12 +444,13 @@ input[type=number]::-webkit-outer-spin-button {
   position: fixed;
   right: 10px;
   bottom: 0px;
-  width: 400px;
+  width: 320px;
   border: 1px solid #d5d5e2;
-  padding: 10px 30px 30px 30px;
-  background: #3876DA;
+  padding: 0px 0px 7px 30px;
+  background: #fff;
   z-index: 10;
-  border-radius: 5px;
+  border-radius: 40px;
+  box-shadow: 0px 1px 4px 0px grey;
 }
 
 .contact-wrapper-none {
@@ -455,11 +466,50 @@ input[type=number]::-webkit-outer-spin-button {
 .contact-close-btn {
   border: none;
   color: #fff;
-  background: #3876DA;
+  background: #ec4715;
+  width: 50px;
+  height: 35px;
+  position: absolute;
+  right: 0px;
+  border-top-right-radius: 40px;
+  border-bottom-left-radius: 20px;
+  font-size: 16px;
+  font-weight: 700;
 }
+.contact-text1{
+  font-size: 20px;
+  margin-top: 20px;
+}
+.contact-text2{
+  font-size: 16px;
+  line-height: 0.3;
+}
+.contact-text3{
+  font-size: 16px;
+  color: grey;
+}
+
 
 @media only screen and (max-width: 600px) {
   .signup-btn {
     margin-top: 20px;
+  }
+  .steps-single-box{
+    display: flex;
+  }
+  .step-icon{
+    min-width: 30px;
+    align-self: center;
+    margin-right: 20px;
+  }
+  .steps-single-box{
+    justify-content: center;
+  }
+  .presentation{
+    margin-top: -150px;
+  }
+  .footer-text{
+    margin-left: 20px;
+    margin-right: 20px;
   }
 }

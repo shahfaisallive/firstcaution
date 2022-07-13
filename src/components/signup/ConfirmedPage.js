@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 const ConfirmedPage = ({content}) => {
     useEffect(() => {
-        localStorage.clear()
+        // localStorage.clear()
     }, [])
     return (
         <div className='container-fluid d-flex justify-content-center'>

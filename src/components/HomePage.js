@@ -19,7 +19,7 @@ const HomePage = ({ changeLanguage, language, content }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let content = await axios.get("http://localhost:1337/api/landing")
+                let content = await axios.get("https://firstcaution.strapi.datamonitors.io/api/landing")
                 setLandingContent(content.data.data.attributes)
                 console.log(content.data.data.attributes)
             } catch (error) {
@@ -58,25 +58,25 @@ const HomePage = ({ changeLanguage, language, content }) => {
                         </div>
 
                         <div className='row d-flex justify-content-center mt-5'>
-                            <p className='home-head2'>{landingContent.landing_steps_title}</p>
+                            <p className='home-head2 text-center'>{landingContent.landing_steps_title}</p>
                         </div>
 
                         <div className='row steps-div d-flex justify-content-center mt-5'>
-                            <div className='col-4 pl-5 pr-5'>
+                            <div className='col-4 pl-5 pr-5 steps-single-box'>
                                 <div className='d-flex justify-content-center'>
-                                    <Step1 />
+                                    <Step1 className='step-icon'/>
                                 </div>
                                 <p className='home-text2 text-center mt-3'>{landingContent.step1_info}</p>
                             </div>
-                            <div className='col-4 pl-5 pr-5'>
+                            <div className='col-4 pl-5 pr-5 steps-single-box'>
                                 <div className='d-flex justify-content-center'>
-                                    <Step2 />
+                                    <Step2 className='step-icon'/>
                                 </div>
                                 <p className='home-text2 text-center mt-3'>{landingContent.step2_info}</p>
                             </div>
-                            <div className='col-4 pl-5 pr-5'>
+                            <div className='col-4 pl-5 pr-5 steps-single-box'>
                                 <div className='d-flex justify-content-center'>
-                                    <Step3 />
+                                    <Step3 className='step-icon'/>
                                 </div>
                                 <p className='home-text2 text-center mt-3'>{landingContent.step3_info}</p>
                             </div>
@@ -162,7 +162,7 @@ const HomePage = ({ changeLanguage, language, content }) => {
                 </div>}
 
             <div className='row footer-note bg-primary mt-4 d-flex justify-content-center'>
-                <p className='text-light text-center mt-1'>{landingContent ? landingContent.footer_info : ''}</p>
+                <p className='text-light text-center footer-text mt-1'>{landingContent ? landingContent.footer_info : ''}</p>
             </div>
         </div>
     )
