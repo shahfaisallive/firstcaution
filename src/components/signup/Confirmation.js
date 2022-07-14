@@ -130,9 +130,9 @@ const Confirmation = ({ language, content }) => {
                 address_country_id: country,
                 lease_type: "commercial",
                 real_estate_name: "",
-                real_estate_address: "",
-                real_estate_zip_code: "",
-                real_estate_city: "",
+                real_estate_address: `${guaranteeStreet} ${guaranteeNo}`,
+                real_estate_zip_code: guaranteeZipCode,
+                real_estate_city: guaranteeLocality,
                 premise_street: "",
                 premise_house_nr: "",
                 premise_zip_code: "",
@@ -147,6 +147,7 @@ const Confirmation = ({ language, content }) => {
                 utm_medium: utmMedium
 
             }
+            console.log("payload", bodyObj)
             const response = await axios.post("https://firstcaution-partner-service-eapi-dev.de-c1.cloudhub.io/api/provisional-certificate",
                 bodyObj,
                 { headers: { "Authorization": `Bearer ${token.data.access_token}` } })

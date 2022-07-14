@@ -440,10 +440,24 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /* Contact Box Styles */
+.contact-toggle{
+  position: fixed;
+  right: 20px;
+  bottom: 10px;
+  background-color:#3876DA;
+  border-radius: 10px;
+  padding: 10px;
+  z-index: 10;
+}
+.contact-toggle:hover{
+  cursor: pointer;
+  transform: scale(0.9);
+  transition: transform 0.2s ease-in-out;
+}
 .contact-wrapper {
   position: fixed;
   right: 10px;
-  bottom: 0px;
+  bottom: 10px;
   width: 320px;
   border: 1px solid #d5d5e2;
   padding: 0px 0px 7px 30px;
@@ -451,9 +465,14 @@ input[type=number]::-webkit-outer-spin-button {
   z-index: 10;
   border-radius: 40px;
   box-shadow: 0px 1px 4px 0px grey;
+  transition: all 1s linear;
+  display: block;
 }
 
 .contact-wrapper-none {
+  display: none;
+}
+.contact-toggle-none{
   display: none;
 }
 
@@ -512,4 +531,7 @@ input[type=number]::-webkit-outer-spin-button {
     margin-left: 20px;
     margin-right: 20px;
   }
+  .contact-wrapper{
+    left: 50%;
+    transform: translate(-50%, 0);  }
 }
