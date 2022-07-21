@@ -146,7 +146,7 @@ const HomePage = ({ changeLanguage, language, content }) => {
 
                     <div className='row d-flex justify-content-center'>
                         <NavLink to={`${language}/signup`}>
-                            <button className='home-btn'>Request Now</button>
+                            <button className='home-btn' id='home-req-btn2'>Request Now</button>
                         </NavLink>
                     </div>
 
