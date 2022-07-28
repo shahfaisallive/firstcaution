@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Content from "./content.json"
 
 // Importing components
@@ -12,7 +12,9 @@ import Payment from './components/signup/Payment';
 import ConfirmedPage from './components/signup/ConfirmedPage';
 
 function App() {
+  const navigate = useNavigate()
   const urlParams = new URLSearchParams(window.location.search)
+  const { pathname } = useLocation();
   const [data, setData] = useState();
   const [content, setContent] = useState({})
   const [language, setLanguage] = useState('en');
@@ -28,6 +30,7 @@ function App() {
   }
 
   useEffect(() => {
+   
     const lang = localStorage.getItem("language")
     if (lang) {
       setLanguage(lang)
@@ -44,9 +47,6 @@ function App() {
     }
     // console.log(content)
 
-    // setUtmSource(urlParams.get('utm_source'))
-    // setUtmCompaign(urlParams.get('utm_compaign'))
-    // setUtmMedium(urlParams.get('utm_medium'))
     let utmSource = urlParams.get('utm_source')
     let utmCompaign = urlParams.get('utm_campaign')
     let utmMedium = urlParams.get('utm_medium')
@@ -57,18 +57,21 @@ function App() {
     }
   }, [language, data, content])
 
+  if(pathname.length==1){
+    navigate('/de')
+  }
+  
+
   return (
     <div className="App">
-      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage changeLanguage={changeLanguage} language={language} content={content} />} />
-          <Route path={`/${language}/signup`} element={<Introduction language={language} content={content} />} />
-          <Route path={`${language}/signup/information`} element={<Information setFormData={setFormData} data={data} language={language} content={content} />} />
-          <Route path={`${language}/signup/guarantee`} element={<Guarantee data={data} language={language} content={content} />} />
-          <Route path={`${language}/signup/confirmation`} element={<Confirmation language={language} content={content} />} />
-          <Route path={`${language}/signup/confirmed`} element={<ConfirmedPage language={language} content={content} />} />
+          <Route path="/:language" element={<HomePage changeLanguage={changeLanguage} language={language} content={content} />} />
+          <Route path={`/:language/signup`} element={<Introduction language={language} content={content} />} />
+          <Route path={`/:language/signup/information`} element={<Information changeLanguage={changeLanguage} setFormData={setFormData} data={data} language={language} content={content} />} />
+          <Route path={`/:language/signup/guarantee`} element={<Guarantee data={data} language={language} content={content} />} />
+          <Route path={`/:language/signup/confirmation`} element={<Confirmation language={language} content={content} />} />
+          <Route path={`/:language/signup/confirmed`} element={<ConfirmedPage language={language} content={content} />} />
         </Routes>
-      </BrowserRouter>
     </div>
   );
 }

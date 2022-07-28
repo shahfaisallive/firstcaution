@@ -1,7 +1,23 @@
 /* GLOBAL STYLES */
+@font-face {
+  font-family: ceraRegular;
+  src: url(./fonts/cera-regular.woff2);
+}
+
+@font-face {
+  font-family: ceraBold;
+  src: url(./fonts/cera-bold.woff2);
+}
+
+@font-face {
+  font-family: ceraLight;
+  src: url(./fonts/cera-light.woff2);
+}
+
+
 body {
   background-color: #F0F4F7;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'ceraRegular';
   overflow-x: hidden;
 }
 
@@ -26,6 +42,10 @@ body {
 }
 
 /* HOMESCREEN STYLES */
+.steps-mob-view {
+  display: none !important;
+}
+
 .homescreen-wrapper {
   padding-top: 20px;
   background-color: white !important;
@@ -52,18 +72,23 @@ body {
   margin-right: auto;
 }
 
-.home-text1 {
-  font-size: 15px;
+.home-text2 {
+  font-size: 16px;
+  color: #263b67;
+  font-weight: 700;
+}
+.home-text3 {
+  font-size: 16px;
   color: #263b67;
 }
 
 .home-btn {
   background-color: #3876DA;
   color: white;
-  width: 200px;
   border-radius: 20px;
   border: none;
-  height: 40px;
+  padding: 10px 20px;
+  font-weight: 700;
 }
 
 .header-promo-img {
@@ -74,12 +99,15 @@ body {
   margin-left: 100px;
   margin-right: 100px;
 }
-.steps-single-box{
+
+.steps-single-box {
   display: block;
 }
-.step-icon{
-  min-width: 30px;
+
+.step-icon {
+  max-width: 50px;
 }
+
 .reviews-container {
   margin-top: 120px;
 }
@@ -180,7 +208,7 @@ body {
   width: 18px;
   height: 18px;
   margin-right: 5px;
-  margin-top: 2px; 
+  margin-top: 2px;
 }
 
 .nav-contact-text {
@@ -188,7 +216,8 @@ body {
   color: #817b7b;
   margin-top: 2px;
 }
-.nav-contact-text:hover{
+
+.nav-contact-text:hover {
   cursor: pointer;
 }
 
@@ -440,20 +469,22 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /* Contact Box Styles */
-.contact-toggle{
+.contact-toggle {
   position: fixed;
   right: 20px;
   bottom: 10px;
-  background-color:#3876DA;
+  background-color: #3876DA;
   border-radius: 10px;
   padding: 10px;
   z-index: 10;
 }
-.contact-toggle:hover{
+
+.contact-toggle:hover {
   cursor: pointer;
   transform: scale(0.9);
   transition: transform 0.2s ease-in-out;
 }
+
 .contact-wrapper {
   position: fixed;
   right: 10px;
@@ -472,7 +503,8 @@ input[type=number]::-webkit-outer-spin-button {
 .contact-wrapper-none {
   display: none;
 }
-.contact-toggle-none{
+
+.contact-toggle-none {
   display: none;
 }
 
@@ -495,52 +527,127 @@ input[type=number]::-webkit-outer-spin-button {
   font-size: 16px;
   font-weight: 700;
 }
-.contact-text1{
+
+.contact-text1 {
   font-size: 20px;
   margin-top: 20px;
 }
-.contact-text2{
+
+.contact-text2 {
   font-size: 16px;
   line-height: 0.3;
 }
-.contact-text3{
+
+.contact-text3 {
   font-size: 16px;
   color: grey;
 }
 
+.home-social-icon {
+  max-width: 45px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.protect-imprint-div {
+  width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.present-circle {
+  box-shadow: 1px 1px 3px 1px #c5cace;
+  border-radius: 100%;
+  padding: 30px;
+  width: 250px;
+}
+.present-logo{
+  max-height: 70px;
+}
+
+.presentation-mobile-view {
+  display: none !important;
+}
+
 
 @media only screen and (max-width: 600px) {
-  .right-design-curve{
+  .steps-mob-view {
+    display: block !important;
+  }
+
+  .steps-web-view {
+    display: none !important;
+  }
+
+  .right-design-curve {
     display: none;
   }
-  .left-design-curve{
+
+  .left-design-curve {
     display: none;
   }
-  .home-head1{
+
+  .home-head1 {
     width: 90%;
   }
+
   .signup-btn {
     margin-top: 20px;
   }
-  .steps-single-box{
+
+  .steps-single-box {
     display: flex;
   }
-  .step-icon{
+
+  .step-icon {
     min-width: 30px;
-    align-self: center;
-    margin-right: 20px;
+    align-self: start;
   }
-  .steps-single-box{
+
+  .steps-single-box {
     justify-content: center;
   }
-  .presentation{
+
+  .presentation {
     margin-top: -150px;
   }
-  .footer-text{
+
+  .presentation-mobile-view {
+    display: block !important;
+  }
+
+  .presentation-web-view {
+    display: none !important;
+  }
+
+  .footer-text {
     margin-left: 20px;
     margin-right: 20px;
   }
-  .contact-wrapper{
+
+  .contact-wrapper {
     left: 50%;
-    transform: translate(-50%, 0);  }
+    transform: translate(-50%, 0);
+  }
+
+  .protect-imprint-div {
+    width: 90%;
+  }
+
+  .home-social-icon {
+    max-width: 30px;
+  }
+}
+
+
+
+@media only screen and (max-width: 400px) {
+  .logo-img {
+    width: 140px;
+    margin-left: -40px;
+  }
+
+  .navbar-toggler {
+    margin-right: -40px;
+  }
 }

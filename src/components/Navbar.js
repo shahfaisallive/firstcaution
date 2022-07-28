@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 
 const Navbar = ({ changeLanguage, language, content }) => {
+    const navigate = useNavigate()
 
     const [aboutLink, setAboutLink] = useState("https://www.firstcaution.ch/en/about-us/company-and-team")
     const [partnerLink, setPartnerLink] = useState("https://www.firstcaution.ch/en/partners/Property-management-companies-and-landlords/")
+    const [faqLink, setFaqLink] = useState("https://www.firstcaution.ch/de/uber-uns/haufige-fragen/")
 
     useEffect(() => {
         if (language == "en") {
@@ -50,8 +52,14 @@ const Navbar = ({ changeLanguage, language, content }) => {
                         <li className="nav-item mr-3">
                             <a href={partnerLink} target={"_blank"} className="text-dark"><p>{content.Partner}</p></a>
                         </li>
+                        <li className="nav-item mr-3">
+                            <a href={faqLink} target={"_blank"} className="text-dark"><p>FAQ</p></a>
+                        </li>
                         <li className="nav-item">
-                            <select name="language" value={language} id="language" onChange={(e) => changeLanguage(e.target.value)}>
+                            <select name="language" value={language} id="language" onChange={(e) => {
+                                changeLanguage(e.target.value)
+                                navigate(`/${e.target.value}`)
+                            }}>
                                 <option value="en">EN</option>
                                 <option value="de">DE</option>
                                 <option value="it">IT</option>
@@ -65,7 +73,7 @@ const Navbar = ({ changeLanguage, language, content }) => {
 
                 </div>
             </div>
-        </nav>
+        </nav >
     )
 }
 

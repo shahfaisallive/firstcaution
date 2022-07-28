@@ -1,13 +1,15 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Breadcrumbs from './Breadcrumbs'
 import { useNavigate } from 'react-router-dom';
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import ContactBox from '../ContactBox';
 
-const Information = ({ setFormData, language, data, content }) => {
+const Information = ({ setFormData, language, data, content, changeLanguage }) => {
+    const params = useParams()
+    const langParam = params.language
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
@@ -62,6 +64,7 @@ const Information = ({ setFormData, language, data, content }) => {
     }
 
     useEffect(() => {
+        changeLanguage(langParam)
         const getFormData = async () => {
             // setLoading(true);
             const res = await axios.get("https://firstcaution-partner-service-eapi-dev.de-c1.cloudhub.io/api/global-configuration")
