@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
+import { useParams } from 'react-router-dom';
+import { ReactComponent as ContactIcon } from "../media/contact.svg";
 
 const ContactBox = () => {
+    const params = useParams()
+    const lang = params.language
     const [wrapperClass, setWrapperClass] = useState('contact-wrapper-none')
     const [toggleClass, setToggleClass] = useState("contact-toggle")
 
@@ -34,7 +38,14 @@ const ContactBox = () => {
                     <a href="mailto:business@firstcaution.ch"><p className='contact-text3 mt-1'>business@firstcaution.ch</p></a>
                 </div>
             </div>
-            <div className={toggleClass} onClick={toggleHandler}><img src="https://img.icons8.com/external-flatart-icons-solid-flatarticons/42/ffffff/external-contact-contact-flatart-icons-solid-flatarticons.png" /></div>
+            <div className={toggleClass} onClick={toggleHandler}>
+                <div className='d-flex justify-content-center'>
+                    <ContactIcon />
+                </div>
+                <p className='text-light text-center'>
+                    {lang == "en" ? "Contact" : lang == "it" ? "Contatto" : lang == "de" ? "Kontact" : lang == "fr" ? "Contact" : "Contact"}
+                </p>
+            </div>
         </>
     )
 }

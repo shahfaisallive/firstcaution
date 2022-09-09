@@ -474,8 +474,9 @@ input[type=number]::-webkit-outer-spin-button {
   right: 20px;
   bottom: 10px;
   background-color: #3876DA;
-  border-radius: 10px;
+  border-radius: 360px;
   padding: 10px;
+  width: 95px;
   z-index: 10;
 }
 
@@ -516,8 +517,8 @@ input[type=number]::-webkit-outer-spin-button {
 
 .contact-close-btn {
   border: none;
-  color: #fff;
-  background: #ec4715;
+  color: red;
+  background: #fff;
   width: 50px;
   height: 35px;
   position: absolute;
@@ -617,7 +618,7 @@ input[type=number]::-webkit-outer-spin-button {
   }
 
   .presentation-web-view {
-    display: none !important;
+    display: block !important;
   }
 
   .footer-text {

@@ -15,15 +15,15 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
     const [loading, setLoading] = useState(false)
     // Data stored from APIs
     const [civilities, setCivilities] = useState([{
-        label: "Mr",
+        label: "Herr",
         value: "Mr"
     },
     {
-        label: "Ms.",
+        label: "Frau",
         value: "Ms."
     }])
     const [countries, setCountries] = useState([{
-        label: "Switzerland",
+        label: "Schweiz",
         value: "CH"
     }])
 
@@ -65,9 +65,10 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 
     useEffect(() => {
         changeLanguage(langParam)
+        console.log("1",language)
         const getFormData = async () => {
             // setLoading(true);
-            const res = await axios.get("https://firstcaution-partner-service-eapi-dev.de-c1.cloudhub.io/api/global-configuration")
+            const res = await axios.get("https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/global-configuration")
             if (language == "en") {
                 setFormData(res.data.en_US)
             } else if (language == "it") {
@@ -86,6 +87,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
     }, [])
 
     useEffect(() => {
+        console.log("2",language)
         console.log(data)
         if (data) {
             setCivilities(data.civilities)
@@ -107,7 +109,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
                     <form onSubmit={nextPageHandler}>
                         <div className="form-group mt-4">
                             <label htmlFor="civility" className='form-label'>{content.civility}</label>
-                            <select className="form-control" id="civility" onChange={(e => setCivility(e.target.value))}>
+                            <select defaultValue={"Ms."} className="form-control" id="civility" onChange={(e => setCivility(e.target.value))}>
                                 {civilities.map((civility) => <option value={civility.value} key={civility.value}>{civility.label}</option>
                                 )}
                             </select>

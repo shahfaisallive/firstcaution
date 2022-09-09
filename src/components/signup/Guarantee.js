@@ -45,10 +45,10 @@ const Guarantee = ({ language, content }) => {
         localStorage.setItem('guaranteeAmount', guaranteeAmount);
         localStorage.setItem('moveInDate', moveInDate);
         localStorage.setItem('promoCode', promoCode);
-        const leaseDoc = leaseFile.slice(27)
-        localStorage.setItem('leaseFile', leaseDoc);
-        const IdDoc = IdFile.slice(27)
-        localStorage.setItem('IdFile', IdDoc);
+        // const leaseDoc = leaseFile.slice(27)
+        localStorage.setItem('leaseFile', leaseFile);
+        // const IdDoc = IdFile.slice(27)
+        localStorage.setItem('IdFile', IdFile);
         localStorage.setItem('leaseFileName', leaseFileName);
         localStorage.setItem('IdFileName', IdFileName);
         localStorage.setItem('tenants', JSON.stringify(tenants));
@@ -74,13 +74,13 @@ const Guarantee = ({ language, content }) => {
     };
 
     const onIDFileChange = async (e) => {
-        console.log('here')
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0]
             setIdFileName(file.name)
             // console.log(e.target.files[0].size)
             const base64 = await getBase64(file)
-            setIdFile(base64)
+            const newBase64 = base64.split(",")
+            setIdFile(newBase64[1])
             // console.log(base64)
 
         }
@@ -93,8 +93,9 @@ const Guarantee = ({ language, content }) => {
             setLeaseFileName(file.name)
             // console.log(e.target.files[0].size)
             const base64 = await getBase64(file)
-            setLeaseFile(base64)
-            // console.log(base64)
+            const newBase64 = base64.split(",")
+            setLeaseFile(newBase64[1])
+            // console.log(newBase64[1])
 
         }
     }

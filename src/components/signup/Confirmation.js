@@ -65,7 +65,7 @@ const Confirmation = ({ language, content }) => {
         setGuaranteeNo(localStorage.getItem("guaranteeNo"))
         setGuaranteeZipCode(localStorage.getItem("guaranteeZipCode"))
         setGuaranteeLocality(localStorage.getItem("guaranteeLocality"))
-        setGuaranteeAmount(localStorage.getItem("guaranteeAmount"))
+        setGuaranteeAmount(parseInt(localStorage.getItem("guaranteeAmount")))
         setMoveInDate(localStorage.getItem("moveInDate"))
         setPromoCode(localStorage.getItem("promoCode"))
         setLeaseFile(localStorage.getItem("leaseFile"))
@@ -102,8 +102,10 @@ const Confirmation = ({ language, content }) => {
     }, [data])
 
     const dataSubmitHandler = async () => {
+        console.log(language)
         if (confirmAuthenticity && confirmTOC) {
             setSubmitLoader(true)
+            // const token = await axios.get("http://localhost:4000/api/auth-token",
             const token = await axios.get("https://backendlanding.firstcaution.ch/api/auth-token",
                 {
                     Headers: {
@@ -114,7 +116,7 @@ const Confirmation = ({ language, content }) => {
 
             const bodyObj = {
                 request_nature: "certificate",
-                language: "en",
+                language: language,
                 civility_id: civility,
                 first_name: firstName,
                 last_name: lastName,
@@ -142,13 +144,13 @@ const Confirmation = ({ language, content }) => {
                 rent_amount: 3000,
                 promotional_code: promoCode,
                 tenants: tenants,
-                utm_source: utmSource,
-                utm_compaign: utmCompaign,
-                utm_medium: utmMedium
+                utm_source: utmSource?utmSource:" ",
+                utm_compaign: utmCompaign?utmCompaign:" ",
+                utm_medium: utmMedium?utmMedium:" "
 
             }
             console.log("payload", bodyObj)
-            const response = await axios.post("https://firstcaution-partner-service-eapi-dev.de-c1.cloudhub.io/api/provisional-certificate",
+            const response = await axios.post("https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/provisional-certificate",
                 bodyObj,
                 { headers: { "Authorization": `Bearer ${token.data.access_token}` } })
 
@@ -168,7 +170,7 @@ const Confirmation = ({ language, content }) => {
 
             if (response.data.data.status == "accepted") {
                 console.log(fileData)
-                const fileRes = await axios.post(`https://firstcaution-partner-service-eapi-dev.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
+                const fileRes = await axios.post(`https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
                     { headers: { "Authorization": `Bearer ${token.data.access_token}` } })
 
                 console.log(fileRes)

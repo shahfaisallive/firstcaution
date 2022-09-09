@@ -70,7 +70,7 @@ const HomePage = ({ changeLanguage, language, content }) => {
                         </div>
 
                         <div className='row d-flex justify-content-center mt-4 pb-5 pt-2'>
-                            <img alt='head-img-promo' src={"/images/landingImg.jpg"} className="header-promo-img" />
+                            <img alt='head-img-promo' src={"/images/landingImg.png"} className="header-promo-img" />
                         </div>
 
                         <div className='row d-flex justify-content-center mt-5'>
@@ -120,100 +120,100 @@ const HomePage = ({ changeLanguage, language, content }) => {
                         </div>
 
                     </div>
-                 
+
                     <div className='home-section3 presentation-web-view'>
                         {/* <p className='home-head2 text-center'>That speaks for us</p> */}
                         {/* <Presentation className='presentation' /> */}
-                        <div className='shadow py-2 px-4' style={{borderRadius:"11%" , border: "6px solid #3f7bdb"}}>
+                        <div className='shadow py-2 px-4' style={{ borderRadius: "11%", border: "6px solid #3f7bdb" }}>
                             {/* <div className='py-4'>
                                 <img src="../images/logo.png"/>
                             </div> */}
                             <table class="table table-borderless">
                                 <h3>{landingContent.advantagesheading}</h3>
-  <thead>
-    <tr>
-      <th scope="col"></th>
-      <th scope="col"></th>
-      {/* <th scope="col"></th> */}
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      {/* <th scope="row">1</th> */}
-      <td>{landingContent.advantagespoint1}</td>
-      <td >	
-      <i class="fa-solid fa-check blue fw-bold"></i>
+                                <thead>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        {/* <th scope="col"></th> */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        {/* <th scope="row">1</th> */}
+                                        <td>{landingContent.advantagespoint1}</td>
+                                        <td >
+                                            <i class="fa-solid fa-check blue fw-bold"></i>
 
-      </td>
-      {/* <td> 
+                                        </td>
+                                        {/* <td> 
       <i class="fa-solid fa-xmark"></i>
       </td> */}
-    </tr>
-    <tr>
-      {/* <th scope="row">2</th> */}
-      <td>{landingContent.advantagespoint2}</td>
-      <td>
+                                    </tr>
+                                    <tr>
+                                        {/* <th scope="row">2</th> */}
+                                        <td>{landingContent.advantagespoint2}</td>
+                                        <td>
 
-      <i class="fa-solid fa-check blue fw-bold"></i>
+                                            <i class="fa-solid fa-check blue fw-bold"></i>
 
-      </td>
-      {/* <td>
+                                        </td>
+                                        {/* <td>
 
       <i class="fa-solid fa-xmark"></i>
       </td> */}
-    </tr>
-    <tr>
-      {/* <th scope="row">3</th> */}
-      <td>{landingContent.advantagespoint3}</td>
-      <td>
+                                    </tr>
+                                    <tr>
+                                        {/* <th scope="row">3</th> */}
+                                        <td>{landingContent.advantagespoint3}</td>
+                                        <td>
 
-      <i class="fa-solid fa-check blue fw-bold"></i>
+                                            <i class="fa-solid fa-check blue fw-bold"></i>
 
-      </td>
-      {/* <td>
+                                        </td>
+                                        {/* <td>
       <i class="fa-solid fa-xmark"></i>
       </td> */}
-    </tr>
-    <tr>
-      {/* <th scope="row">3</th> */}
-      <td>{landingContent.advantagespoint4}</td>
-      <td>
-      <i class="fa-solid fa-check blue fw-bold"></i>
+                                    </tr>
+                                    <tr>
+                                        {/* <th scope="row">3</th> */}
+                                        <td>{landingContent.advantagespoint4}</td>
+                                        <td>
+                                            <i class="fa-solid fa-check blue fw-bold"></i>
 
-      </td>
-      {/* <td>
+                                        </td>
+                                        {/* <td>
       <i class="fa-solid fa-xmark"></i>
       </td> */}
-    </tr>
-    <tr>
-      {/* <th scope="row">3</th> */}
-      <td>{landingContent.advantagespoint5}</td>
-      <td>
-      <i class="fa-solid fa-check blue fw-bold"></i>
+                                    </tr>
+                                    <tr>
+                                        {/* <th scope="row">3</th> */}
+                                        <td>{landingContent.advantagespoint5}</td>
+                                        <td>
+                                            <i class="fa-solid fa-check blue fw-bold"></i>
 
-      </td>
-      {/* <td>
+                                        </td>
+                                        {/* <td>
       <i class="fa-solid fa-xmark"></i>
       </td> */}
-    </tr>
-    <tr>
-      {/* <th scope="row">3</th> */}
-      <td>{landingContent.advantagespoint6}</td>
-      <td>
-      <i class="fa-solid fa-check blue fw-bold"></i>
+                                    </tr>
+                                    <tr>
+                                        {/* <th scope="row">3</th> */}
+                                        <td>{landingContent.advantagespoint6}</td>
+                                        <td>
+                                            <i class="fa-solid fa-check blue fw-bold"></i>
 
-      </td>
-      {/* <td>
+                                        </td>
+                                        {/* <td>
       <i class="fa-solid fa-xmark"></i>
       </td> */}
-    </tr>
-  </tbody>
-</table>
-                            
-                           
-                        
-                            
-                            </div>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+
+
+                        </div>
                         {/* <div className='d-flex justify-content-between mt-5 ml-5 mr-5'>
                             <div className='present-circle'>
                                 <div className='row d-flex justify-content-center'>
@@ -236,7 +236,7 @@ const HomePage = ({ changeLanguage, language, content }) => {
                         </div> */}
                     </div>
 
-                    <div className='row home-section3 presentation-mobile-view'>
+                    {/* <div className='row home-section3 presentation-mobile-view'>
                         <p className='home-head2 text-center'>That speaks for us</p>
                         <div className='col-12 mt-5'>
                             <div className='row d-flex justify-content-center'>
@@ -253,7 +253,7 @@ const HomePage = ({ changeLanguage, language, content }) => {
                             </div>
                             <p className='home-text2 text-center mt-3'>{landingContent.present_text3}</p>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className='row d-flex justify-content-center mt-5'>
                         <NavLink to={`/${langParam}/signup`}>

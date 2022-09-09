@@ -17,7 +17,7 @@ function App() {
   const { pathname } = useLocation();
   const [data, setData] = useState();
   const [content, setContent] = useState({})
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = useState('de');
 
   const changeLanguage = (lang) => {
     setLanguage(lang)
