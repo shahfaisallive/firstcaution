@@ -10,6 +10,7 @@ import ContactBox from '../ContactBox';
 const Information = ({ setFormData, language, data, content, changeLanguage }) => {
     const params = useParams()
     const langParam = params.language
+    const type = params.type
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
@@ -59,7 +60,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
         localStorage.setItem('country', country);
         localStorage.setItem('number', number);
         localStorage.setItem('email', email);
-
+        localStorage.setItem('type',type)
         navigate("/" + language + "/signup/guarantee")
     }
 

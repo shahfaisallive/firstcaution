@@ -285,6 +285,14 @@ input[type=number]::-webkit-outer-spin-button {
   box-shadow: 5px 3px 15px 2px #263b67;
 }
 
+.private-img {
+  border-radius: 5px;
+}
+
+.private-img:hover {
+  box-shadow: 5px 3px 15px 2px #263b67;
+}
+
 .info-wrapper {
   padding-top: 100px;
   padding-bottom: 50px;
@@ -475,7 +483,37 @@ input[type=number]::-webkit-outer-spin-button {
   bottom: 10px;
   background-color: #3876DA;
   border-radius: 360px;
-  padding: 10px;
+  padding: 19px 10px 12px 10px;
+  width: 95px;
+  z-index: 10;
+}
+.contact-toggle-1 {
+  position: fixed;
+  right: 20px;
+  bottom: 270px;
+  background-color: #3876DA;
+  border-radius: 360px;
+  padding: 19px 10px 12px 10px;
+  width: 95px;
+  z-index: 10;
+}
+.contact-toggle-2 {
+  position: fixed;
+  right: 20px;
+  bottom: 160px;
+  background-color: #3876DA;
+  border-radius: 360px;
+  padding: 19px 10px 12px 10px;
+  width: 95px;
+  z-index: 10;
+}
+.contact-toggle-3 {
+  position: fixed;
+  right: 20px;
+  bottom: 50px;
+  background-color: #3876DA;
+  border-radius: 360px;
+  padding: 19px 10px 12px 10px;
   width: 95px;
   z-index: 10;
 }
@@ -488,17 +526,13 @@ input[type=number]::-webkit-outer-spin-button {
 
 .contact-wrapper {
   position: fixed;
-  right: 10px;
+  right: 20px;
   bottom: 10px;
-  width: 320px;
-  border: 1px solid #d5d5e2;
-  padding: 0px 0px 7px 30px;
-  background: #fff;
+  background-color: #3876DA;
+  border-radius: 360px;
+  padding: 19px 10px 12px 10px;
+  width: 95px;
   z-index: 10;
-  border-radius: 40px;
-  box-shadow: 0px 1px 4px 0px grey;
-  transition: all 1s linear;
-  display: block;
 }
 
 .contact-wrapper-none {

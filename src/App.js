@@ -16,6 +16,7 @@ function App() {
   const urlParams = new URLSearchParams(window.location.search)
   const { pathname } = useLocation();
   const [data, setData] = useState();
+  const [type, setType] = useState('');
   const [content, setContent] = useState({})
   const [language, setLanguage] = useState('de');
 
@@ -30,7 +31,7 @@ function App() {
   }
 
   useEffect(() => {
-   
+
     const lang = localStorage.getItem("language")
     if (lang) {
       setLanguage(lang)
@@ -50,28 +51,38 @@ function App() {
     let utmSource = urlParams.get('utm_source')
     let utmCompaign = urlParams.get('utm_campaign')
     let utmMedium = urlParams.get('utm_medium')
-    if (utmSource || utmCompaign || utmMedium) {
+    let type = urlParams.get('type')
+    if (utmSource || utmCompaign || utmMedium || type) {
       localStorage.setItem('utmSource', utmSource);
       localStorage.setItem('utmCompaign', utmCompaign);
       localStorage.setItem('utmMedium', utmMedium);
     }
   }, [language, data, content])
 
-  if(pathname.length==1){
+  if (pathname.length == 1) {
     navigate('/de')
   }
-  
+
 
   return (
     <div className="App">
-        <Routes>
-          <Route path="/:language" element={<HomePage changeLanguage={changeLanguage} language={language} content={content} />} />
-          <Route path={`/:language/signup`} element={<Introduction language={language} content={content} />} />
-          <Route path={`/:language/signup/information`} element={<Information changeLanguage={changeLanguage} setFormData={setFormData} data={data} language={language} content={content} />} />
-          <Route path={`/:language/signup/guarantee`} element={<Guarantee data={data} language={language} content={content} />} />
-          <Route path={`/:language/signup/confirmation`} element={<Confirmation language={language} content={content} />} />
-          <Route path={`/:language/signup/confirmed`} element={<ConfirmedPage language={language} content={content} />} />
-        </Routes>
+      <Routes>
+        <Route path="/:language" element={<HomePage changeLanguage={changeLanguage} language={language} content={content} />} />
+        <Route path={`/:language/signup`} element={<Introduction language={language} content={content} />} />
+        <Route path={`/:language/signup/information/:type`}
+          element={
+          <Information
+            changeLanguage={changeLanguage}
+            setFormData={setFormData}
+            data={data}
+            language={language}
+            content={content}
+          />}
+        />
+        <Route path={`/:language/signup/guarantee`} element={<Guarantee data={data} language={language} content={content} />} />
+        <Route path={`/:language/signup/confirmation`} element={<Confirmation language={language} content={content} />} />
+        <Route path={`/:language/signup/confirmed`} element={<ConfirmedPage language={language} content={content} />} />
+      </Routes>
     </div>
   );
 }

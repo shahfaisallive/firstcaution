@@ -26,16 +26,40 @@ const ContactBox = () => {
                 </div>
                 {/* <p className='text-dark contact-text1'><b>Contact us:</b></p> */}
                 <div className='d-flex mt-3'>
-                    <img className='contact-icon' src="https://img.icons8.com/ios-glyphs/50/1859e6/phone-disconnected.png" />
-                    <a href="tel:0840 78 78 77"><p className='contact-text3 mt-1'>0840 78 78 77</p></a>
+                    <div className='contact-toggle-1' >
+                        <div className='d-flex justify-content-center'>
+                            <ContactIcon />
+                        </div>
+                        <p className='text-light text-center'>
+                            {lang == "en" ? "Contact" : lang == "it" ? "Contatto" : lang == "de" ? "Kontact" : lang == "fr" ? "Contact" : "Contact"}
+                        </p>
+                    </div>
+                    {/* <img className='contact-icon' src="https://img.icons8.com/ios-glyphs/50/1859e6/phone-disconnected.png" />
+                    <a href="tel:0840 78 78 77"><p className='contact-text3 mt-1'>0840 78 78 77</p></a> */}
                 </div>
                 <div className='d-flex'>
-                    <img className='contact-icon' src="https://img.icons8.com/ios-glyphs/50/1859e6/whatsapp.png" />
-                    <a href="tel:022 318 59 39"><p className='contact-text3 mt-1'>022 318 59 39</p></a>
+                    <div className='contact-toggle-2' >
+                        <div className='d-flex justify-content-center'>
+                            <ContactIcon />
+                        </div>
+                        <p className='text-light text-center'>
+                            {lang == "en" ? "Contact" : lang == "it" ? "Contatto" : lang == "de" ? "Kontact" : lang == "fr" ? "Contact" : "Contact"}
+                        </p>
+                    </div>
+                    {/* <img className='contact-icon' src="https://img.icons8.com/ios-glyphs/50/1859e6/whatsapp.png" />
+                    <a href="tel:022 318 59 39"><p className='contact-text3 mt-1'>022 318 59 39</p></a> */}
                 </div>
                 <div className='d-flex'>
-                    <img className='contact-icon' src="https://img.icons8.com/material-sharp/50/1859e6/mail.png" />
-                    <a href="mailto:business@firstcaution.ch"><p className='contact-text3 mt-1'>business@firstcaution.ch</p></a>
+                    <div className='contact-toggle-3' >
+                        <div className='d-flex justify-content-center'>
+                            <ContactIcon />
+                        </div>
+                        <p className='text-light text-center'>
+                            {lang == "en" ? "Contact" : lang == "it" ? "Contatto" : lang == "de" ? "Kontact" : lang == "fr" ? "Contact" : "Contact"}
+                        </p>
+                    </div>
+                    {/* <img className='contact-icon' src="https://img.icons8.com/material-sharp/50/1859e6/mail.png" />
+                    <a href="mailto:business@firstcaution.ch"><p className='contact-text3 mt-1'>business@firstcaution.ch</p></a> */}
                 </div>
             </div>
             <div className={toggleClass} onClick={toggleHandler}>

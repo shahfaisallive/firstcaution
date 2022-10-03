@@ -3,6 +3,7 @@ import Breadcrumbs from './Breadcrumbs'
 import { ReactComponent as EditIcon } from "../../media/edit.svg";
 import { ReactComponent as HouseIcon } from "../../media/house.svg";
 import { Link, useNavigate } from 'react-router-dom';
+import * as yup from "yup";
 import axios from 'axios';
 import ContactBox from '../ContactBox';
 
@@ -41,10 +42,42 @@ const Confirmation = ({ language, content }) => {
     const [utmSource, setUtmSource] = useState("")
     const [utmMedium, setUtmMedium] = useState("")
     const [utmCompaign, setUtmCompaign] = useState("")
+    const [type,setType] = useState("")
 
     const [confirmAuthenticity, setConfirmAuthenticity] = useState(false)
     const [confirmTOC, setConfirmTOC] = useState(false)
 
+    const validationSchema = yup.object({
+        request_nature: yup.string().required("Required").min(3, "Channel Name Must be Greater than 3 Characters"),
+        language: yup.string().required("Required").min(3, "Creator Name Must be Greater than 3 Characters"),
+        first_name: yup.string().required("Required"),
+        real_estate_city: yup.string().required("Required"),
+        real_estate_zip_code: yup.string().required("Required"),
+        real_estate_address: yup.string().required("Required"),
+        real_estate_name: yup.string().required("Required"),
+        lease_type: yup.string().required("Required"),
+        address_country_id: yup.string().required("Required"),
+        address_zip_code: yup.string().required("Required"),
+        address_house_nr: yup.string().required("Required"),
+        address_street: yup.string().required("Required"),
+        mobile_phone: yup.string().required("Required"),
+        email: yup.string().required("Required"),
+        residence_permit_id: yup.string().required("Required"),
+        nationality_id: yup.string().required("Required"),
+        birthday: yup.string().required("Required"),
+        premise_street: yup.string().required("Required"),
+        premise_house_nr: yup.string().required("Required"),
+        premise_zip_code: yup.string().required("Required"),
+        premise_city: yup.string().required("Required"),
+        premise_country_id: yup.string().required("Required"),
+        guarantee_amount: yup.string().required("Required"),
+        rent_amount: yup.string().required("Required"),
+        promotional_code: yup.string().required("Required"),
+        tenants: yup.string().required("Required"),
+        utm_source: yup.string().required("Required"),
+        utm_medium: yup.string().required("Required"),
+        utm_compaign: yup.string().required("Required"),
+    });
 
     useEffect(() => {
         setData(JSON.parse(localStorage.getItem("data")))
@@ -53,6 +86,7 @@ const Confirmation = ({ language, content }) => {
         setLastName(localStorage.getItem("lastName"))
         setDob(localStorage.getItem("dob"))
         setNationality(localStorage.getItem("nationality"))
+        setType(localStorage.getItem("type"))
         setStreet(localStorage.getItem("street"))
         setNo(localStorage.getItem("no"))
         setZipCode(localStorage.getItem("zipCode"))
@@ -106,13 +140,13 @@ const Confirmation = ({ language, content }) => {
         if (confirmAuthenticity && confirmTOC) {
             setSubmitLoader(true)
             // const token = await axios.get("http://localhost:4000/api/auth-token",
-            const token = await axios.get("https://backendlanding.firstcaution.ch/api/auth-token",
-                {
-                    Headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-            console.log(token.data.access_token)
+            // const token = await axios.get("https://backendlanding.firstcaution.ch/api/auth-token",
+            //     {
+            //         Headers: {
+            //             'Content-Type': 'application/json',
+            //         }
+            //     })
+            // console.log(token.data.access_token)
 
             const bodyObj = {
                 request_nature: "certificate",
@@ -130,7 +164,7 @@ const Confirmation = ({ language, content }) => {
                 address_zip_code: zipCode,
                 address_city: locality,
                 address_country_id: country,
-                lease_type: "commercial",
+                lease_type: type,
                 real_estate_name: "",
                 real_estate_address: "",
                 real_estate_zip_code: "",
@@ -150,35 +184,39 @@ const Confirmation = ({ language, content }) => {
 
             }
             console.log("payload", bodyObj)
-            const response = await axios.post("https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/provisional-certificate",
-                bodyObj,
-                { headers: { "Authorization": `Bearer ${token.data.access_token}` } })
 
-            console.log(response.data.data.token)
-            // console.log(leaseFile)
+            validationSchema.validate(bodyObj).catch(function (err) {
+                console.log(err.name,err.errors)
+              });
+            // const response = await axios.post("https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/provisional-certificate",
+            //     bodyObj,
+            //     { headers: { "Authorization": `Bearer ${token.data.access_token}` } })
 
-            const fileData = [
-                {
-                    fileName: leaseFileName,
-                    fileBase64: leaseFile
-                },
-                {
-                    fileName: IdFileName,
-                    fileBase64: IdFile
-                }
-            ]
+            // console.log(response.data.data.token)
+            // // console.log(leaseFile)
 
-            if (response.data.data.status == "accepted") {
-                console.log(fileData)
-                const fileRes = await axios.post(`https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
-                    { headers: { "Authorization": `Bearer ${token.data.access_token}` } })
+            // const fileData = [
+            //     {
+            //         fileName: leaseFileName,
+            //         fileBase64: leaseFile
+            //     },
+            //     {
+            //         fileName: IdFileName,
+            //         fileBase64: IdFile
+            //     }
+            // ]
 
-                console.log(fileRes)
-                setSubmitLoader(false)
-                navigate("/" + language + "/signup/confirmed")
-            } else {
-                alert("Data not correct")
-            }
+            // if (response.data.data.status == "accepted") {
+            //     console.log(fileData)
+            //     const fileRes = await axios.post(`https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
+            //         { headers: { "Authorization": `Bearer ${token.data.access_token}` } })
+
+            //     console.log(fileRes)
+            //     setSubmitLoader(false)
+            //     navigate("/" + language + "/signup/confirmed")
+            // } else {
+            //     alert("Data not correct")
+            // }
 
         } else {
             document.getElementById("form-submit-authenticate").style.display = "block"
@@ -310,7 +348,7 @@ const Confirmation = ({ language, content }) => {
 
                     <div className='row d-flex justify-content-center mt-5'>
                         {!submitLoader ? <button className='btn next-btn' onClick={dataSubmitHandler}>Submit</button> :
-                            <button className='btn next-btn'><div class="spinner-border spinner-border-sm" role="status">
+                            <button className='btn next-btn'><div className="spinner-border spinner-border-sm" role="status">
                                 <span className="sr-only">Loading...</span>
                             </div></button>}
                     </div>
