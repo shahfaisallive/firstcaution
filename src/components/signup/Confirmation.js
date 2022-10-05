@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import Breadcrumbs from './Breadcrumbs'
-import { ReactComponent as EditIcon } from "../../media/edit.svg";
+import { ReactComponent as EditIcon } from "../../media/edit-icon.svg";
 import { ReactComponent as HouseIcon } from "../../media/house.svg";
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from "yup";
-import axios from 'axios';
 import ContactBox from '../ContactBox';
 
 const Confirmation = ({ language, content }) => {
+
     const navigate = useNavigate()
     const [submitLoader, setSubmitLoader] = useState(false)
-
     const [data, setData] = useState()
     const [civility, setCivility] = useState("")
     const [firstName, setFirstName] = useState("")
@@ -42,7 +41,7 @@ const Confirmation = ({ language, content }) => {
     const [utmSource, setUtmSource] = useState("")
     const [utmMedium, setUtmMedium] = useState("")
     const [utmCompaign, setUtmCompaign] = useState("")
-    const [type,setType] = useState("")
+    const [type, setType] = useState("")
 
     const [confirmAuthenticity, setConfirmAuthenticity] = useState(false)
     const [confirmTOC, setConfirmTOC] = useState(false)
@@ -78,7 +77,7 @@ const Confirmation = ({ language, content }) => {
         utm_medium: yup.string().required("Required"),
         utm_compaign: yup.string().required("Required"),
     });
-
+    
     useEffect(() => {
         setData(JSON.parse(localStorage.getItem("data")))
         setCivility(localStorage.getItem("civility"))
@@ -170,24 +169,24 @@ const Confirmation = ({ language, content }) => {
                 real_estate_zip_code: "",
                 real_estate_city: "",
                 premise_street: guaranteeStreet,
-                premise_house_nr: guaranteeNo?guaranteeNo:null,
-                premise_zip_code: guaranteeZipCode?guaranteeZipCode:null,
-                premise_city: guaranteeLocality?guaranteeLocality:"",
+                premise_house_nr: guaranteeNo ? guaranteeNo : null,
+                premise_zip_code: guaranteeZipCode ? guaranteeZipCode : null,
+                premise_city: guaranteeLocality ? guaranteeLocality : "",
                 premise_country_id: "",
-                guarantee_amount: guaranteeAmount?guaranteeAmount:null,
+                guarantee_amount: guaranteeAmount ? guaranteeAmount : null,
                 rent_amount: 3000,
                 promotional_code: promoCode,
                 tenants: tenants,
-                utm_source: utmSource?utmSource:" ",
-                utm_compaign: utmCompaign?utmCompaign:" ",
-                utm_medium: utmMedium?utmMedium:" "
+                utm_source: utmSource ? utmSource : " ",
+                utm_compaign: utmCompaign ? utmCompaign : " ",
+                utm_medium: utmMedium ? utmMedium : " "
 
             }
             console.log("payload", bodyObj)
 
             validationSchema.validate(bodyObj).catch(function (err) {
-                console.log(err.name,err.errors)
-              });
+                console.log(err.name, err.errors)
+            });
             // const response = await axios.post("https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/provisional-certificate",
             //     bodyObj,
             //     { headers: { "Authorization": `Bearer ${token.data.access_token}` } })
@@ -236,22 +235,19 @@ const Confirmation = ({ language, content }) => {
                     <div className='detail-div pl-5'>
                         <div className='row'>
                             <p className='form-text1'>{content.conf_head2}</p>
-                            {/* <span className='edit-btn mt-1'>
-                                <p>Edit<EditIcon className='ml-2' /></p>
-                            </span> */}
                         </div>
                         <div className='row'>
                             <HouseIcon />
-                            <p className='detail-text2 ml-2'>Commercial</p>
+                            <p className='detail-text2 ml-2'>{type}</p>
                         </div>
                     </div>
 
                     <div className='detail-div mt-4 pl-5'>
-                        <div className='row'>
+                        <div className='d-flex justify-content-between'>
                             <p className='form-text1'>{content.conf_head3}</p>
-                            {/* <span className='edit-btn mt-1'>
-                                <p>Edit<EditIcon className='ml-2' /></p>
-                            </span> */}
+                            <Link to={`/${language}/signup/edit/information/${type}`}>
+                                <EditIcon />
+                            </Link>
                         </div>
 
                         <div className='row'>
@@ -300,11 +296,11 @@ const Confirmation = ({ language, content }) => {
                     </div>
 
                     <div className='detail-div mt-4 pl-5'>
-                        <div className='row'>
+                        <div className='d-flex justify-content-between'>
                             <p className='form-text1'>{content.conf_head4}</p>
-                            {/* <span className='edit-btn mt-1'>
-                                <p>Edit<EditIcon className='ml-2' /></p>
-                            </span> */}
+                            <Link to={`/${language}/signup/edit/guarantee/`}>
+                                <EditIcon />
+                            </Link>
                         </div>
 
                         <div className='row'>

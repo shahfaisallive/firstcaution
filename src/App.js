@@ -63,28 +63,58 @@ function App() {
     navigate('/de')
   }
 
-
   return (
     <div className="App">
       <Routes>
-        <Route path="/:language" element={<HomePage changeLanguage={changeLanguage} language={language} content={content} />} />
-        <Route path={`/:language/signup`} element={<Introduction language={language} content={content} />} />
-        <Route path={`/:language/signup/information/:type`}
-          element={
-          <Information
+        <Route path="/:language" element={
+          <HomePage
             changeLanguage={changeLanguage}
-            setFormData={setFormData}
-            data={data}
             language={language}
             content={content}
           />}
         />
-        <Route path={`/:language/signup/guarantee`} element={<Guarantee data={data} language={language} content={content} />} />
-        <Route path={`/:language/signup/confirmation`} element={<Confirmation language={language} content={content} />} />
-        <Route path={`/:language/signup/confirmed`} element={<ConfirmedPage language={language} content={content} />} />
+        <Route path={`/:language/signup`}
+          element={
+            <Introduction
+              language={language}
+              content={content}
+            />}
+        />
+        <Route path={`/:language/signup/:status/information/:type`}
+          element={
+            <Information
+              changeLanguage={changeLanguage}
+              setFormData={setFormData}
+              data={data}
+              language={language}
+              content={content}
+            />}
+        />
+        <Route path={`/:language/signup/:status/guarantee`}
+          element={
+            <Guarantee
+              data={data}
+              language={language}
+              content={content}
+            />}
+        />
+        <Route path={`/:language/signup/confirmation`}
+          element={
+            <Confirmation
+              language={language}
+              content={content} />}
+        />
+        <Route path={`/:language/signup/confirmed`}
+          element={
+            <ConfirmedPage
+              language={language}
+              content={content} />}
+        />
       </Routes>
     </div>
   );
 }
 
 export default App;
+
+//:status/

@@ -55,7 +55,10 @@
         "btn_submit": "Submit",
         "btn_next": "NEXT",
         "success_msg": "Data submitted successfully!",
-        "confirmed_msg" : "Congratulations! Your registration is almost complete. Now choose your payment method"
+        "confirmed_heading":"Thank You For Registering",
+        "confirmed_msg" : "You will soon receive a confirmation e-mail from Firstcaution that will process your application in the next 1-2 business days. Thank you for your trust.",
+        "confirmed_msg_1" : "You will soon receive a confirmation e-mail from Firstcaution that will process your application in the next 1-2 business days. Thank you for your trust.",
+        "confirmed_msg_2" : "If you're moving to the new address you can already schedule an address change for the moving in date in the app, by using the \"Update your address\" option below"
     },
     "de": {
         "about_us": "Über uns",

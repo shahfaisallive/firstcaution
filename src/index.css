@@ -77,6 +77,7 @@ body {
   color: #263b67;
   font-weight: 700;
 }
+
 .home-text3 {
   font-size: 16px;
   color: #263b67;
@@ -348,6 +349,19 @@ input[type=number]::-webkit-outer-spin-button {
   color: #F0F4F7;
 }
 
+.save-btn {
+  background-color: #0f397c;
+  color: #fff;
+  font-size: 14px;
+  padding: 5px 15px 5px 15px;
+  width: 120px;
+}
+
+.save-btn:hover {
+  background-color: #3876DA;
+  color: #F0F4F7;
+}
+
 .form-control {
   background-color: #F8FBFF;
   height: 40px;
@@ -465,10 +479,10 @@ input[type=number]::-webkit-outer-spin-button {
 /* Confirmed styles */
 .confirmed-wrapper {
   margin-top: 100px;
-  padding: 40px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 2px 2px 10px grey;
+  /* padding: 40px; */
+  /* background-color: #fff; */
+  /* border-radius: 5px; */
+  /* box-shadow: 2px 2px 10px grey; */
 }
 
 .con-text1 {
@@ -477,44 +491,78 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /* Contact Box Styles */
-.contact-toggle {
+.contact-toggle-on {
   position: fixed;
   right: 20px;
+  background-color: #3876DA;
+  border-radius: 360px;
+  padding: 15px 7px 1px 9px;
+  width: 73px;
+  z-index: 10;
   bottom: 10px;
-  background-color: #3876DA;
-  border-radius: 360px;
-  padding: 19px 10px 12px 10px;
-  width: 95px;
-  z-index: 10;
 }
-.contact-toggle-1 {
+.contact-toggle-off {
   position: fixed;
   right: 20px;
-  bottom: 270px;
-  background-color: #3876DA;
+  background-color: #0c2341;
   border-radius: 360px;
-  padding: 19px 10px 12px 10px;
-  width: 95px;
+  padding: 15px 7px 1px 9px;
+  width: 73px;
   z-index: 10;
+  bottom: 10px;
 }
-.contact-toggle-2 {
+
+.contact-btn:hover {
+  cursor: pointer;
+}
+
+.contact-toggle-1 {
   position: fixed;
   right: 20px;
   bottom: 160px;
   background-color: #3876DA;
   border-radius: 360px;
-  padding: 19px 10px 12px 10px;
-  width: 95px;
+  padding: 15px 7px 1px 9px;
+  width: 73px;
   z-index: 10;
 }
+
+.icons-contact:hover {
+  background-color: #0c2341;
+  cursor: pointer;
+
+}
+
+.contact-toggle-2 {
+  position: fixed;
+  right: 20px;
+  bottom: 85px;
+  background-color: #3876DA;
+  border-radius: 360px;
+  padding: 15px 7px 1px 9px;
+  width: 73px;
+  z-index: 10;
+}
+
 .contact-toggle-3 {
   position: fixed;
   right: 20px;
-  bottom: 50px;
+  bottom: 160px;
   background-color: #3876DA;
   border-radius: 360px;
-  padding: 19px 10px 12px 10px;
-  width: 95px;
+  padding: 15px 7px 1px 9px;
+  width: 73px;
+  z-index: 10;
+}
+
+.contact-toggle-4 {
+  position: fixed;
+  right: 20px;
+  bottom: 85px;
+  background-color: #3876DA;
+  border-radius: 360px;
+  padding: 15px 7px 1px 9px;
+  width: 73px;
   z-index: 10;
 }
 
@@ -522,17 +570,6 @@ input[type=number]::-webkit-outer-spin-button {
   cursor: pointer;
   transform: scale(0.9);
   transition: transform 0.2s ease-in-out;
-}
-
-.contact-wrapper {
-  position: fixed;
-  right: 20px;
-  bottom: 10px;
-  background-color: #3876DA;
-  border-radius: 360px;
-  padding: 19px 10px 12px 10px;
-  width: 95px;
-  z-index: 10;
 }
 
 .contact-wrapper-none {
@@ -547,6 +584,11 @@ input[type=number]::-webkit-outer-spin-button {
   width: 30px;
   height: 30px;
   margin-right: 10px;
+}
+
+.icon-text {
+  font-size: 12px;
+  text-align: center;
 }
 
 .contact-close-btn {
@@ -596,7 +638,8 @@ input[type=number]::-webkit-outer-spin-button {
   padding: 30px;
   width: 250px;
 }
-.present-logo{
+
+.present-logo {
   max-height: 70px;
 }
 
@@ -689,5 +732,5 @@ input[type=number]::-webkit-outer-spin-button {
 
 
 .blue {
-  color : #0056b3;
+  color: #0056b3;
 }
