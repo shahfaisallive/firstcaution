@@ -55,7 +55,6 @@
         "btn_submit": "Submit",
         "btn_next": "NEXT",
         "success_msg": "Data submitted successfully!",
-        "confirmed_heading":"Thank You For Registering",
         "confirmed_msg" : "You will soon receive a confirmation e-mail from Firstcaution that will process your application in the next 1-2 business days. Thank you for your trust.",
         "confirmed_msg_1" : "You will soon receive a confirmation e-mail from Firstcaution that will process your application in the next 1-2 business days. Thank you for your trust.",
         "confirmed_msg_2" : "If you're moving to the new address you can already schedule an address change for the moving in date in the app, by using the \"Update your address\" option below"
@@ -116,7 +115,9 @@
         "btn_submit": "Einreichen",
         "btn_next": "NÄCHSTE",
         "success_msg": "Daten erfolgreich übermittelt!",
-        "confirmed_msg": "Gratulation! lhre Anmeldung ist fast fertig. Wahlen Sie nun lhre Zahlungsart"
+        "confirmed_msg": "Gratulation! lhre Anmeldung ist fast fertig. Wahlen Sie nun lhre Zahlungsart",
+        "confirmed_msg_sub1" : "Sie erhalten in Kürze eine Bestätigungs-E-Mail von Firstcaution, die Ihren Antrag in den nächsten 1-2 Werktagen bearbeitet. Danke für dein Vertrauen.",
+        "confirmed_msg_sub2" : "Wenn Sie an die neue Adresse ziehen, können Sie in der App bereits eine Adressänderung für das Einzugsdatum planen, indem Sie unten die Option \"Adresse aktualisieren\" verwenden"
     },
     "fr": {
         "about_us": "À propos de nous",
@@ -174,7 +175,9 @@
         "btn_submit": "Soumettre",
         "btn_next": "SUIVANT",
         "success_msg": "Données soumises avec succès !",
-        "confirmed_msg": "Toutes nos félicitations! Votre inscription est presque terminée. Choisissez maintenant votre mode de paiement"
+        "confirmed_msg": "Toutes nos félicitations! Votre inscription est presque terminée. Choisissez maintenant votre mode de paiement",
+        "confirmed_msg_sub1" : "Vous recevrez bientôt un e-mail de confirmation de Firstcaution qui traitera votre demande dans les 1-2 prochains jours ouvrables. Merci pour ta confiance.",
+        "confirmed_msg_sub2" : "subSi vous déménagez à la nouvelle adresse, vous pouvez déjà programmer un changement d'adresse pour la date d'emménagement dans l'application, en utilisant l'option \"Mettre à jour votre adresse\" ci-dessous"
     },
     "it": {
         "about_us": "Chi siamo",
@@ -232,6 +235,8 @@
         "btn_submit": "Invia",
         "btn_next": "PROSSIMO",
         "success_msg": "Dati inviati con successo!",
-        "confirmed_msg": "Congratulazioni! La tua registrazione è quasi completa. Ora scegli il tuo metodo di pagamento"
+        "confirmed_msg": "Congratulazioni! La tua registrazione è quasi completa. Ora scegli il tuo metodo di pagamento",
+        "confirmed_msg_sub1" : "Riceverai presto un'e-mail di conferma da Firstcaution che elaborerà la tua richiesta nei prossimi 1-2 giorni lavorativi. Grazie per la tua fiducia.",
+        "confirmed_msg_sub2" : "Se ti stai trasferendo al nuovo indirizzo puoi già programmare una modifica dell'indirizzo per la data del trasloco nell'app, utilizzando l'opzione \"Aggiorna il tuo indirizzo\" di seguito"
     }
 }

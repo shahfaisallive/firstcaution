@@ -24,6 +24,7 @@ const Guarantee = ({ language, content }) => {
 	const [IdFile, setIdFile] = useState("")
 	const [leaseFileName, setLeaseFileName] = useState("")
 	const [IdFileName, setIdFileName] = useState("")
+	const [type, setType] = useState("")
 
 	// Tenant States
 	const [tenants, setTenants] = useState([])
@@ -38,6 +39,7 @@ const Guarantee = ({ language, content }) => {
 	}, [])
 
 	useEffect(() => {
+		setType(localStorage.getItem("type"))
 		if (status == 'edit') {
 			setGuaranteeStreet(localStorage.getItem("guaranteeStreet"))
 			setGuaranteeNo(localStorage.getItem("guaranteeNo"))
@@ -50,10 +52,29 @@ const Guarantee = ({ language, content }) => {
 			setLeaseFileName(localStorage.getItem("leaseFileName"))
 			setIdFile(localStorage.getItem("IdFile"))
 			setIdFileName(localStorage.getItem("IdFileName"))
+			const tenantsArray = JSON.parse(localStorage.getItem("tenants"))
+			console.log(tenantsArray,'asasdasdas')
+			let allTenants = tenantsArray.map((obj) => {
+				let myKey = Object.values(obj)
+				return {
+					last_name: myKey[3],
+					birthday: myKey[4],
+					nationality_id: myKey[5],
+					role_id: "1",
+					civility_id: myKey[1],
+					first_name: myKey[2],
+					number : myKey[9],
+					email : myKey[6]
+				}
+			})
+			// console.log(allTenants,'dasdas')
+			setTenants(tenantsArray)
 		}
 	}, [status])
 
-	const nextPageHandler = () => {
+	const nextPageHandler = (e) => {
+		e.preventDefault()
+		console.log(tenants,'dasdasd')
 		localStorage.setItem('guaranteeStreet', guaranteeStreet);
 		localStorage.setItem('guaranteeNo', guaranteeNo);
 		localStorage.setItem('guaranteeZipCode', guaranteeZipCode);
@@ -118,15 +139,6 @@ const Guarantee = ({ language, content }) => {
 		console.log(tenants)
 	}
 
-	useEffect(() => {
-		if (tenants.length !== 0) {
-			let data = [...tenants];
-			data[indexForTNum]['t_mobile'] = tNum;
-			setTenants(data);
-			console.log(tenants)
-		}
-	}, [tNum])
-
 	const onDocFileChange = async (index, e) => {
 		let data = [...tenants];
 		if (e.target.files && e.target.files[0]) {
@@ -170,20 +182,20 @@ const Guarantee = ({ language, content }) => {
 		<div className='info-wrapper container'>
 			<ContactBox />
 			<Breadcrumbs level={3} content={content} />
-			<Link to={`/${language}/signup/information`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
+			<Link to={`/${language}/signup/new/information/${type}`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
 
 			<div className='row'>
 				<div className='col-sm-8 form-div mt-3'>
 
 					{/* ADDRESS SECTION */}
 
-					<form onSubmit={nextPageHandler}>
+					<form >
 						<p className='form-text1'>{content.guar_head1}</p>
 
 						<div className='row d-flex justify-content-start mt-4'>
 							<div className="form-group col-8">
 								<label htmlFor="street" className='form-label'>{content.street}</label>
-								<input value={guaranteeStreet}  type="text" className="form-control" id="street" onChange={(e => setGuaranteeStreet(e.target.value))} />
+								<input value={guaranteeStreet} type="text" className="form-control" id="street" onChange={(e => setGuaranteeStreet(e.target.value))} />
 							</div>
 							<div className="form-group col-4">
 								<label htmlFor="number" className='form-label'>{content.no}</label>
@@ -204,17 +216,17 @@ const Guarantee = ({ language, content }) => {
 						<p className='form-text1 mt-5'>{content.guar_head2}</p>
 						<div className="form-group">
 							<label htmlFor="guaranteeAmount" className='form-label'>{content.amount_in_guarantee}</label>
-							<input value={guaranteeAmount}  type="number" className="form-control" id="guaranteeAmount" onChange={(e => setGuaranteeAmount(e.target.value))} />
+							<input value={guaranteeAmount} type="number" className="form-control" id="guaranteeAmount" onChange={(e => setGuaranteeAmount(e.target.value))} />
 						</div>
 
 						<div className="form-group mt-1">
 							<label htmlFor="moveDate" className='form-label'>{content.mone_in_date}</label>
-							<input value={moveInDate}  type="date" className="form-control" id="moveDate" onChange={(e => setMoveInDate(e.target.value))} />
+							<input value={moveInDate} type="date" className="form-control" id="moveDate" onChange={(e => setMoveInDate(e.target.value))} />
 						</div>
 
 						<div className="form-group mt-1 mb-5">
 							<label htmlFor="guaranteeAmount" className='form-label'>{content.promo_code}</label>
-							<input value={promoCode}  type="text" className="form-control" id="guaranteeAmount" onChange={(e => setPromoCode(e.target.value))} />
+							<input value={promoCode} type="text" className="form-control" id="guaranteeAmount" onChange={(e => setPromoCode(e.target.value))} />
 							<label className='form-label'>{content.promo_validated}</label>
 						</div>
 
@@ -248,9 +260,9 @@ const Guarantee = ({ language, content }) => {
 									<div className='row d-flex justify-content-start mt-5'>
 										<div className="form-group col-6">
 											<label htmlFor="type" className='form-label'>{content.type}</label>
-											<select className="form-control" defaultValue={'Tenant'} id="type" name='t_type' onChange={e => handleFormChange(index, e)}>
+											<select className="form-control" defaultValue={tenant.t_type || 'Tenant'} id="type" name='t_type' onChange={e => handleFormChange(index, e)}>
 												<option value="Guarantor">Guarantor</option>
-												<option value="Tenant" selected>Tenant</option>
+												<option value="Tenant">Tenant</option>
 											</select>
 										</div>
 										<div className="form-group col-6">
@@ -265,22 +277,22 @@ const Guarantee = ({ language, content }) => {
 									<div className='row d-flex justify-content-start mt-1'>
 										<div className="form-group col-6">
 											<label htmlFor="firstname" className='form-label'>{content.first_name}</label>
-											<input required type="text" className="form-control" id="type" name='t_firstName' onChange={e => handleFormChange(index, e)} />
+											<input value={tenant.t_firstName} required type="text" className="form-control" id="type" name='t_firstName' onChange={e => handleFormChange(index, e)} />
 										</div>
 										<div className="form-group col-6">
 											<label htmlFor="lasttime" className='form-label'>{content.last_name}</label>
-											<input required type="text" className="form-control" id="lasttime" name='t_lastName' onChange={e => handleFormChange(index, e)} />
+											<input value={tenant.t_lastName} required type="text" className="form-control" id="lasttime" name='t_lastName' onChange={e => handleFormChange(index, e)} />
 										</div>
 									</div>
 
 									<div className='row d-flex justify-content-start mt-1'>
 										<div className="form-group col-6">
 											<label htmlFor="dob" className='form-label'>{content.date_of_birth}</label>
-											<input type="date" className="form-control" id="dob" name='t_dob' onChange={e => handleFormChange(index, e)} />
+											<input value={tenant.birthday} type="date" className="form-control" id="dob" name='t_dob' onChange={e => handleFormChange(index, e)} />
 										</div>
 										<div className="form-group col-6">
 											<label htmlFor="nationality" className='form-label'>{content.nationality}</label>
-											<select defaultValue="CH" className="form-control" id="nationality" name='t_nationality' onChange={e => handleFormChange(index, e)}>
+											<select className="form-control" defaultValue={tenant.nationality_id} id="nationality" name='t_nationality' onChange={e => handleFormChange(index, e)}>
 												{data.countries.map((country) => <option value={country.value} key={country.value}>{country.label}</option>
 												)}
 											</select>
@@ -291,9 +303,8 @@ const Guarantee = ({ language, content }) => {
 										<div className="form-group col-12">
 											<label htmlFor="num" className='form-label'>{content.number}</label>
 											<PhoneInput
-												defaultCountry='CH'
 												placeholder="Enter phone number"
-												value={tNum}
+												value={tenant.t_mobile}
 												onChange={setTNum} className="phone-input-field" onFocus={() => setIndexForTNum(index)}
 											/>
 										</div>
@@ -301,7 +312,7 @@ const Guarantee = ({ language, content }) => {
 
 									<div className="form-group">
 										<label htmlFor="email" className='form-label'>{content.email}</label>
-										<input type="email" className="form-control" id="email" name='t_email' onChange={e => handleFormChange(index, e)} />
+										<input value={tenant.t_email}type="email" className="form-control" id="email" name='t_email' onChange={e => handleFormChange(index, e)} />
 									</div>
 
 									<div className="upload-btn-wrapper mt-3">
@@ -319,13 +330,13 @@ const Guarantee = ({ language, content }) => {
 						{
 							status == 'new' ?
 								<div className='row d-flex justify-content-center mt-4'>
-									<button className='btn next-btn' type='submit'>NEXT</button>
+									<button onClick={nextPageHandler} className='btn next-btn'>NEXT</button>
 								</div> :
 								status == 'edit' ?
 									<div className='row d-flex justify-content-center mt-4'>
-										<button className='btn save-btn'>SAVE</button>
+										<button onClick={nextPageHandler} className='btn save-btn'>SAVE</button>
 									</div> :
-									<></>
+								<></>
 						}
 					</form>
 				</div>

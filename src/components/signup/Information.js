@@ -47,7 +47,9 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 	// const [utmMedium, setUtmMedium] = useState("")
 
 
-	const nextPageHandler = () => {
+	const nextPageHandler = (e) => {
+		e.preventDefault()
+		// console.log(dob,'date of birth')
 		localStorage.setItem('civility', civility);
 		localStorage.setItem('firstName', firstName);
 		localStorage.setItem('lastName', lastName);
@@ -108,6 +110,23 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 		}
 	}, [data])
 
+	const onSaveHandler =() => {
+		localStorage.setItem('civility', civility);
+		localStorage.setItem('firstName', firstName);
+		localStorage.setItem('lastName', lastName);
+		localStorage.setItem('dob', dob);
+		localStorage.setItem('nationality', nationality);
+		localStorage.setItem('street', street);
+		localStorage.setItem('no', no);
+		localStorage.setItem('zipCode', zipCode);
+		localStorage.setItem('locality', locality);
+		localStorage.setItem('country', country);
+		localStorage.setItem('number', number);
+		localStorage.setItem('email', email);
+		localStorage.setItem('type', type == 'commercial' ? 'commercial' : 'private')
+		navigate("/" + language + "/signup/confirmation")
+	}
+
 
 	return (
 		<div className='info-wrapper container'>
@@ -119,7 +138,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 				<div className='col-sm-8 form-div mt-3'>
 					<p className='form-text1'>{content.info_head1}</p>
 
-					<form onSubmit={nextPageHandler}>
+					<form>
 						<div className="form-group mt-4">
 							<label htmlFor="civility" className='form-label'>{content.civility}</label>
 							<select defaultValue={"Ms."} className="form-control" id="civility" onChange={(e => setCivility(e.target.value))}>
@@ -211,11 +230,11 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 						{
 							status == 'new' ?
 								<div className='row d-flex justify-content-center mt-4'>
-									<button className='btn next-btn' type='submit'>NEXT</button>
+									<button onClick={nextPageHandler} className='btn next-btn'>NEXT</button>
 								</div> :
 							status == 'edit' ?
 									<div className='row d-flex justify-content-center mt-4'>
-										<button className='btn save-btn'>SAVE</button>
+										<button onClick={onSaveHandler} className='btn save-btn'>SAVE</button>
 									</div> :
 							<></>
 						}

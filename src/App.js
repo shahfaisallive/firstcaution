@@ -10,6 +10,8 @@ import Information from './components/signup/Information';
 import Confirmation from './components/signup/Confirmation';
 import Payment from './components/signup/Payment';
 import ConfirmedPage from './components/signup/ConfirmedPage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const navigate = useNavigate()
@@ -65,6 +67,7 @@ function App() {
 
   return (
     <div className="App">
+      <ToastContainer />
       <Routes>
         <Route path="/:language" element={
           <HomePage

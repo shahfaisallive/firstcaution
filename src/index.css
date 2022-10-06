@@ -487,7 +487,19 @@ input[type=number]::-webkit-outer-spin-button {
 
 .con-text1 {
   font-size: 24px;
-  color: #0f397c;
+  text-align: center;
+  color: black;
+}
+
+.con-text-sub1 {
+  font-size: 15px;
+  text-align: center;
+  color: black;
+}
+.con-text-sub2 {
+  font-size: 15px;
+  text-align: center;
+  color: black;
 }
 
 /* Contact Box Styles */
@@ -645,6 +657,33 @@ input[type=number]::-webkit-outer-spin-button {
 
 .presentation-mobile-view {
   display: none !important;
+}
+
+.btn-section-confirm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.update-btn-confirmation {
+  width: 350px;
+  border: 2px solid #817b7b;
+  background-color: white !important;
+  font-weight: bold;
+  border-radius: 0px !important;
+  padding: 10px 5px;
+}
+
+.home-btn-confirmation {
+  margin-top: 10px;
+  width: 350px;
+  border: 2px solid black;
+  background-color: white !important;
+  color: black;
+  font-weight: bold;
+  border-radius: 0px !important;
+  padding: 10px 5px;
 }
 
 
