@@ -4,9 +4,9 @@ import { ReactComponent as EditIcon } from "../../media/edit-icon.svg";
 import { ReactComponent as HouseIcon } from "../../media/house.svg";
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from "yup";
+import { toast } from 'react-toastify'
 import axios from 'axios';
 import ContactBox from '../ContactBox';
-import { toast } from 'react-toastify'
 
 const Confirmation = ({ language, content }) => {
 
@@ -49,30 +49,31 @@ const Confirmation = ({ language, content }) => {
 	const [confirmTOC, setConfirmTOC] = useState(false)
 
 	const validationSchema = yup.object({
-		request_nature: yup.string().required("Required1").oneOf(["attestation", "certificate"]),
-		language: yup.string().required("Required2").oneOf(['fr', 'de', 'it', 'en', 'pt', 'es']),
-		first_name: yup.string().required("Required3").max(150, 'Should be less than 150'),
-		lease_type: yup.string().required("Required8").oneOf(["residential", "commercial"]),
-		address_country_id: yup.string().required("Required9").max(150, 'Should be less than 150'),
-		address_zip_code: yup.string().required("Required10").max(150, 'Should be less than 150'),
-		address_house_nr: yup.string().required("Required11").max(150, 'Should be less than 150'),
-		address_street: yup.string().required("Required12").max(150, 'Should be less than 150'),
-		mobile_phone: yup.string().matches(/^\+[1-9]\d{10,14}$/, 'Is not in correct format').required("Required"),
-		email: yup.string().email().required("Required13"),
-		residence_permit_id: yup.string().required("Required14").max(150, 'Should be less than 150'),
-		nationality_id: yup.string().required("Required15").max(150, 'Should be less than 150'),
-		birthday: yup.date().required("Required16"),
-		premise_street: yup.string().required("Required17").max(150, 'Should be less than 150'),
-		premise_house_nr: yup.string().required("Required18").max(150, 'Should be less than 150'),
-		premise_zip_code: yup.string().required("Required19").max(50, 'Should be less than 150'),
-		premise_city: yup.string().required("Required20").max(150, 'Should be less than 150'),
-		guarantee_amount: yup.string().required("Required22"),
-		rent_amount: yup.string().required("Required23"),
-		promotional_code: yup.string().required("Required24").max(150, 'Should be less than 150'),
-		tenants: yup.array().required("Required25"),
-		utm_source: yup.string().required("Required26").max(150, 'Should be less than 150'),
-		utm_medium: yup.string().required("Required27").max(150, 'Should be less than 150'),
-		utm_compaign: yup.string().required("Required28").max(150, 'Should be less than 150'),
+		request_nature: yup.string().required("Request Nature is Required").oneOf(["attestation", "certificate"]),
+		language: yup.string().required("Language is Required").oneOf(['fr', 'de', 'it', 'en', 'pt', 'es']),
+		first_name: yup.string().required("First Name is Required3").max(150, 'Should be less than 150'),
+		lease_type: yup.string().required("Lease Type is Required8").oneOf(["residential", "commercial"]),
+		address_country_id: yup.string().required("Country is Required9").max(150, 'Should be less than 150'),
+		address_zip_code: yup.string().required("Zip Code is Required").max(150, 'Should be less than 150'),
+		address_house_nr: yup.string().required("House Number is Required").max(150, 'Should be less than 150'),
+		address_street: yup.string().required("Street Address is Required").max(150, 'Should be less than 150'),
+		mobile_phone: yup.string().required("Phone Number is Required"),
+		email: yup.string().email().required("Email is Required"),
+		residence_permit_id: yup.string().required("Residence Permit is Required").max(150, 'Should be less than 150'),
+		nationality_id: yup.string().required("Nationality is Required").max(150, 'Should be less than 150'),
+		birthday: yup.date().required("Date of Birth is Required"),
+		premise_street: yup.string().required("Guarantee Street Address is Required").max(150, 'Should be less than 150'),
+		premise_house_nr: yup.string().required("Guarantee House No. is Required").max(150, 'Should be less than 150'),
+		premise_zip_code: yup.string().required("Guarantee Zip Code").max(50, 'Should be less than 150'),
+		premise_city: yup.string().required("Guarantee City is Required").max(150, 'Should be less than 150'),
+		guarantee_amount: yup.string().required("Guarantee Amount is Required"),
+		rent_amount: yup.string().required("Rent Amount is Required"),
+		promotional_code: yup.string().required("Promo Code is Required").max(150, 'Should be less than 150'),
+		tenants: yup.array().required("Tenants are Required"),
+		utm_source: yup.string().required("UTM_SOURCE is Required").max(150, 'Should be less than 150'),
+		utm_medium: yup.string().required("UTM_MEDIUM is Required").max(150, 'Should be less than 150'),
+		utm_compaign: yup.string().required("UTM_COMPAIGN is Required").max(150, 'Should be less than 150'),
+
 	});
 
 	useEffect(() => {
@@ -178,41 +179,46 @@ const Confirmation = ({ language, content }) => {
 				utm_medium: utmMedium ? utmMedium : " "
 
 			}
-			console.log("payload", bodyObj)
-
+			// console.log("payload", bodyObj)
+			let numberRegex = /^\+[1-9]\d{10,14}$/
 			validationSchema.validate(bodyObj)
 				.then(async res => {
 					console.log(res, 'dasda')
-					const response = await axios.post("https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/provisional-certificate",
-						bodyObj,
-						{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
-
-					console.log(response.data.data.token)
-					// console.log(leaseFile)
-
-					const fileData = [
-						{
-							fileName: leaseFileName,
-							fileBase64: leaseFile
-						},
-						{
-							fileName: IdFileName,
-							fileBase64: IdFile
-						}
-					]
-
-					if (response.data.data.status == "accepted") {
-						console.log(fileData)
-						const fileRes = await axios.post(`https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
+					if (!numberRegex.test(bodyObj.mobile_phone)) {
+						toast.warn('Invalid Phone Number')
+					}
+					else {
+						const response = await axios.post("https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/provisional-certificate",
+							bodyObj,
 							{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
 
-						console.log(fileRes)
-						setSubmitLoader(false)
-						navigate("/" + language + "/signup/confirmed")
-					} else {
-						alert("Data not correct")
-						setSubmitLoader(false)
+						console.log(response.data.data.token)
+						// console.log(leaseFile)
 
+						const fileData = [
+							{
+								fileName: leaseFileName,
+								fileBase64: leaseFile
+							},
+							{
+								fileName: IdFileName,
+								fileBase64: IdFile
+							}
+						]
+
+						if (response.data.data.status == "accepted") {
+							console.log(fileData)
+							const fileRes = await axios.post(`https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
+								{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
+
+							console.log(fileRes)
+							setSubmitLoader(false)
+							navigate("/" + language + "/signup/confirmed")
+						} else {
+							alert("Data not correct")
+							setSubmitLoader(false)
+
+						}
 					}
 				})
 				.catch(function (err) {
@@ -230,7 +236,7 @@ const Confirmation = ({ language, content }) => {
 		<div className='info-wrapper container'>
 			<ContactBox />
 			<Breadcrumbs level={4} content={content} />
-			<Link to={`/${language}/signup/guarantee`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
+			<Link to={`/${language}/signup/new/guarantee`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
 
 			<div className='row'>
 				<div className='col-sm-8 mt-3'>

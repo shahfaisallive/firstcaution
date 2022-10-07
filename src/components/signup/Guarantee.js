@@ -6,6 +6,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import ContactBox from '../ContactBox';
+import * as yup from "yup";
+import { toast } from 'react-toastify'
 
 const Guarantee = ({ language, content }) => {
 	const navigate = useNavigate()
@@ -53,7 +55,7 @@ const Guarantee = ({ language, content }) => {
 			setIdFile(localStorage.getItem("IdFile"))
 			setIdFileName(localStorage.getItem("IdFileName"))
 			const tenantsArray = JSON.parse(localStorage.getItem("tenants"))
-			console.log(tenantsArray,'asasdasdas')
+			console.log(tenantsArray, 'asasdasdas')
 			let allTenants = tenantsArray.map((obj) => {
 				let myKey = Object.values(obj)
 				return {
@@ -63,8 +65,8 @@ const Guarantee = ({ language, content }) => {
 					role_id: "1",
 					civility_id: myKey[1],
 					first_name: myKey[2],
-					number : myKey[9],
-					email : myKey[6]
+					number: myKey[9],
+					email: myKey[6]
 				}
 			})
 			// console.log(allTenants,'dasdas')
@@ -74,20 +76,43 @@ const Guarantee = ({ language, content }) => {
 
 	const nextPageHandler = (e) => {
 		e.preventDefault()
-		console.log(tenants,'dasdasd')
-		localStorage.setItem('guaranteeStreet', guaranteeStreet);
-		localStorage.setItem('guaranteeNo', guaranteeNo);
-		localStorage.setItem('guaranteeZipCode', guaranteeZipCode);
-		localStorage.setItem('guaranteeLocality', guaranteeLocality);
-		localStorage.setItem('guaranteeAmount', guaranteeAmount);
-		localStorage.setItem('moveInDate', moveInDate);
-		localStorage.setItem('promoCode', promoCode);
-		localStorage.setItem('leaseFile', leaseFile);
-		localStorage.setItem('IdFile', IdFile);
-		localStorage.setItem('leaseFileName', leaseFileName);
-		localStorage.setItem('IdFileName', IdFileName);
-		localStorage.setItem('tenants', JSON.stringify(tenants));
-		navigate('/' + language + '/signup/confirmation')
+		var ToDate = new Date();
+		console.log(tenants, 'dasdasd')
+		validationSchema.validate({
+			guaranteeStreet,
+			guaranteeNo,
+			guaranteeZipCode,
+			guaranteeLocality,
+			guaranteeAmount,
+			promoCode,
+			tenants
+		})
+			.then(res => {
+				if (!leaseFile || !IdFile) {
+					toast.warn('Please Select All the Files')
+				}
+				else if (new Date(moveInDate).getTime() <= ToDate.getTime()) {
+					toast.warn('move in date should be greater than current date')
+				}
+				else {
+					localStorage.setItem('guaranteeStreet', guaranteeStreet);
+					localStorage.setItem('guaranteeNo', guaranteeNo);
+					localStorage.setItem('guaranteeZipCode', guaranteeZipCode);
+					localStorage.setItem('guaranteeLocality', guaranteeLocality);
+					localStorage.setItem('guaranteeAmount', guaranteeAmount);
+					localStorage.setItem('moveInDate', moveInDate);
+					localStorage.setItem('promoCode', promoCode);
+					localStorage.setItem('leaseFile', leaseFile);
+					localStorage.setItem('IdFile', IdFile);
+					localStorage.setItem('leaseFileName', leaseFileName);
+					localStorage.setItem('IdFileName', IdFileName);
+					localStorage.setItem('tenants', JSON.stringify(tenants));
+					navigate('/' + language + '/signup/confirmation')
+				}
+			})
+			.catch(function (err) {
+				toast.warn(err.message)
+			});
 	}
 
 	const getBase64 = async (file) => {
@@ -177,6 +202,15 @@ const Guarantee = ({ language, content }) => {
 		data.splice(index, 1)
 		setTenants(data)
 	}
+
+	const validationSchema = yup.object({
+		guaranteeStreet: yup.string().required("Street is Required").max(150, 'Should be less than 150'),
+		guaranteeNo: yup.string().required("Phone Number is Required").max(150, 'Should be less than 150'),
+		guaranteeZipCode: yup.string().required("Zip Code is Required").max(50, 'Should be less than 150'),
+		guaranteeLocality: yup.string().required("Locality is Required").max(150, 'Should be less than 150'),
+		guaranteeAmount: yup.string().required("Guarantee Amount is Required"),
+		tenants: yup.array().required("Required25"),
+	});
 
 	return (
 		<div className='info-wrapper container'>
@@ -312,7 +346,7 @@ const Guarantee = ({ language, content }) => {
 
 									<div className="form-group">
 										<label htmlFor="email" className='form-label'>{content.email}</label>
-										<input value={tenant.t_email}type="email" className="form-control" id="email" name='t_email' onChange={e => handleFormChange(index, e)} />
+										<input value={tenant.t_email} type="email" className="form-control" id="email" name='t_email' onChange={e => handleFormChange(index, e)} />
 									</div>
 
 									<div className="upload-btn-wrapper mt-3">
@@ -336,7 +370,7 @@ const Guarantee = ({ language, content }) => {
 									<div className='row d-flex justify-content-center mt-4'>
 										<button onClick={nextPageHandler} className='btn save-btn'>SAVE</button>
 									</div> :
-								<></>
+									<></>
 						}
 					</form>
 				</div>

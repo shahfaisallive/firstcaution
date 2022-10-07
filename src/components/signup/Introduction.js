@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 const Introduction = ({ language, content }) => {
     return (
         <div className='container pt-5'>
+            <Link to={`/${language}`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
             <p className='text-center form-head1'>{content.intro_text}</p>
             <div className='d-flex justify-content-center'>
                 <div className='d-flex justify-content-center mt-5'>
