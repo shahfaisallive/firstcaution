@@ -90,6 +90,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 
 	const nextPageHandler = (e) => {
 		e.preventDefault()
+		var ToDate = new Date();
 		validationSchema.validate({
 			civility,
 			firstName,
@@ -104,9 +105,12 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			locality,
 			country
 		})
-			.then(async res => {
+			.then(res => {
 				if (!numberRegex.test(number)) {
 					toast.warn('Please Enter a Valid Phone Number')
+				}
+				else if (new Date(dob).getTime() > ToDate.getTime()) {
+					toast.warn('DoB should not be greater than current date')
 				}
 				else {
 					localStorage.setItem('civility', civility);
@@ -130,7 +134,8 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			});
 	}
 
-	const onSaveHandler = () => {
+	const onSaveHandler = (e) => {
+		e.preventDefault()
 		validationSchema.validate({
 			civility,
 			firstName,
@@ -167,18 +172,18 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 	}
 
 	const validationSchema = yup.object({
-		firstName: yup.string().required("First Name is Required").max(150, 'Should be less than 150'),
-		lastName: yup.string().required("Last Name is Required").max(150, 'Should be less than 150'),
-		number: yup.string().required("Phone Number is Required"),
+		firstName: yup.string().required("First Name is Required").max(150, 'First Name Should be less than 150'),
+		lastName: yup.string().required("Last Name is Required").max(150, 'Last Name Should be less than 150'),
+		number: yup.string().required("Phone Number is Required").max(20, 'Phone Number Should be less than 20'),
 		civility: yup.string().required("Civility is Required"),
 		email: yup.string().email().required("Email is Required"),
 		dob: yup.date().required("Birthday is Required"),
-		country: yup.string().required("Country is Required").max(150, 'Should be less than 150'),
-		zipCode: yup.string().required("Zipcode is Required").max(150, 'Should be less than 150'),
-		no: yup.string().required("House Number is Required").max(150, 'Should be less than 150'),
-		street: yup.string().required("Street Address is Required").max(150, 'Should be less than 150'),
-		locality: yup.string().required("Locality is Required").max(150, 'Should be less than 150'),
-		nationality: yup.string().required("Nationality is Required").max(150, 'Should be less than 150'),
+		country: yup.string().required("Country is Required").max(150, 'Country Should be less than 150'),
+		zipCode: yup.string().required("Zipcode is Required").max(150, 'Zip Code Should be less than 150'),
+		no: yup.string().required("House Number is Required").max(15, 'House Number Should be less than 15'),
+		street: yup.string().required("Street Address is Required").max(150, 'Street Should be less than 150'),
+		locality: yup.string().required("Locality is Required").max(150, 'Locality Should be less than 150'),
+		nationality: yup.string().required("Nationality is Required").max(150, 'Nationality Should be less than 150'),
 	});
 
 	return (

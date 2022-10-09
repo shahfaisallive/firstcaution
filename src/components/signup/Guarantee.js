@@ -16,11 +16,11 @@ const Guarantee = ({ language, content }) => {
 	// Form Input states
 	const [data, setData] = useState()
 	const [guaranteeStreet, setGuaranteeStreet] = useState("")
-	const [guaranteeNo, setGuaranteeNo] = useState(0)
+	const [guaranteeNo, setGuaranteeNo] = useState("")
 	const [guaranteeZipCode, setGuaranteeZipCode] = useState("")
 	const [guaranteeLocality, setGuaranteeLocality] = useState("")
-	const [guaranteeAmount, setGuaranteeAmount] = useState(0)
-	const [moveInDate, setMoveInDate] = useState()
+	const [guaranteeAmount, setGuaranteeAmount] = useState("")
+	const [moveInDate, setMoveInDate] = useState("")
 	const [promoCode, setPromoCode] = useState("")
 	const [leaseFile, setLeaseFile] = useState("")
 	const [IdFile, setIdFile] = useState("")
@@ -55,7 +55,7 @@ const Guarantee = ({ language, content }) => {
 			setIdFile(localStorage.getItem("IdFile"))
 			setIdFileName(localStorage.getItem("IdFileName"))
 			const tenantsArray = JSON.parse(localStorage.getItem("tenants"))
-			console.log(tenantsArray, 'asasdasdas')
+			// console.log(tenantsArray, 'asasdasdas')
 			let allTenants = tenantsArray.map((obj) => {
 				let myKey = Object.values(obj)
 				return {
@@ -74,10 +74,45 @@ const Guarantee = ({ language, content }) => {
 		}
 	}, [status])
 
+	const validateBirthday = () => {
+		var ToDate = new Date();
+		for (let index = 0; index < tenants.length; index++) {
+			const element = tenants[index];
+			if (new Date(element.t_dob).getTime() > ToDate.getTime()) {
+				toast.warn(`${element.t_firstName}'s bithday should not be greater than current date`)
+				return false;
+			}
+		}
+		return true
+	}
+
+	const validateFiles = () => {
+		for (let index = 0; index < tenants.length; index++) {
+			const element = tenants[index];
+			console.log(element.t_docFile)
+			if (!element.t_docFile) {
+				toast.warn(`${element.t_firstName}'s file is Missing`)
+				return false;
+			}
+		}
+		return true
+	}
+
+	const validateNumber = () => {
+		let numberRegex = /^\+[1-9]\d{10,14}$/
+		for (let index = 0; index < tenants.length; index++) {
+			const element = tenants[index];
+			console.log(String(element.t_mobile),'dasdasd')
+			if (!numberRegex.test(tNum)) {
+				toast.warn(`${element.t_firstName}'s Number is Invalid`)
+			}
+		}
+		return true
+	}
+
 	const nextPageHandler = (e) => {
 		e.preventDefault()
 		var ToDate = new Date();
-		console.log(tenants, 'dasdasd')
 		validationSchema.validate({
 			guaranteeStreet,
 			guaranteeNo,
@@ -91,10 +126,13 @@ const Guarantee = ({ language, content }) => {
 				if (!leaseFile || !IdFile) {
 					toast.warn('Please Select All the Files')
 				}
+				else if (moveInDate.length == 0) {
+					toast.warn('Select a Move In Date')
+				}
 				else if (new Date(moveInDate).getTime() <= ToDate.getTime()) {
 					toast.warn('move in date should be greater than current date')
 				}
-				else {
+				else if(validateBirthday() && validateFiles() && validateNumber()){
 					localStorage.setItem('guaranteeStreet', guaranteeStreet);
 					localStorage.setItem('guaranteeNo', guaranteeNo);
 					localStorage.setItem('guaranteeZipCode', guaranteeZipCode);
@@ -204,12 +242,24 @@ const Guarantee = ({ language, content }) => {
 	}
 
 	const validationSchema = yup.object({
-		guaranteeStreet: yup.string().required("Street is Required").max(150, 'Should be less than 150'),
-		guaranteeNo: yup.string().required("Phone Number is Required").max(150, 'Should be less than 150'),
-		guaranteeZipCode: yup.string().required("Zip Code is Required").max(50, 'Should be less than 150'),
-		guaranteeLocality: yup.string().required("Locality is Required").max(150, 'Should be less than 150'),
+		guaranteeStreet: yup.string().required("Street is Required").max(150, 'Guarantee Should be less than 150'),
+		guaranteeNo: yup.string().required("Phone Number is Required").max(150, 'Guarantee House Number Should be less than 150'),
+		guaranteeZipCode: yup.string().required("Zip Code is Required").max(50, 'Guarantee Zip Code Should be less than 150'),
+		guaranteeLocality: yup.string().required("Locality is Required").max(150, 'Guarantee Locality Should be less than 150'),
 		guaranteeAmount: yup.string().required("Guarantee Amount is Required"),
-		tenants: yup.array().required("Required25"),
+		tenants: yup.array()
+			.of(
+				yup.object().shape({
+					t_firstName: yup.string().required("Flatmate's First Name is Required").max(150, "Flatmate's First Name Should be less than 150"),
+					t_lastName: yup.string().required("Flatmate's Last Name is Required").max(150, "Flatmate's Last Name Should be less than 150"),
+					t_mobile: yup.string().required("Flatmate's Phone Number is Required").max(20, "Flatmate's Phone Number Should be less than 20"),
+					t_dob: yup.string().required("Flatmate's Birthday is Required"),
+					t_email: yup.string().email().required("Flatmate's Email is Required"),
+					t_nationality: yup.string().required("Flatmate's Nationality is Required").max(150, "Flatmate's Nationality Should be less than 150"),
+					t_civility: yup.string().required("Flatmate's Civility is Required"),
+					t_type: yup.string().required("Flatmate's Type is Required"),
+				})
+			)
 	});
 
 	return (
@@ -220,9 +270,6 @@ const Guarantee = ({ language, content }) => {
 
 			<div className='row'>
 				<div className='col-sm-8 form-div mt-3'>
-
-					{/* ADDRESS SECTION */}
-
 					<form >
 						<p className='form-text1'>{content.guar_head1}</p>
 
@@ -322,7 +369,7 @@ const Guarantee = ({ language, content }) => {
 									<div className='row d-flex justify-content-start mt-1'>
 										<div className="form-group col-6">
 											<label htmlFor="dob" className='form-label'>{content.date_of_birth}</label>
-											<input value={tenant.birthday} type="date" className="form-control" id="dob" name='t_dob' onChange={e => handleFormChange(index, e)} />
+											<input value={tenant.t_dob} type="date" className="form-control" id="dob" name='t_dob' onChange={e => handleFormChange(index, e)} />
 										</div>
 										<div className="form-group col-6">
 											<label htmlFor="nationality" className='form-label'>{content.nationality}</label>
@@ -353,7 +400,7 @@ const Guarantee = ({ language, content }) => {
 										<button type='button' className="upload-btn text-left ">{content.id_doc}</button>
 										<UploadIcon className='upload-icon' />
 										<input type="file" className='upload-input' name="t_docFile" onChange={(e) => onDocFileChange(index, e)} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
-										{tenantsDocs[index] ? <p>{tenantsDocs[index]}</p> : <p>{content.no_file_selected}</p>}
+										{tenant.t_docName ? <p>{tenant.t_docName}</p> : <p>{content.no_file_selected}</p>}
 									</div>
 
 									<p className='delete-text mt-4' onClick={() => deleteTenant(index)}>{content.delete}</p>
