@@ -37,7 +37,7 @@ function App() {
     const lang = localStorage.getItem("language")
     if (lang) {
       setLanguage(lang)
-      console.log("lang", language)
+      // console.log("lang", language)
     }
     if (language == "en") {
       setContent(Content.en)

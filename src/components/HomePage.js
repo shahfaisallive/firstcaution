@@ -37,7 +37,7 @@ const HomePage = ({ changeLanguage, language, content }) => {
 					content = await axios.get("https://firstcaution.strapi.datamonitors.io/api/it-landing")
 				}
 				setLandingContent(content.data.data.attributes)
-				console.log(content.data.data.attributes)
+				// console.log(content.data.data.attributes)
 			} catch (error) {
 				setLandingContent(LandingContent)
 			}

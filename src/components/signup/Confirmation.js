@@ -124,7 +124,7 @@ const Confirmation = ({ language, content }) => {
 
 	useEffect(() => {
 		if (data) {
-			console.log(data)
+			// console.log(data)
 			const countryName = data.countries.find(c => c.value == country)
 			const nationalityName = data.countries.find(c => c.value == nationality)
 			setCountryName(countryName.label)
@@ -133,7 +133,7 @@ const Confirmation = ({ language, content }) => {
 	}, [data])
 
 	const dataSubmitHandler = async () => {
-		console.log(language)
+		// console.log(language)
 		if (confirmAuthenticity && confirmTOC) {
 			setSubmitLoader(true)
 			const token = await axios.get("https://backendlanding.firstcaution.ch/api/auth-token",
@@ -180,52 +180,53 @@ const Confirmation = ({ language, content }) => {
 
 			}
 			// console.log("payload", bodyObj)
-			let numberRegex = /^\+[1-9]\d{10,14}$/
-			validationSchema.validate(bodyObj)
-				.then(async res => {
-					console.log(res, 'dasda')
-					if (!numberRegex.test(bodyObj.mobile_phone)) {
-						toast.warn('Invalid Phone Number')
-					}
-					else {
-						const response = await axios.post("https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/provisional-certificate",
-							bodyObj,
-							{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
+			// let numberRegex = /^\+[1-9]\d{10,14}$/
+			// validationSchema.validate(bodyObj)
+			// 	.then(async res => {
+			// 		// console.log(res, 'dasda')
+			// 		if (!numberRegex.test(bodyObj.mobile_phone)) {
+			// 			toast.warn('Invalid Phone Number')
+			// 		}
+			// 		else {
+					
+			// 		}
+			// 	})
+			// 	.catch(function (err) {
+			// 		toast.warn(err.message)
+			// 		setSubmitLoader(false)
 
-						console.log(response.data.data.token)
-						// console.log(leaseFile)
+			// 	});
+			const response = await axios.post("https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/provisional-certificate",
+			bodyObj,
+			{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
 
-						const fileData = [
-							{
-								fileName: leaseFileName,
-								fileBase64: leaseFile
-							},
-							{
-								fileName: IdFileName,
-								fileBase64: IdFile
-							}
-						]
+		console.log(response.data.data.token)
+		// console.log(leaseFile)
 
-						if (response.data.data.status == "accepted") {
-							console.log(fileData)
-							const fileRes = await axios.post(`https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
-								{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
+		const fileData = [
+			{
+				fileName: leaseFileName,
+				fileBase64: leaseFile
+			},
+			{
+				fileName: IdFileName,
+				fileBase64: IdFile
+			}
+		]
 
-							console.log(fileRes)
-							setSubmitLoader(false)
-							navigate("/" + language + "/signup/confirmed")
-						} else {
-							alert("Data not correct")
-							setSubmitLoader(false)
+		if (response.data.data.status == "accepted") {
+			console.log(fileData)
+			const fileRes = await axios.post(`https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
+				{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
 
-						}
-					}
-				})
-				.catch(function (err) {
-					toast.warn(err.message)
-					setSubmitLoader(false)
+			console.log(fileRes)
+			setSubmitLoader(false)
+			navigate("/" + language + "/signup/confirmed")
+		} else {
+			alert("Data not correct")
+			setSubmitLoader(false)
 
-				});
+		}
 
 		} else {
 			document.getElementById("form-submit-authenticate").style.display = "block"

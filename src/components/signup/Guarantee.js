@@ -34,6 +34,58 @@ const Guarantee = ({ language, content }) => {
 	const [tNum, setTNum] = useState()
 	const [indexForTNum, setIndexForTNum] = useState()
 
+	const [tenantsValidationArr, setTenantsValidationArr] = useState([])
+
+	const [validationArr, setValidationArr] = useState([
+		{
+			type: 'Street',
+			status: false,
+			msg: ""
+		}
+		,
+		{
+			type: 'No',
+			status: false,
+			msg: ""
+		}
+		,
+		{
+			type: 'Zip Code',
+			status: false,
+			msg: ""
+		}
+		,
+		{
+			type: 'Locality',
+			status: false,
+			msg: ""
+		}
+		,
+		{
+			type: 'Amount',
+			status: false,
+			msg: ""
+		}
+		,
+		{
+			type: 'Move In Date',
+			status: false,
+			msg: ""
+		}
+		,
+		{
+			type: 'Lease File',
+			status: false,
+			msg: ""
+		}
+		,
+		{
+			type: 'ID File',
+			status: false,
+			msg: ""
+		}
+	])
+
 	useEffect(() => {
 		if (!data) {
 			setData(JSON.parse(localStorage.getItem("data")))
@@ -74,83 +126,278 @@ const Guarantee = ({ language, content }) => {
 		}
 	}, [status])
 
-	const validateBirthday = () => {
-		var ToDate = new Date();
-		for (let index = 0; index < tenants.length; index++) {
-			const element = tenants[index];
-			if (new Date(element.t_dob).getTime() > ToDate.getTime()) {
-				toast.warn(`${element.t_firstName}'s bithday should not be greater than current date`)
-				return false;
-			}
+	const textValidation = (state, type) => {
+		// console.log(state,type)
+		if (state.length <= 0) {
+			updateValidationArr(state, true, `${type} is Required`, type)
+			return false
 		}
+		else if (state.length > 150) {
+			updateValidationArr(state, true, `${type} should not be greater than 150`, type)
+			return false
+		}
+		updateValidationArr(state, false, '', type)
 		return true
 	}
 
-	const validateFiles = () => {
-		for (let index = 0; index < tenants.length; index++) {
-			const element = tenants[index];
-			console.log(element.t_docFile)
-			if (!element.t_docFile) {
-				toast.warn(`${element.t_firstName}'s file is Missing`)
-				return false;
+	const updateValidationArr = (state, status, message, type) => {
+		// 👇️ passing function to setData method
+		setValidationArr(prevState => {
+			const newState = prevState.map(obj => {
+				if (obj.type === type) {
+					// console.log(state, 'here')
+					return { ...obj, msg: message, status: status };
+				}
+				return obj;
+			});
+
+			return newState;
+		});
+	};
+
+	const handleChange = (index, column, type, message, status) => {
+		let copy = [...tenantsValidationArr];
+		if (copy.length >= index) {
+			if (copy[index][column].type == type) {
+				copy[index][column].msg = message
+				copy[index][column].status = status
 			}
 		}
-		return true
-	}
+		setTenantsValidationArr(copy);
+	};
 
-	const validateNumber = () => {
+	const updateTenantValidationArr = () => {
+		// console.log(tenants)
+		if (tenants.length == 0) {
+			return true
+		}
+		else {
+			let flag = false
+			tenants.map((item, index) => {
+				flag = textValidationTenant(item.t_civility, index, 1, 'Civility') &
+					textValidationTenant(item.t_firstName, index, 2, 'First Name') &
+					textValidationTenant(item.t_lastName, index, 3, 'Last Name') &
+					dobTenantValidation(item.t_dob, index, 4, 'DoB') &
+					textValidationTenant(item.t_nationality, index, 5, 'Nationality') &
+					validateFilesTenant(item.t_docFile, index, 7, 'Doc File') &
+					validateEmailTenant(item.t_email, index, 6, 'Email') &
+					numberValidationTenant(tNum, index, 8, 'Mobile')
+			})
+			return flag
+		}
+	};
+
+	const numberValidationTenant = (state, index, column, type) => {
 		let numberRegex = /^\+[1-9]\d{10,14}$/
-		for (let index = 0; index < tenants.length; index++) {
-			const element = tenants[index];
-			console.log(String(element.t_mobile),'dasdasd')
-			if (!numberRegex.test(tNum)) {
-				toast.warn(`${element.t_firstName}'s Number is Invalid`)
-			}
+		if (state <= 0) {
+			handleChange(index, column, type, `${type} is Required`, true)
+			return false
 		}
+		else if (!numberRegex.test(state)) {
+			handleChange(index, column, type, `${type} is Invalid`, true)
+			return false
+		}
+		handleChange(index, column, type, '', false)
+		return true
+	}
+
+	const dobTenantValidation = (state, index, column, type) => {
+		var ToDate = new Date();
+		// console.log(dob, 'dob')
+		if (state <= 0) {
+			handleChange(index, column, type, `${type} is Required`, true)
+			return false
+		}
+		if (new Date(state).getTime() > ToDate.getTime()) {
+			handleChange(index, column, type, `${type} cannot be greater than Current date`, true)
+			return false
+		}
+		handleChange(index, column, type, '', false)
+		return true
+	}
+
+	const textValidationTenant = (state, index, column, type) => {
+		if (state.length <= 0) {
+			handleChange(index, column, type, `${type} is Required`, true)
+			return false
+		}
+		else if (state.length > 150) {
+			handleChange(index, column, type, `${type} should be less than 150 chars `, true)
+			return false
+		}
+		handleChange(index, column, type, '', false)
+		return true
+	}
+
+	const validateEmailTenant = (state, index, column, type) => {
+		let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+		if (state.length <= 0) {
+			handleChange(index, column, type, 'Email is Required', true)
+			return false
+		}
+		else if (!emailRegex.test(state)) {
+			handleChange(index, column, type, 'Email is Invalid', true)
+			return false
+		}
+		handleChange(index, column, type, '', false)
+		return true
+	}
+
+	const addNewTenant = () => {
+		let data = [...tenants];
+		// if (data.some(i => i.t_firstName === "" || i.t_lastName === "" || i.t_type === "" || i.t_civility === "" || i.t_dob === "" || i.t_nationality === "" || i.t_mobile === "" || i.t_number === "" || i.t_email === "")) {
+		//     alert("please fill out the data")
+		// } else {
+		let newTenant = {
+			t_type: "Tenant",
+			t_civility: "Mr.",
+			t_firstName: "",
+			t_lastName: "",
+			t_dob: "",
+			t_nationality: "CH",
+			t_mobile: 0,
+			t_number: 0,
+			t_email: "",
+			t_docName: null,
+			t_docFile: ""
+		}
+		setTenants([...tenants, newTenant])
+
+		let newTenantValidation = [
+			{
+				type: 'Type',
+				status: false,
+				msg: ""
+			},
+			{
+				type: 'Civility',
+				status: false,
+				msg: ""
+			},
+			{
+				type: 'First Name',
+				status: false,
+				msg: ""
+			},
+			{
+				type: 'Last Name',
+				status: false,
+				msg: ""
+			},
+			{
+				type: 'DoB',
+				status: false,
+				msg: ""
+			},
+			{
+				type: 'Nationality',
+				status: false,
+				msg: ""
+			},
+			{
+				type: 'Email',
+				status: false,
+				msg: ""
+			},
+			{
+				type: 'Doc File',
+				status: false,
+				msg: ""
+			},
+			{
+				type: 'Mobile',
+				status: false,
+				msg: ""
+			},
+
+		]
+		setTenantsValidationArr([...tenantsValidationArr, newTenantValidation])
+	}
+
+	const validateLeaseFile = () => {
+		if (!leaseFile) {
+			updateValidationArr(leaseFile, true, 'Lease is Required', 'Lease File')
+			return false
+		}
+		updateValidationArr(leaseFile, false, '', 'Lease File')
+		return true
+	}
+
+	const validateIdFile = () => {
+		if (!IdFile) {
+			updateValidationArr(IdFile, true, 'ID File is Required', 'ID File')
+			return false
+		}
+		updateValidationArr(IdFile, false, '', 'ID File')
+		return true
+	}
+
+	const validateFilesTenant = (state, index, column, type) => {
+		if (!state) {
+			handleChange(index, column, type, `${type} is Required`, true)
+			return false
+		}
+		handleChange(index, column, type, '', false)
+		return true
+	}
+
+	const streetNoValidation = () => {
+		if (guaranteeNo <= 0) {
+			updateValidationArr(guaranteeNo, true, 'Street Number is Required', 'No')
+			return false
+		}
+		updateValidationArr(guaranteeNo, false, '', 'No')
+		return true
+	}
+
+	const amountValidation = () => {
+		if (guaranteeAmount <= 0) {
+			updateValidationArr(guaranteeAmount, true, 'Amount is Required', 'Amount')
+			return false
+		}
+		updateValidationArr(guaranteeAmount, false, '', 'Amount')
+		return true
+	}
+
+	const moveInDateValidation = () => {
+		var ToDate = new Date();
+		if (moveInDate.length == 0) {
+			updateValidationArr(moveInDate, true, 'Move In Date is Required', 'Move In Date')
+			return false
+		}
+		else if (new Date(moveInDate).getTime() <= ToDate.getTime()) {
+			updateValidationArr(moveInDate, true, 'Move In Date should be greater than current date', 'Move In Date')
+			return false
+		}
+		updateValidationArr(moveInDate, false, '', 'Move In Date')
 		return true
 	}
 
 	const nextPageHandler = (e) => {
 		e.preventDefault()
-		var ToDate = new Date();
-		validationSchema.validate({
-			guaranteeStreet,
-			guaranteeNo,
-			guaranteeZipCode,
-			guaranteeLocality,
-			guaranteeAmount,
-			promoCode,
-			tenants
-		})
-			.then(res => {
-				if (!leaseFile || !IdFile) {
-					toast.warn('Please Select All the Files')
-				}
-				else if (moveInDate.length == 0) {
-					toast.warn('Select a Move In Date')
-				}
-				else if (new Date(moveInDate).getTime() <= ToDate.getTime()) {
-					toast.warn('move in date should be greater than current date')
-				}
-				else if(validateBirthday() && validateFiles() && validateNumber()){
-					localStorage.setItem('guaranteeStreet', guaranteeStreet);
-					localStorage.setItem('guaranteeNo', guaranteeNo);
-					localStorage.setItem('guaranteeZipCode', guaranteeZipCode);
-					localStorage.setItem('guaranteeLocality', guaranteeLocality);
-					localStorage.setItem('guaranteeAmount', guaranteeAmount);
-					localStorage.setItem('moveInDate', moveInDate);
-					localStorage.setItem('promoCode', promoCode);
-					localStorage.setItem('leaseFile', leaseFile);
-					localStorage.setItem('IdFile', IdFile);
-					localStorage.setItem('leaseFileName', leaseFileName);
-					localStorage.setItem('IdFileName', IdFileName);
-					localStorage.setItem('tenants', JSON.stringify(tenants));
-					navigate('/' + language + '/signup/confirmation')
-				}
-			})
-			.catch(function (err) {
-				toast.warn(err.message)
-			});
+		if (textValidation(guaranteeZipCode, 'Zip Code') &
+			textValidation(guaranteeStreet, 'Street') &
+			textValidation(guaranteeLocality, 'Locality') &
+			streetNoValidation() &
+			amountValidation() &
+			moveInDateValidation() &
+			validateLeaseFile() &
+			validateIdFile() &
+			updateTenantValidationArr()) {
+			localStorage.setItem('guaranteeStreet', guaranteeStreet);
+			localStorage.setItem('guaranteeNo', guaranteeNo);
+			localStorage.setItem('guaranteeZipCode', guaranteeZipCode);
+			localStorage.setItem('guaranteeLocality', guaranteeLocality);
+			localStorage.setItem('guaranteeAmount', guaranteeAmount);
+			localStorage.setItem('moveInDate', moveInDate);
+			localStorage.setItem('promoCode', promoCode);
+			localStorage.setItem('leaseFile', leaseFile);
+			localStorage.setItem('IdFile', IdFile);
+			localStorage.setItem('leaseFileName', leaseFileName);
+			localStorage.setItem('IdFileName', IdFileName);
+			localStorage.setItem('tenants', JSON.stringify(tenants));
+			navigate('/' + language + '/signup/confirmation')
+		}
 	}
 
 	const getBase64 = async (file) => {
@@ -199,7 +446,7 @@ const Guarantee = ({ language, content }) => {
 		let data = [...tenants];
 		data[index][e.target.name] = e.target.value;
 		setTenants(data);
-		console.log(tenants)
+		// console.log(tenants)
 	}
 
 	const onDocFileChange = async (index, e) => {
@@ -210,63 +457,30 @@ const Guarantee = ({ language, content }) => {
 			data[index]['t_docName'] = file.name
 			const base64 = await getBase64(file)
 			data[index]['t_docFile'] = base64.slice(27)
-			console.log(tenants)
+			// console.log(tenants)
 		}
-	}
-
-	const addNewTenant = () => {
-		let data = [...tenants];
-		// if (data.some(i => i.t_firstName === "" || i.t_lastName === "" || i.t_type === "" || i.t_civility === "" || i.t_dob === "" || i.t_nationality === "" || i.t_mobile === "" || i.t_number === "" || i.t_email === "")) {
-		//     alert("please fill out the data")
-		// } else {
-		let newTenant = {
-			t_type: "Tenant",
-			t_civility: "Mr.",
-			t_firstName: "",
-			t_lastName: "",
-			t_dob: "",
-			t_nationality: "CH",
-			t_mobile: 0,
-			t_number: 0,
-			t_email: "",
-			t_docName: null,
-			t_docFile: ""
-		}
-		setTenants([...tenants, newTenant])
 	}
 
 	const deleteTenant = (index) => {
 		let data = [...tenants];
 		data.splice(index, 1)
 		setTenants(data)
+
+		let validationData = [...tenantsValidationArr]
+		validationData.splice(index, 1)
+		setTenantsValidationArr(validationData)
 	}
 
-	const validationSchema = yup.object({
-		guaranteeStreet: yup.string().required("Street is Required").max(150, 'Guarantee Should be less than 150'),
-		guaranteeNo: yup.string().required("Phone Number is Required").max(150, 'Guarantee House Number Should be less than 150'),
-		guaranteeZipCode: yup.string().required("Zip Code is Required").max(50, 'Guarantee Zip Code Should be less than 150'),
-		guaranteeLocality: yup.string().required("Locality is Required").max(150, 'Guarantee Locality Should be less than 150'),
-		guaranteeAmount: yup.string().required("Guarantee Amount is Required"),
-		tenants: yup.array()
-			.of(
-				yup.object().shape({
-					t_firstName: yup.string().required("Flatmate's First Name is Required").max(150, "Flatmate's First Name Should be less than 150"),
-					t_lastName: yup.string().required("Flatmate's Last Name is Required").max(150, "Flatmate's Last Name Should be less than 150"),
-					t_mobile: yup.string().required("Flatmate's Phone Number is Required").max(20, "Flatmate's Phone Number Should be less than 20"),
-					t_dob: yup.string().required("Flatmate's Birthday is Required"),
-					t_email: yup.string().email().required("Flatmate's Email is Required"),
-					t_nationality: yup.string().required("Flatmate's Nationality is Required").max(150, "Flatmate's Nationality Should be less than 150"),
-					t_civility: yup.string().required("Flatmate's Civility is Required"),
-					t_type: yup.string().required("Flatmate's Type is Required"),
-				})
-			)
-	});
+
 
 	return (
 		<div className='info-wrapper container'>
 			<ContactBox />
 			<Breadcrumbs level={3} content={content} />
-			<Link to={`/${language}/signup/new/information/${type}`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
+			{
+				status == 'new' &&
+				<Link to={`/${language}/signup/new/information/${type}`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
+			}
 
 			<div className='row'>
 				<div className='col-sm-8 form-div mt-3'>
@@ -277,10 +491,12 @@ const Guarantee = ({ language, content }) => {
 							<div className="form-group col-8">
 								<label htmlFor="street" className='form-label'>{content.street}</label>
 								<input value={guaranteeStreet} type="text" className="form-control" id="street" onChange={(e => setGuaranteeStreet(e.target.value))} />
+								<div id="emailHelp" className={validationArr[0].status ? 'form-text helper-text' : 'd-none'}>{validationArr[0].msg}</div>
 							</div>
 							<div className="form-group col-4">
 								<label htmlFor="number" className='form-label'>{content.no}</label>
 								<input value={guaranteeNo} type="number" className="form-control" id="number" onChange={(e => setGuaranteeNo(e.target.value))} />
+								<div id="emailHelp" className={validationArr[1].status ? 'form-text helper-text' : 'd-none'}>{validationArr[1].msg}</div>
 							</div>
 						</div>
 
@@ -288,21 +504,25 @@ const Guarantee = ({ language, content }) => {
 							<div className="form-group col-6">
 								<label htmlFor="zip" className='form-label'>{content.zip_code}</label>
 								<input value={guaranteeZipCode} type="text" className="form-control" maxLength={4} id="zip" onChange={(e => setGuaranteeZipCode(e.target.value))} />
+								<div id="emailHelp" className={validationArr[2].status ? 'form-text helper-text' : 'd-none'}>{validationArr[2].msg}</div>
 							</div>
 							<div className="form-group col-6">
 								<label htmlFor="locality" className='form-label'>{content.locality}</label>
 								<input value={guaranteeLocality} type="text" className="form-control" id="locality" onChange={(e => setGuaranteeLocality(e.target.value))} />
+								<div id="emailHelp" className={validationArr[3].status ? 'form-text helper-text' : 'd-none'}>{validationArr[3].msg}</div>
 							</div>
 						</div>
 						<p className='form-text1 mt-5'>{content.guar_head2}</p>
 						<div className="form-group">
 							<label htmlFor="guaranteeAmount" className='form-label'>{content.amount_in_guarantee}</label>
 							<input value={guaranteeAmount} type="number" className="form-control" id="guaranteeAmount" onChange={(e => setGuaranteeAmount(e.target.value))} />
+							<div id="emailHelp" className={validationArr[4].status ? 'form-text helper-text' : 'd-none'}>{validationArr[4].msg}</div>
 						</div>
 
 						<div className="form-group mt-1">
 							<label htmlFor="moveDate" className='form-label'>{content.mone_in_date}</label>
 							<input value={moveInDate} type="date" className="form-control" id="moveDate" onChange={(e => setMoveInDate(e.target.value))} />
+							<div id="emailHelp" className={validationArr[5].status ? 'form-text helper-text' : 'd-none'}>{validationArr[5].msg}</div>
 						</div>
 
 						<div className="form-group mt-1 mb-5">
@@ -323,6 +543,7 @@ const Guarantee = ({ language, content }) => {
 									<input type="file" className='upload-input' name="myfile" onChange={onLeaseFileChange} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
 								</div>
 								{leaseFileName ? <p>{leaseFileName}</p> : <p>{content.no_file_selected}</p>}
+								<div id="emailHelp" className={validationArr[6].status ? 'form-text helper-text' : 'd-none'}>{validationArr[6].msg}</div>
 							</div>
 							<div className="form-group col-6">
 								<div className="upload-btn-wrapper">
@@ -331,7 +552,7 @@ const Guarantee = ({ language, content }) => {
 									<input type="file" className='upload-input' name="myfile" onChange={onIDFileChange} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
 								</div>
 								{IdFileName ? <p>{IdFileName}</p> : <p>{content.no_file_selected}</p>}
-
+								<div id="emailHelp" className={validationArr[7].status ? 'form-text helper-text' : 'd-none'}>{validationArr[7].msg}</div>
 							</div>
 						</div>
 						<p className='form-text1 mt-5'>{content.guar_head4}</p>
@@ -359,10 +580,14 @@ const Guarantee = ({ language, content }) => {
 										<div className="form-group col-6">
 											<label htmlFor="firstname" className='form-label'>{content.first_name}</label>
 											<input value={tenant.t_firstName} required type="text" className="form-control" id="type" name='t_firstName' onChange={e => handleFormChange(index, e)} />
+											<div id="emailHelp" className={tenantsValidationArr[index][2].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr[index][2].msg}</div>
+
 										</div>
 										<div className="form-group col-6">
 											<label htmlFor="lasttime" className='form-label'>{content.last_name}</label>
 											<input value={tenant.t_lastName} required type="text" className="form-control" id="lasttime" name='t_lastName' onChange={e => handleFormChange(index, e)} />
+											<div id="emailHelp" className={tenantsValidationArr[index][3].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr[index][3].msg}</div>
+
 										</div>
 									</div>
 
@@ -370,6 +595,8 @@ const Guarantee = ({ language, content }) => {
 										<div className="form-group col-6">
 											<label htmlFor="dob" className='form-label'>{content.date_of_birth}</label>
 											<input value={tenant.t_dob} type="date" className="form-control" id="dob" name='t_dob' onChange={e => handleFormChange(index, e)} />
+											<div id="emailHelp" className={tenantsValidationArr[index][4].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr[index][4].msg}</div>
+
 										</div>
 										<div className="form-group col-6">
 											<label htmlFor="nationality" className='form-label'>{content.nationality}</label>
@@ -385,15 +612,17 @@ const Guarantee = ({ language, content }) => {
 											<label htmlFor="num" className='form-label'>{content.number}</label>
 											<PhoneInput
 												placeholder="Enter phone number"
-												value={tenant.t_mobile}
+												value={tNum}
 												onChange={setTNum} className="phone-input-field" onFocus={() => setIndexForTNum(index)}
 											/>
+											<div id="emailHelp" className={tenantsValidationArr[index][8].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr[index][8].msg}</div>
 										</div>
 									</div>
 
 									<div className="form-group">
 										<label htmlFor="email" className='form-label'>{content.email}</label>
 										<input value={tenant.t_email} type="email" className="form-control" id="email" name='t_email' onChange={e => handleFormChange(index, e)} />
+										<div id="emailHelp" className={tenantsValidationArr[index][6].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr[index][6].msg}</div>
 									</div>
 
 									<div className="upload-btn-wrapper mt-3">
@@ -401,6 +630,8 @@ const Guarantee = ({ language, content }) => {
 										<UploadIcon className='upload-icon' />
 										<input type="file" className='upload-input' name="t_docFile" onChange={(e) => onDocFileChange(index, e)} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
 										{tenant.t_docName ? <p>{tenant.t_docName}</p> : <p>{content.no_file_selected}</p>}
+										<div id="emailHelp" className={tenantsValidationArr[index][7].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr[index][7].msg}</div>
+
 									</div>
 
 									<p className='delete-text mt-4' onClick={() => deleteTenant(index)}>{content.delete}</p>

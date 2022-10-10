@@ -118,6 +118,11 @@ body {
   padding: 100px 70px;
 }
 
+.helper-text {
+  font-size: 12px !important;
+  color: red;
+}
+
 .reviewer-img {
   position: absolute;
   top: -75px;
