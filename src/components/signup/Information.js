@@ -203,8 +203,8 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			updateValidationArr(state, true, `${type} is Required`, type)
 			return false
 		}
-		else if (state.length > 150) {
-			updateValidationArr(state, true, `${type} should not be greater than 150`, type)
+		else if (state.length > 20) {
+			updateValidationArr(state, true, `${type} should not be greater than 20`, type)
 			return false
 		}
 		updateValidationArr(state, false, '', type)
@@ -255,17 +255,36 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			updateValidationArr(no, true, 'Street Number is Required', 'No')
 			return false
 		}
+		else if(!/^\d+$/.test(no)){
+			updateValidationArr(no, true, 'Street Number Can Only be Numeric', 'No')
+		}
 		updateValidationArr(no, false, '', 'No')
 		return true
 	}
 
-	const checkErr = () => {
-		for (let index = 0; index < validationArr.length; index++) {
-			const element = validationArr[index];
-			if (!element.status) {
-				return false
-			}
+	const zipCodeValidation = () => {
+		if (zipCode <= 0) {
+			updateValidationArr(zipCode, true, 'Zip Code is Required', 'Zip Code')
+			return false
 		}
+		else if(!/^\d+$/.test(zipCode )){
+			updateValidationArr(zipCode , true, 'Zip Code Can Only be Numeric', 'Zip Code')
+			return false
+		}
+		updateValidationArr(zipCode, false, '', 'Zip Code')
+		return true
+	}
+
+	const streetValidation = () => {
+		if (street.length <= 0) {
+			updateValidationArr(street, true, 'Street is Required', 'Street')
+			return false
+		}
+		else if(!/^[a-zA-Z]+$/.test(street)){
+			updateValidationArr(street , true, 'Street can Only have Alphabets', 'Street')
+			return false
+		}
+		updateValidationArr(street, false, '', 'Street')
 		return true
 	}
 
@@ -274,15 +293,15 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 		if (textValidation(firstName, 'First Name') &
 			textValidation(lastName, 'Last Name') &
 			textValidation(country, 'Country') &
-			textValidation(zipCode, 'Zip Code') &
-			textValidation(street, 'Street') &
 			textValidation(locality, 'Locality') &
 			textValidation(nationality, 'Nationality') &
 			textValidation(civility, 'Civility') &
 			numberValidation() &
 			streetNoValidation() &
 			dobValidation() &
-			emailValidation()) {
+			emailValidation() &
+			zipCodeValidation() &
+			streetValidation()) {
 			localStorage.setItem('civility', civility);
 			localStorage.setItem('firstName', firstName);
 			localStorage.setItem('lastName', lastName);

@@ -132,8 +132,8 @@ const Guarantee = ({ language, content }) => {
 			updateValidationArr(state, true, `${type} is Required`, type)
 			return false
 		}
-		else if (state.length > 150) {
-			updateValidationArr(state, true, `${type} should not be greater than 150`, type)
+		else if (state.length > 20) {
+			updateValidationArr(state, true, `${type} should not be greater than 20`, type)
 			return false
 		}
 		updateValidationArr(state, false, '', type)
@@ -221,8 +221,8 @@ const Guarantee = ({ language, content }) => {
 			handleChange(index, column, type, `${type} is Required`, true)
 			return false
 		}
-		else if (state.length > 150) {
-			handleChange(index, column, type, `${type} should be less than 150 chars `, true)
+		else if (state.length > 20) {
+			handleChange(index, column, type, `${type} should be less than 20 chars `, true)
 			return false
 		}
 		handleChange(index, column, type, '', false)
@@ -342,11 +342,27 @@ const Guarantee = ({ language, content }) => {
 	}
 
 	const streetNoValidation = () => {
-		if (guaranteeNo <= 0) {
+		if(!/^\d+$/.test(guaranteeNo )){
+			updateValidationArr(guaranteeNo , true, 'Street Number Can Only be Numeric', 'No')
+		}
+		else if (guaranteeNo <= 0) {
 			updateValidationArr(guaranteeNo, true, 'Street Number is Required', 'No')
 			return false
 		}
 		updateValidationArr(guaranteeNo, false, '', 'No')
+		return true
+	}
+
+	const zipCodeValidation = () => {
+		if(!/^\d+$/.test(guaranteeZipCode )){
+			updateValidationArr(guaranteeZipCode , true, 'Zip Code Can Only be Numeric', 'Zip Code')
+			return false
+		}
+		else if (guaranteeZipCode <= 0) {
+			updateValidationArr(guaranteeZipCode, true, 'Zip Code is Required', 'Zip Code')
+			return false
+		}
+		updateValidationArr(guaranteeZipCode, false, '', 'Zip Code')
 		return true
 	}
 
@@ -356,6 +372,19 @@ const Guarantee = ({ language, content }) => {
 			return false
 		}
 		updateValidationArr(guaranteeAmount, false, '', 'Amount')
+		return true
+	}
+
+	const streetValidation = () => {
+		if (guaranteeStreet.length <= 0) {
+			updateValidationArr(guaranteeStreet, true, 'Street is Required', 'Street')
+			return false
+		}
+		else if(!/^[a-zA-Z]+$/.test(guaranteeStreet)){
+			updateValidationArr(guaranteeStreet , true, 'Street can Only have Alphabets', 'Street')
+			return false
+		}
+		updateValidationArr(guaranteeStreet, false, '', 'Street')
 		return true
 	}
 
@@ -375,15 +404,16 @@ const Guarantee = ({ language, content }) => {
 
 	const nextPageHandler = (e) => {
 		e.preventDefault()
-		if (textValidation(guaranteeZipCode, 'Zip Code') &
-			textValidation(guaranteeStreet, 'Street') &
+		if (
 			textValidation(guaranteeLocality, 'Locality') &
 			streetNoValidation() &
 			amountValidation() &
 			moveInDateValidation() &
 			validateLeaseFile() &
 			validateIdFile() &
-			updateTenantValidationArr()) {
+			updateTenantValidationArr() &
+			zipCodeValidation() &
+			streetValidation()) {
 			localStorage.setItem('guaranteeStreet', guaranteeStreet);
 			localStorage.setItem('guaranteeNo', guaranteeNo);
 			localStorage.setItem('guaranteeZipCode', guaranteeZipCode);
@@ -470,8 +500,6 @@ const Guarantee = ({ language, content }) => {
 		validationData.splice(index, 1)
 		setTenantsValidationArr(validationData)
 	}
-
-
 
 	return (
 		<div className='info-wrapper container'>

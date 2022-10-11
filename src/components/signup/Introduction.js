@@ -14,7 +14,7 @@ const Introduction = ({ language, content }) => {
                 </div>
                 <div className='d-flex justify-content-center mt-5 ml-3'>
                     <Link to={`/${language}/signup/new/information/private`}>
-                        <img src='/images/privateImg.PNG' height={255} width={300} alt="imggg" className='private-img' />
+                        <img src='/images/privateImg.png' height={255} width={300} alt="imggg" className='private-img' />
                     </Link>
                 </div>
             </div>
