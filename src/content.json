@@ -1,7 +1,7 @@
 {
     "en": {
         "about_us": "About Us",
-        "Partner": "Partner",
+        "Partner": "Partnersasdasd",
         "sign_up": "SIGN UP NOW",
         "intro_text": "Online Application Rental Guarantee",
         "introduction": "Introduction",
@@ -55,9 +55,16 @@
         "btn_submit": "Submit",
         "btn_next": "NEXT",
         "success_msg": "Data submitted successfully!",
-        "confirmed_msg" : "You will soon receive a confirmation e-mail from Firstcaution that will process your application in the next 1-2 business days. Thank you for your trust.",
-        "confirmed_msg_1" : "You will soon receive a confirmation e-mail from Firstcaution that will process your application in the next 1-2 business days. Thank you for your trust.",
-        "confirmed_msg_2" : "If you're moving to the new address you can already schedule an address change for the moving in date in the app, by using the \"Update your address\" option below"
+        "confirmed_msg": "You will soon receive a confirmation e-mail from Firstcaution that will process your application in the next 1-2 business days. Thank you for your trust.",
+        "confirmed_msg_1": "You will soon receive a confirmation e-mail from Firstcaution that will process your application in the next 1-2 business days. Thank you for your trust.",
+        "confirmed_msg_2": "If you're moving to the new address you can already schedule an address change for the moving in date in the app, by using the \"Update your address\" option below",
+        "is_required_err": "is Required",
+        "is_invalid": "is Invalid",
+        "dob_err": "Date of Birth should be greater than current Date",
+        "only_numeric": "can only be Numberic",
+        "only_alphabet": "can only be Alphabetic",
+        "limit_err": "should not be greater than 20",
+        "move_in_err": "Move In Date should be greater than current date"
     },
     "de": {
         "about_us": "Über uns",
@@ -116,8 +123,15 @@
         "btn_next": "NÄCHSTE",
         "success_msg": "Daten erfolgreich übermittelt!",
         "confirmed_msg": "Gratulation! lhre Anmeldung ist fast fertig. Wahlen Sie nun lhre Zahlungsart",
-        "confirmed_msg_sub1" : "Sie erhalten in Kürze eine Bestätigungs-E-Mail von Firstcaution, die Ihren Antrag in den nächsten 1-2 Werktagen bearbeitet. Danke für dein Vertrauen.",
-        "confirmed_msg_sub2" : "Wenn Sie an die neue Adresse ziehen, können Sie in der App bereits eine Adressänderung für das Einzugsdatum planen, indem Sie unten die Option \"Adresse aktualisieren\" verwenden"
+        "confirmed_msg_sub1": "Sie erhalten in Kürze eine Bestätigungs-E-Mail von Firstcaution, die Ihren Antrag in den nächsten 1-2 Werktagen bearbeitet. Danke für dein Vertrauen.",
+        "confirmed_msg_sub2": "Wenn Sie an die neue Adresse ziehen, können Sie in der App bereits eine Adressänderung für das Einzugsdatum planen, indem Sie unten die Option \"Adresse aktualisieren\" verwenden",
+        "is_required_err": "ist nötig",
+        "limit_err": "sollte nicht größer als 20 sein",
+        "is_invalid_err": "ist ungültig",
+        "dob_err": "Das Geburtsdatum sollte nach dem aktuellen Datum liegen",
+        "only_numeric": "Kann nur numerisch sein",
+        "only_alphabet": "kann nur Alphabete haben",
+        "move_in_err": "Das Einzugsdatum sollte nach dem aktuellen Datum liegen"
     },
     "fr": {
         "about_us": "À propos de nous",
@@ -176,8 +190,15 @@
         "btn_next": "SUIVANT",
         "success_msg": "Données soumises avec succès !",
         "confirmed_msg": "Toutes nos félicitations! Votre inscription est presque terminée. Choisissez maintenant votre mode de paiement",
-        "confirmed_msg_sub1" : "Vous recevrez bientôt un e-mail de confirmation de Firstcaution qui traitera votre demande dans les 1-2 prochains jours ouvrables. Merci pour ta confiance.",
-        "confirmed_msg_sub2" : "subSi vous déménagez à la nouvelle adresse, vous pouvez déjà programmer un changement d'adresse pour la date d'emménagement dans l'application, en utilisant l'option \"Mettre à jour votre adresse\" ci-dessous"
+        "confirmed_msg_sub1": "Vous recevrez bientôt un e-mail de confirmation de Firstcaution qui traitera votre demande dans les 1-2 prochains jours ouvrables. Merci pour ta confiance.",
+        "confirmed_msg_sub2": "subSi vous déménagez à la nouvelle adresse, vous pouvez déjà programmer un changement d'adresse pour la date d'emménagement dans l'application, en utilisant l'option \"Mettre à jour votre adresse\" ci-dessous",
+        "only_numeric": "Ne peut être que numérique",
+        "limit_err": "ne doit pas être supérieur à 20",
+        "is_required_err": " est requis",
+        "dob_err": "La date de naissance doit être supérieure à la date actuelle",
+        "only_alphabet": "ne peut avoir que des alphabets",
+        "move_in_err": "La date d'emménagement doit être supérieure à la date actuelle",
+        "is_invalid_err": "est invalide"
     },
     "it": {
         "about_us": "Chi siamo",
@@ -236,7 +257,14 @@
         "btn_next": "PROSSIMO",
         "success_msg": "Dati inviati con successo!",
         "confirmed_msg": "Congratulazioni! La tua registrazione è quasi completa. Ora scegli il tuo metodo di pagamento",
-        "confirmed_msg_sub1" : "Riceverai presto un'e-mail di conferma da Firstcaution che elaborerà la tua richiesta nei prossimi 1-2 giorni lavorativi. Grazie per la tua fiducia.",
-        "confirmed_msg_sub2" : "Se ti stai trasferendo al nuovo indirizzo puoi già programmare una modifica dell'indirizzo per la data del trasloco nell'app, utilizzando l'opzione \"Aggiorna il tuo indirizzo\" di seguito"
+        "confirmed_msg_sub1": "Riceverai presto un'e-mail di conferma da Firstcaution che elaborerà la tua richiesta nei prossimi 1-2 giorni lavorativi. Grazie per la tua fiducia.",
+        "confirmed_msg_sub2": "Se ti stai trasferendo al nuovo indirizzo puoi già programmare una modifica dell'indirizzo per la data del trasloco nell'app, utilizzando l'opzione \"Aggiorna il tuo indirizzo\" di seguito",
+        "is_required_err": "è obbligatorio",
+        "only_alphabets": " può avere solo alfabeti",
+        "limit_err": "non deve essere maggiore di 20",
+        "is_invalid_err": "è invalido",
+        "dob_err": "La data di nascita dovrebbe essere maggiore della data corrente",
+        "only_numeric": "Può essere solo numerico",
+        "move_in_err": "La data di arrivo dovrebbe essere maggiore della data corrente"
     }
 }

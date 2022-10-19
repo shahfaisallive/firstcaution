@@ -188,7 +188,7 @@ const Confirmation = ({ language, content }) => {
 			// 			toast.warn('Invalid Phone Number')
 			// 		}
 			// 		else {
-					
+
 			// 		}
 			// 	})
 			// 	.catch(function (err) {
@@ -196,38 +196,39 @@ const Confirmation = ({ language, content }) => {
 			// 		setSubmitLoader(false)
 
 			// 	});
-			const response = await axios.post("https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/provisional-certificate",
-			bodyObj,
-			{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
+			try {
+				const response = await axios.post("https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/provisional-certificate",
+					bodyObj,
+					{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
+				console.log(response.data.data.token)
+				// console.log(leaseFile)
 
-		console.log(response.data.data.token)
-		// console.log(leaseFile)
+				const fileData = [
+					{
+						fileName: leaseFileName,
+						fileBase64: leaseFile
+					},
+					{
+						fileName: IdFileName,
+						fileBase64: IdFile
+					}
+				]
 
-		const fileData = [
-			{
-				fileName: leaseFileName,
-				fileBase64: leaseFile
-			},
-			{
-				fileName: IdFileName,
-				fileBase64: IdFile
+				if (response.data.data.status == "accepted") {
+					console.log(fileData)
+					const fileRes = await axios.post(`https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
+						{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
+
+					console.log(fileRes)
+					setSubmitLoader(false)
+					navigate("/" + language + "/signup/confirmed")
+				} else {
+					alert("Data not correct")
+					setSubmitLoader(false)
+				}
+			} catch (error) {
+				setSubmitLoader(false)
 			}
-		]
-
-		if (response.data.data.status == "accepted") {
-			console.log(fileData)
-			const fileRes = await axios.post(`https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
-				{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
-
-			console.log(fileRes)
-			setSubmitLoader(false)
-			navigate("/" + language + "/signup/confirmed")
-		} else {
-			alert("Data not correct")
-			setSubmitLoader(false)
-
-		}
-
 		} else {
 			document.getElementById("form-submit-authenticate").style.display = "block"
 		}

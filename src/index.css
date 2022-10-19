@@ -691,6 +691,24 @@ input[type=number]::-webkit-outer-spin-button {
   padding: 10px 5px;
 }
 
+.intro-sec-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.commercial-intro {
+  display: flex ;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.private-intro {
+  display: flex ;
+  justify-content: center;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
 
 @media only screen and (max-width: 600px) {
   .steps-mob-view {
@@ -717,6 +735,10 @@ input[type=number]::-webkit-outer-spin-button {
     margin-top: 20px;
   }
 
+  .intro-sec-wrapper {
+    flex-direction: column;
+  }
+
   .steps-single-box {
     display: flex;
   }
@@ -724,6 +746,11 @@ input[type=number]::-webkit-outer-spin-button {
   .step-icon {
     min-width: 30px;
     align-self: start;
+  }
+
+  .info-wrapper {
+    padding-top: 60px;
+    padding-bottom: 50px;
   }
 
   .steps-single-box {
@@ -749,7 +776,6 @@ input[type=number]::-webkit-outer-spin-button {
 
   .contact-wrapper {
     left: 50%;
-    transform: translate(-50%, 0);
   }
 
   .protect-imprint-div {
@@ -759,9 +785,11 @@ input[type=number]::-webkit-outer-spin-button {
   .home-social-icon {
     max-width: 30px;
   }
+
+  .private-intro {
+    margin-left: 0px;
+  }
 }
-
-
 
 @media only screen and (max-width: 400px) {
   .logo-img {
@@ -769,8 +797,18 @@ input[type=number]::-webkit-outer-spin-button {
     margin-left: -40px;
   }
 
+  .contact-wrapper {
+    left: 50%;
+  }
+
   .navbar-toggler {
     margin-right: -40px;
+  }
+  .intro-sec-wrapper {
+    flex-direction: column;
+  }
+  .private-intro {
+    margin-left: 0px;
   }
 }
 

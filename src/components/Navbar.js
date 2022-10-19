@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 
 
 const Navbar = ({ changeLanguage, language, content }) => {
+    // console.log(content.sign_up,'dasdasdasdasdsdas')
     const navigate = useNavigate()
 
     const [aboutLink, setAboutLink] = useState("https://www.firstcaution.ch/en/about-us/company-and-team")

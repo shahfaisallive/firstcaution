@@ -93,7 +93,7 @@ function App() {
               content={content}
             />}
         />
-        <Route path={`/:language/signup/:status/guarantee`}
+        <Route path={`/:language/signup/:status/guarantee/:type`}
           element={
             <Guarantee
               data={data}
@@ -101,7 +101,7 @@ function App() {
               content={content}
             />}
         />
-        <Route path={`/:language/signup/confirmation`}
+        <Route path={`/:language/signup/confirmation/:type`}
           element={
             <Confirmation
               language={language}

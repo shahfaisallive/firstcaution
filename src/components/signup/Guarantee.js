@@ -6,13 +6,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import ContactBox from '../ContactBox';
-import * as yup from "yup";
-import { toast } from 'react-toastify'
+import PlacesAutocomplete from 'react-places-autocomplete';
 
 const Guarantee = ({ language, content }) => {
 	const navigate = useNavigate()
 	const params = useParams()
-	const { status } = params
+	const { status, type } = params
 	// Form Input states
 	const [data, setData] = useState()
 	const [guaranteeStreet, setGuaranteeStreet] = useState("")
@@ -26,8 +25,6 @@ const Guarantee = ({ language, content }) => {
 	const [IdFile, setIdFile] = useState("")
 	const [leaseFileName, setLeaseFileName] = useState("")
 	const [IdFileName, setIdFileName] = useState("")
-	const [type, setType] = useState("")
-
 	// Tenant States
 	const [tenants, setTenants] = useState([])
 	const [tenantsDocs, setTenantsDocs] = useState([])
@@ -87,13 +84,13 @@ const Guarantee = ({ language, content }) => {
 	])
 
 	useEffect(() => {
+		console.log(content,'dasdasdasd')
 		if (!data) {
 			setData(JSON.parse(localStorage.getItem("data")))
 		}
 	}, [])
 
 	useEffect(() => {
-		setType(localStorage.getItem("type"))
 		if (status == 'edit') {
 			setGuaranteeStreet(localStorage.getItem("guaranteeStreet"))
 			setGuaranteeNo(localStorage.getItem("guaranteeNo"))
@@ -129,7 +126,7 @@ const Guarantee = ({ language, content }) => {
 	const textValidation = (state, type) => {
 		// console.log(state,type)
 		if (state.length <= 0) {
-			updateValidationArr(state, true, `${type} is Required`, type)
+			updateValidationArr(state, true, `${type} ${content.is_required_err}`, type)
 			return false
 		}
 		else if (state.length > 20) {
@@ -190,11 +187,11 @@ const Guarantee = ({ language, content }) => {
 	const numberValidationTenant = (state, index, column, type) => {
 		let numberRegex = /^\+[1-9]\d{10,14}$/
 		if (state <= 0) {
-			handleChange(index, column, type, `${type} is Required`, true)
+			handleChange(index, column, type, `${type} ${content.is_required_err}`, true)
 			return false
 		}
 		else if (!numberRegex.test(state)) {
-			handleChange(index, column, type, `${type} is Invalid`, true)
+			handleChange(index, column, type, `${type} ${content.is_invalid_err}`, true)
 			return false
 		}
 		handleChange(index, column, type, '', false)
@@ -205,11 +202,11 @@ const Guarantee = ({ language, content }) => {
 		var ToDate = new Date();
 		// console.log(dob, 'dob')
 		if (state <= 0) {
-			handleChange(index, column, type, `${type} is Required`, true)
+			handleChange(index, column, type, `${type} ${content.is_required_err}`, true)
 			return false
 		}
 		if (new Date(state).getTime() > ToDate.getTime()) {
-			handleChange(index, column, type, `${type} cannot be greater than Current date`, true)
+			handleChange(index, column, type, `${content.dob_err}`, true)
 			return false
 		}
 		handleChange(index, column, type, '', false)
@@ -218,11 +215,11 @@ const Guarantee = ({ language, content }) => {
 
 	const textValidationTenant = (state, index, column, type) => {
 		if (state.length <= 0) {
-			handleChange(index, column, type, `${type} is Required`, true)
+			handleChange(index, column, type, `${type} ${content.is_required_err}`, true)
 			return false
 		}
 		else if (state.length > 20) {
-			handleChange(index, column, type, `${type} should be less than 20 chars `, true)
+			handleChange(index, column, type, `${type} should be less than 20 charc `, true)
 			return false
 		}
 		handleChange(index, column, type, '', false)
@@ -232,11 +229,11 @@ const Guarantee = ({ language, content }) => {
 	const validateEmailTenant = (state, index, column, type) => {
 		let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 		if (state.length <= 0) {
-			handleChange(index, column, type, 'Email is Required', true)
+			handleChange(index, column, type, `Email ${content.is_required_err}`, true)
 			return false
 		}
 		else if (!emailRegex.test(state)) {
-			handleChange(index, column, type, 'Email is Invalid', true)
+			handleChange(index, column, type, `Email ${content.is_invalid_err}`, true)
 			return false
 		}
 		handleChange(index, column, type, '', false)
@@ -314,18 +311,18 @@ const Guarantee = ({ language, content }) => {
 		setTenantsValidationArr([...tenantsValidationArr, newTenantValidation])
 	}
 
-	const validateLeaseFile = () => {
-		if (!leaseFile) {
-			updateValidationArr(leaseFile, true, 'Lease is Required', 'Lease File')
+	const validateLeaseFile = (state) => {
+		if (!state) {
+			updateValidationArr(leaseFile, true, `Lease ${content.is_required_err}`, 'Lease File')
 			return false
 		}
 		updateValidationArr(leaseFile, false, '', 'Lease File')
 		return true
 	}
 
-	const validateIdFile = () => {
-		if (!IdFile) {
-			updateValidationArr(IdFile, true, 'ID File is Required', 'ID File')
+	const validateIdFile = (state) => {
+		if (!state) {
+			updateValidationArr(IdFile, true, `ID File ${content.is_required_err}`, 'ID File')
 			return false
 		}
 		updateValidationArr(IdFile, false, '', 'ID File')
@@ -334,100 +331,88 @@ const Guarantee = ({ language, content }) => {
 
 	const validateFilesTenant = (state, index, column, type) => {
 		if (!state) {
-			handleChange(index, column, type, `${type} is Required`, true)
+			handleChange(index, column, type, `${type} ${content.is_required_err}`, true)
 			return false
 		}
 		handleChange(index, column, type, '', false)
 		return true
 	}
 
-	const streetNoValidation = () => {
-		if(!/^\d+$/.test(guaranteeNo )){
-			updateValidationArr(guaranteeNo , true, 'Street Number Can Only be Numeric', 'No')
-		}
-		else if (guaranteeNo <= 0) {
-			updateValidationArr(guaranteeNo, true, 'Street Number is Required', 'No')
+	const streetNoValidation = (state) => {
+		setGuaranteeNo(state)
+		if (state.length <= 0) {
+			console.log('here1')
+			updateValidationArr(guaranteeNo, true, `Street Number ${content.is_required_err}`, 'No')
 			return false
+		}
+		else if (!/^\d+$/.test(state)) {
+			console.log('here2')
+			updateValidationArr(guaranteeNo, true, `Street Number ${content.only_numeric}`, 'No')
 		}
 		updateValidationArr(guaranteeNo, false, '', 'No')
 		return true
 	}
 
-	const zipCodeValidation = () => {
-		if(!/^\d+$/.test(guaranteeZipCode )){
-			updateValidationArr(guaranteeZipCode , true, 'Zip Code Can Only be Numeric', 'Zip Code')
+	const zipCodeValidation = (state) => {
+		setGuaranteeZipCode(state)
+		if (state <= 0) {
+			updateValidationArr(guaranteeZipCode, true, `Zip Code ${content.is_required_err}`, 'Zip Code')
 			return false
 		}
-		else if (guaranteeZipCode <= 0) {
-			updateValidationArr(guaranteeZipCode, true, 'Zip Code is Required', 'Zip Code')
+		else if (!/^\d+$/.test(state)) {
+			updateValidationArr(guaranteeZipCode, true, `Zip Code ${content.only_numeric}`, 'Zip Code')
 			return false
 		}
 		updateValidationArr(guaranteeZipCode, false, '', 'Zip Code')
 		return true
 	}
 
-	const amountValidation = () => {
-		if (guaranteeAmount <= 0) {
-			updateValidationArr(guaranteeAmount, true, 'Amount is Required', 'Amount')
+	const amountValidation = (state) => {
+		setGuaranteeAmount(state)
+		if (state <= 0) {
+			updateValidationArr(guaranteeAmount, true, `Amount ${content.is_required_err}`, 'Amount')
 			return false
 		}
 		updateValidationArr(guaranteeAmount, false, '', 'Amount')
 		return true
 	}
 
-	const streetValidation = () => {
-		if (guaranteeStreet.length <= 0) {
-			updateValidationArr(guaranteeStreet, true, 'Street is Required', 'Street')
+	const handleSelect = address => {
+		setGuaranteeStreet(address)
+	};
+
+	const streetValidation = (state) => {
+		setGuaranteeStreet(state)
+		if (state <= 0) {
+			updateValidationArr(guaranteeStreet, true, `Street ${content.is_required_err}`, 'Street')
 			return false
 		}
-		else if(!/^[a-zA-Z]+$/.test(guaranteeStreet)){
-			updateValidationArr(guaranteeStreet , true, 'Street can Only have Alphabets', 'Street')
+		else if (!/^[a-zA-Z ,-]+$/.test(state)) {
+			updateValidationArr(guaranteeStreet, true, `Street ${content.only_alphabets}`, 'Street')
 			return false
 		}
 		updateValidationArr(guaranteeStreet, false, '', 'Street')
 		return true
 	}
 
-	const moveInDateValidation = () => {
+	const moveInDateValidation = (state) => {
+		setMoveInDate(state)
 		var ToDate = new Date();
-		if (moveInDate.length == 0) {
-			updateValidationArr(moveInDate, true, 'Move In Date is Required', 'Move In Date')
+		if (state.length == 0) {
+			updateValidationArr(moveInDate, true, `Move In Date ${content.is_required_err}`, 'Move In Date')
 			return false
 		}
-		else if (new Date(moveInDate).getTime() <= ToDate.getTime()) {
-			updateValidationArr(moveInDate, true, 'Move In Date should be greater than current date', 'Move In Date')
+		else if (new Date(state).getTime() <= ToDate.getTime()) {
+			updateValidationArr(moveInDate, true, content.move_in_err, 'Move In Date')
 			return false
 		}
 		updateValidationArr(moveInDate, false, '', 'Move In Date')
 		return true
 	}
 
-	const nextPageHandler = (e) => {
-		e.preventDefault()
-		if (
-			textValidation(guaranteeLocality, 'Locality') &
-			streetNoValidation() &
-			amountValidation() &
-			moveInDateValidation() &
-			validateLeaseFile() &
-			validateIdFile() &
-			updateTenantValidationArr() &
-			zipCodeValidation() &
-			streetValidation()) {
-			localStorage.setItem('guaranteeStreet', guaranteeStreet);
-			localStorage.setItem('guaranteeNo', guaranteeNo);
-			localStorage.setItem('guaranteeZipCode', guaranteeZipCode);
-			localStorage.setItem('guaranteeLocality', guaranteeLocality);
-			localStorage.setItem('guaranteeAmount', guaranteeAmount);
-			localStorage.setItem('moveInDate', moveInDate);
-			localStorage.setItem('promoCode', promoCode);
-			localStorage.setItem('leaseFile', leaseFile);
-			localStorage.setItem('IdFile', IdFile);
-			localStorage.setItem('leaseFileName', leaseFileName);
-			localStorage.setItem('IdFileName', IdFileName);
-			localStorage.setItem('tenants', JSON.stringify(tenants));
-			navigate('/' + language + '/signup/confirmation')
-		}
+	const localityValidation = (state) => {
+		setGuaranteeLocality(state)
+		textValidation(state, 'Locality')
 	}
 
 	const getBase64 = async (file) => {
@@ -453,6 +438,7 @@ const Guarantee = ({ language, content }) => {
 			// console.log(e.target.files[0].size)
 			const base64 = await getBase64(file)
 			const newBase64 = base64.split(",")
+			validateIdFile(newBase64[1])
 			setIdFile(newBase64[1])
 			// console.log(base64)
 
@@ -466,6 +452,7 @@ const Guarantee = ({ language, content }) => {
 			// console.log(e.target.files[0].size)
 			const base64 = await getBase64(file)
 			const newBase64 = base64.split(",")
+			validateLeaseFile(newBase64[1])
 			setLeaseFile(newBase64[1])
 			// console.log(newBase64[1])
 
@@ -474,9 +461,40 @@ const Guarantee = ({ language, content }) => {
 
 	const handleFormChange = (index, e) => {
 		let data = [...tenants];
-		data[index][e.target.name] = e.target.value;
-		setTenants(data);
-		// console.log(tenants)
+		if (e.target.name == 't_firstName') {
+			data[index][e.target.name] = e.target.value;
+			setTenants(data);
+			textValidationTenant(e.target.value, index, 2, 'First Name')
+		}
+		else if (e.target.name == 't_lastName') {
+			data[index][e.target.name] = e.target.value;
+			setTenants(data);
+			textValidationTenant(e.target.value, index, 3, 'Last Name')
+		}
+		else if (e.target.name == 't_dob') {
+			data[index][e.target.name] = e.target.value;
+			setTenants(data);
+			dobTenantValidation(e.target.value, index, 4, 'DoB')
+		}
+		else if (e.target.name == 't_email') {
+			data[index][e.target.name] = e.target.value;
+			setTenants(data);
+			validateEmailTenant(e.target.value, index, 6, 'Email')
+		}
+		else if (e.target.name == 't_docFile') {
+			data[index][e.target.name] = e.target.value;
+			setTenants(data);
+			validateFilesTenant(e.target.value, index, 7, 'Doc File')
+		}
+		else if (e.target.name == 't_civility') {
+			data[index][e.target.name] = e.target.value;
+			setTenants(data);
+			textValidationTenant(e.target.value, index, 1, 'Civility')
+		}
+		else {
+			data[index][e.target.name] = e.target.value;
+			setTenants(data);
+		}
 	}
 
 	const onDocFileChange = async (index, e) => {
@@ -501,6 +519,34 @@ const Guarantee = ({ language, content }) => {
 		setTenantsValidationArr(validationData)
 	}
 
+	const nextPageHandler = (e) => {
+		e.preventDefault()
+		if (
+			textValidation(guaranteeLocality, 'Locality') &
+			streetNoValidation(guaranteeNo) &
+			amountValidation(guaranteeAmount) &
+			moveInDateValidation(moveInDate) &
+			validateLeaseFile(leaseFile) &
+			validateIdFile(IdFile) &
+			updateTenantValidationArr() &
+			zipCodeValidation(guaranteeZipCode) &
+			streetValidation(guaranteeStreet)) {
+			localStorage.setItem('guaranteeStreet', guaranteeStreet);
+			localStorage.setItem('guaranteeNo', guaranteeNo);
+			localStorage.setItem('guaranteeZipCode', guaranteeZipCode);
+			localStorage.setItem('guaranteeLocality', guaranteeLocality);
+			localStorage.setItem('guaranteeAmount', guaranteeAmount);
+			localStorage.setItem('moveInDate', moveInDate);
+			localStorage.setItem('promoCode', promoCode);
+			localStorage.setItem('leaseFile', leaseFile);
+			localStorage.setItem('IdFile', IdFile);
+			localStorage.setItem('leaseFileName', leaseFileName);
+			localStorage.setItem('IdFileName', IdFileName);
+			localStorage.setItem('tenants', JSON.stringify(tenants));
+			navigate('/' + language + '/signup/confirmation/'+type)
+		}
+	}
+
 	return (
 		<div className='info-wrapper container'>
 			<ContactBox />
@@ -509,7 +555,6 @@ const Guarantee = ({ language, content }) => {
 				status == 'new' &&
 				<Link to={`/${language}/signup/new/information/${type}`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
 			}
-
 			<div className='row'>
 				<div className='col-sm-8 form-div mt-3'>
 					<form >
@@ -518,12 +563,51 @@ const Guarantee = ({ language, content }) => {
 						<div className='row d-flex justify-content-start mt-4'>
 							<div className="form-group col-8">
 								<label htmlFor="street" className='form-label'>{content.street}</label>
-								<input value={guaranteeStreet} type="text" className="form-control" id="street" onChange={(e => setGuaranteeStreet(e.target.value))} />
+								{/* <input value={guaranteeStreet} type="text" className="form-control" id="street" onChange={(e => streetValidation(e.target.value))} /> */}
+								<PlacesAutocomplete
+									value={guaranteeStreet}
+									onChange={streetValidation}
+									onSelect={handleSelect}
+								>
+									{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+										<div>
+											<input
+												{...getInputProps({
+													placeholder: '',
+													className: "form-control",
+													id: "street"
+												})}
+											/>
+											<div style={suggestions.length > 0 ? { border: '2px solid grey' } : {}} className="autocomplete-dropdown-container">
+												{loading && <div>searching...</div>}
+												{suggestions.map(suggestion => {
+													const className = suggestion.active
+														? 'suggestion-item--active'
+														: 'suggestion-item';
+													// inline style for demonstration purpose
+													const style = suggestion.active
+														? { backgroundColor: '#fafafa', cursor: 'pointer', border: '2px solid grey' }
+														: { backgroundColor: '#ffffff', cursor: 'pointer' };
+													return (
+														<div
+															{...getSuggestionItemProps(suggestion, {
+																className,
+																style,
+															})}
+														>
+															<span>{suggestion.description}</span>
+														</div>
+													);
+												})}
+											</div>
+										</div>
+									)}
+								</PlacesAutocomplete>
 								<div id="emailHelp" className={validationArr[0].status ? 'form-text helper-text' : 'd-none'}>{validationArr[0].msg}</div>
 							</div>
 							<div className="form-group col-4">
 								<label htmlFor="number" className='form-label'>{content.no}</label>
-								<input value={guaranteeNo} type="number" className="form-control" id="number" onChange={(e => setGuaranteeNo(e.target.value))} />
+								<input value={guaranteeNo} type="number" className="form-control" id="number" onChange={(e => streetNoValidation(e.target.value))} />
 								<div id="emailHelp" className={validationArr[1].status ? 'form-text helper-text' : 'd-none'}>{validationArr[1].msg}</div>
 							</div>
 						</div>
@@ -531,25 +615,25 @@ const Guarantee = ({ language, content }) => {
 						<div className='row d-flex justify-content-start mt-1'>
 							<div className="form-group col-6">
 								<label htmlFor="zip" className='form-label'>{content.zip_code}</label>
-								<input value={guaranteeZipCode} type="text" className="form-control" maxLength={4} id="zip" onChange={(e => setGuaranteeZipCode(e.target.value))} />
+								<input value={guaranteeZipCode} type="text" className="form-control" maxLength={4} id="zip" onChange={(e => zipCodeValidation(e.target.value))} />
 								<div id="emailHelp" className={validationArr[2].status ? 'form-text helper-text' : 'd-none'}>{validationArr[2].msg}</div>
 							</div>
 							<div className="form-group col-6">
 								<label htmlFor="locality" className='form-label'>{content.locality}</label>
-								<input value={guaranteeLocality} type="text" className="form-control" id="locality" onChange={(e => setGuaranteeLocality(e.target.value))} />
+								<input value={guaranteeLocality} type="text" className="form-control" id="locality" onChange={(e => localityValidation(e.target.value))} />
 								<div id="emailHelp" className={validationArr[3].status ? 'form-text helper-text' : 'd-none'}>{validationArr[3].msg}</div>
 							</div>
 						</div>
 						<p className='form-text1 mt-5'>{content.guar_head2}</p>
 						<div className="form-group">
 							<label htmlFor="guaranteeAmount" className='form-label'>{content.amount_in_guarantee}</label>
-							<input value={guaranteeAmount} type="number" className="form-control" id="guaranteeAmount" onChange={(e => setGuaranteeAmount(e.target.value))} />
+							<input value={guaranteeAmount} type="number" className="form-control" id="guaranteeAmount" onChange={(e => amountValidation(e.target.value))} />
 							<div id="emailHelp" className={validationArr[4].status ? 'form-text helper-text' : 'd-none'}>{validationArr[4].msg}</div>
 						</div>
 
 						<div className="form-group mt-1">
 							<label htmlFor="moveDate" className='form-label'>{content.mone_in_date}</label>
-							<input value={moveInDate} type="date" className="form-control" id="moveDate" onChange={(e => setMoveInDate(e.target.value))} />
+							<input value={moveInDate} type="date" className="form-control" id="moveDate" onChange={(e => moveInDateValidation(e.target.value))} />
 							<div id="emailHelp" className={validationArr[5].status ? 'form-text helper-text' : 'd-none'}>{validationArr[5].msg}</div>
 						</div>
 
