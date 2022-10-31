@@ -10,6 +10,8 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 
 const Information = ({ setFormData, language, data, content, changeLanguage }) => {
 
+	const urlParams = new URLSearchParams(window.location.search)
+
 	const params = useParams()
 	const { type, status } = params
 	const langParam = params.language
@@ -49,6 +51,14 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			// setLoading(false)
 		}
 		getFormData()
+		let utmSource = urlParams.get('utm_source')
+    let utmCompaign = urlParams.get('utm_campaign')
+    let utmMedium = urlParams.get('utm_medium')
+    if (utmSource || utmCompaign || utmMedium) {
+      localStorage.setItem('utmSource', utmSource);
+      localStorage.setItem('utmCompaign', utmCompaign);
+      localStorage.setItem('utmMedium', utmMedium);
+    }
 		if (status == 'edit') {
 			setCivility(localStorage.getItem("civility"))
 			setFirstName(localStorage.getItem("firstName"))
@@ -225,13 +235,11 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 
 	const numberValidation = (state) => {
 		if (number != undefined && number.length <= 0 && isTyping) {
-			console.log('here2')
 			setIsTyping(false)
 			updateValidationArr(number, true, `${content.number} ${content.is_required_err}`, 'Number')
 			return false
 		}
 		else if (!numberRegex.test(number) && isTyping) {
-			console.log('here3')
 			updateValidationArr(number, true, `Phone Number ${content.is_invalid_err}`, 'Number')
 			return false
 		}
@@ -293,14 +301,13 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 	}
 
 	const streetValidation = (state) => {
-		// console.log(state)
-		setStreet(state)
+		setGoogleAddresses(state)
 		if (state.length <= 0) {
 			updateValidationArr(street, true, `${content.street} ${content.is_required_err}`, 'Street')
 			return false
 		}
 		else if (!/^[a-zA-Z ]+$/.test(state)) {
-			updateValidationArr(street, true, `${content.street} ${content.only_alphabets}`, 'Street')
+			updateValidationArr(street, true, `${content.street} ${content.only_alphabet}`, 'Street')
 			return false
 		}
 		updateValidationArr(street, false, '', 'Street')
@@ -325,7 +332,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			dobValidation(dob) &
 			emailValidation(email) &
 			zipCodeValidation(zipCode) &
-			streetValidation(street)) {
+			streetValidation(googleAddress)) {
 			localStorage.setItem('civility', civility);
 			localStorage.setItem('firstName', firstName);
 			localStorage.setItem('lastName', lastName);
@@ -357,7 +364,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			streetNoValidation(no) &
 			dobValidation(dob) &
 			emailValidation(email) &
-			streetValidation(street)) {
+			streetValidation(googleAddress)) {
 			localStorage.setItem('civility', civility);
 			localStorage.setItem('firstName', firstName);
 			localStorage.setItem('lastName', lastName);
@@ -375,39 +382,16 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 		}
 	}
 
-	const handleChange = address => {
-		// console.log(address, 'dad')
-		setGoogleAddresses(address)
-		setStreet(address)
-		if (address.length <= 0) {
-			console.log('here1')
-			updateValidationArr(street, true, `Street ${content.is_required_err}`, 'Street')
-			return false
-		}
-		else if (!/^[a-zA-Z ,-]+$/.test(address)) {
-			console.log('here2')
-			updateValidationArr(street, true, `Street ${content.only_alphabets}`, 'Street')
-			return false
-		}
-		console.log('here3')
-		updateValidationArr(street, false, '', 'Street')
-		return true
+	const handleChange = (address,x,y) => {
+		streetValidation(address)
 	};
 
-	const isNumber = (char) => {
-		if (typeof char !== 'string') {
-			return false;
-		}
-
-		if (char.trim() === '') {
-			return false;
-		}
-
-		return !isNaN(char);
-	}
-
 	const handleSelect = (address, x, y) => {
+		// console.log(y.formattedSuggestion.mainText,'text')
 		setGoogleAddresses(y.formattedSuggestion.mainText)
+		setLocality("")
+		setZipCode("")
+		setNo("")
 		if (window.google) {
 			const PlacesService = new window.google.maps.places.PlacesService(document.getElementById('map'));
 			try {
@@ -420,16 +404,23 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 						for (const component of place.address_components) {
 							// @ts-ignore remove once typings fixed
 							const componentType = component.types[0];
+							// console.log(componentType,'tuoeqweqwe')
 
 							switch (componentType) {
 								case "street_number": {
-									setNo(component.long_name,'noooo')
+									setNo(component.long_name)
+									break;
+								}
+								case "street_address": {
+									// console.log(component.long_name,'std')
+									// streetValidation(component.long_name)
 									break;
 								}
 
 								case "route": {
-									console.log(component.long_name,'roue')
+									// console.log(component.long_name,'roue')
 									// setGoogleAddresses(component.long_name)
+									streetValidation(component.long_name)
 									break;
 								}
 
@@ -439,17 +430,17 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 								}
 
 								case "postal_code_suffix": {
-									console.log(component.long_name)
+									// console.log(component.long_name)
 									break;
 								}
 
 								case "locality":
-									console.log(component.long_name,'LONG')
+									// console.log(component.long_name,'LONG')
 									setLocality(component.long_name)
 									break;
 
 								case "administrative_area_level_1": {
-									console.log(component.long_name,'level 1')
+									// console.log(component.long_name,'level 1')
 									break;
 								}
 
@@ -466,8 +457,6 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			}
 		}
 	}
-
-
 
 	return (
 		<div className='info-wrapper container'>

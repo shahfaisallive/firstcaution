@@ -53,8 +53,7 @@ function App() {
     let utmSource = urlParams.get('utm_source')
     let utmCompaign = urlParams.get('utm_campaign')
     let utmMedium = urlParams.get('utm_medium')
-    let type = urlParams.get('type')
-    if (utmSource || utmCompaign || utmMedium || type) {
+    if (utmSource || utmCompaign || utmMedium) {
       localStorage.setItem('utmSource', utmSource);
       localStorage.setItem('utmCompaign', utmCompaign);
       localStorage.setItem('utmMedium', utmMedium);

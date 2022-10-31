@@ -108,18 +108,20 @@ const Confirmation = ({ language, content }) => {
 		setUtmMedium(localStorage.getItem("utmMedium"))
 		const tenantsArray = JSON.parse(localStorage.getItem("tenants"))
 
-		let allTenants = tenantsArray.map((obj) => {
-			let myKey = Object.values(obj)
-			return {
-				last_name: myKey[3],
-				birthday: myKey[4],
-				nationality_id: myKey[5],
-				role_id: "1",
-				civility_id: myKey[1],
-				first_name: myKey[2]
-			}
-		})
-		setTenants(allTenants)
+		if (tenantsArray.length > 0) {
+			let allTenants = tenantsArray.map((obj) => {
+				let myKey = Object.values(obj)
+				return {
+					last_name: myKey[3],
+					birthday: myKey[4],
+					nationality_id: myKey[5],
+					role_id: "1",
+					civility_id: myKey[1],
+					first_name: myKey[2]
+				}
+			})
+			setTenants(allTenants || [])
+		}
 	}, [])
 
 	useEffect(() => {
@@ -127,8 +129,10 @@ const Confirmation = ({ language, content }) => {
 			// console.log(data)
 			const countryName = data.countries.find(c => c.value == country)
 			const nationalityName = data.countries.find(c => c.value == nationality)
-			setCountryName(countryName.label)
-			setNationalityName(nationalityName.label)
+			console.log(countryName?.label, 'dasdasdasx')
+			console.log(nationalityName?.label, 'dasdasdasy')
+			setCountryName(countryName?.label)
+			setNationalityName(nationalityName?.label)
 		}
 	}, [data])
 
@@ -200,7 +204,7 @@ const Confirmation = ({ language, content }) => {
 				const response = await axios.post("https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/provisional-certificate",
 					bodyObj,
 					{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
-				console.log(response.data.data.token)
+				console.log(response.data,'daseeeeee	')
 				// console.log(leaseFile)
 
 				const fileData = [
@@ -215,18 +219,18 @@ const Confirmation = ({ language, content }) => {
 				]
 
 				if (response.data.data.status == "accepted") {
-					console.log(fileData)
 					const fileRes = await axios.post(`https://firstcaution-partner-service-eapi.de-c1.cloudhub.io/api/register/${response.data.data.token}/files`, fileData,
 						{ headers: { "Authorization": `Bearer ${token.data.access_token}` } })
 
-					console.log(fileRes)
+					console.log(fileRes,'repomdadsa')
 					setSubmitLoader(false)
 					navigate("/" + language + "/signup/confirmed")
-				} else {
+				} else if(response.data?.errors?.length>0) {
 					alert("Data not correct")
 					setSubmitLoader(false)
 				}
 			} catch (error) {
+				alert("Submission Failed")
 				setSubmitLoader(false)
 			}
 		} else {
@@ -238,7 +242,7 @@ const Confirmation = ({ language, content }) => {
 		<div className='info-wrapper container'>
 			<ContactBox />
 			<Breadcrumbs level={4} content={content} />
-			<Link to={`/${language}/signup/new/guarantee`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
+			<Link to={`/${language}/signup/new/guarantee/${type}`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
 
 			<div className='row'>
 				<div className='col-sm-8 mt-3'>

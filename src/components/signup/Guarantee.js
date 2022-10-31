@@ -388,7 +388,7 @@ const Guarantee = ({ language, content }) => {
 			return false
 		}
 		else if (!/^[a-zA-Z ,-]+$/.test(state)) {
-			updateValidationArr(guaranteeStreet, true, `Street ${content.only_alphabets}`, 'Street')
+			updateValidationArr(guaranteeStreet, true, `Street ${content.only_alphabet}`, 'Street')
 			return false
 		}
 		updateValidationArr(guaranteeStreet, false, '', 'Street')
@@ -547,8 +547,75 @@ const Guarantee = ({ language, content }) => {
 		}
 	}
 
+	const handleSelectAddress = (address, x, suggestion) => {
+		setGuaranteeStreet(suggestion.formattedSuggestion.mainText)
+		setGuaranteeLocality("")
+		setGuaranteeZipCode("")
+		setGuaranteeNo("")
+		if (window.google) {
+			const PlacesService = new window.google.maps.places.PlacesService(document.getElementById('map'));
+			try {
+				PlacesService.getDetails(
+					{
+						placeId: suggestion.placeId,
+						fields: ['address_components'],
+					},
+					(place, status) => {
+						for (const component of place.address_components) {
+							// @ts-ignore remove once typings fixed
+							const componentType = component.types[0];
+
+							switch (componentType) {
+								case "street_number": {
+									setGuaranteeNo(component.long_name)
+									break;
+								}
+
+								case "route": {
+									// console.log(component.long_name,'roue')
+									setGuaranteeStreet(component.long_name)
+									// setGoogleAddresses(component.long_name)
+									streetValidation(component.long_name)
+									break;
+								}
+
+								case "postal_code": {
+									setGuaranteeZipCode(component.long_name)
+									break;
+								}
+
+								case "postal_code_suffix": {
+									// console.log(component.long_name)
+									break;
+								}
+
+								case "locality":
+									// console.log(component.long_name,'LONG')
+									setGuaranteeLocality(component.long_name)
+									break;
+
+								case "administrative_area_level_1": {
+									// console.log(component.long_name,'level 1')
+									break;
+								}
+
+								case "country":
+									// console.log(component.long_name,'country')
+									break;
+							}
+						}
+
+					}
+				);
+			} catch (e) {
+				console.error(e);
+			}
+		}
+	}
+
 	return (
 		<div className='info-wrapper container'>
+			<div id='map'></div>
 			<ContactBox />
 			<Breadcrumbs level={3} content={content} />
 			{
@@ -567,7 +634,7 @@ const Guarantee = ({ language, content }) => {
 								<PlacesAutocomplete
 									value={guaranteeStreet}
 									onChange={streetValidation}
-									onSelect={handleSelect}
+									onSelect={handleSelectAddress}
 								>
 									{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
 										<div>
