@@ -445,7 +445,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 								}
 
 								case "country":
-									setCountry(component.long_name)
+									setCountry(component.short_name)
 									break;
 							}
 						}

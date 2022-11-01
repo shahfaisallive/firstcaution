@@ -77,50 +77,55 @@ const Confirmation = ({ language, content }) => {
 	});
 
 	useEffect(() => {
-		setData(JSON.parse(localStorage.getItem("data")))
-		setCivility(localStorage.getItem("civility"))
-		setFirstName(localStorage.getItem("firstName"))
-		setLastName(localStorage.getItem("lastName"))
-		setDob(localStorage.getItem("dob"))
-		setNationality(localStorage.getItem("nationality"))
-		setType(localStorage.getItem("type"))
-		setStreet(localStorage.getItem("street"))
-		setNo(localStorage.getItem("no"))
-		setZipCode(localStorage.getItem("zipCode"))
-		setLocality(localStorage.getItem("locality"))
-		setCountry(localStorage.getItem("country"))
-		setMobile(localStorage.getItem("mobile"))
-		setNumber(localStorage.getItem("number"))
-		setEmail(localStorage.getItem("email"))
-		setGuaranteeStreet(localStorage.getItem("guaranteeStreet"))
-		setGuaranteeNo(localStorage.getItem("guaranteeNo"))
-		setGuaranteeZipCode(localStorage.getItem("guaranteeZipCode"))
-		setGuaranteeLocality(localStorage.getItem("guaranteeLocality"))
-		setGuaranteeAmount(parseInt(localStorage.getItem("guaranteeAmount")))
-		setMoveInDate(localStorage.getItem("moveInDate"))
-		setPromoCode(localStorage.getItem("promoCode"))
-		setLeaseFile(localStorage.getItem("leaseFile"))
-		setLeaseFileName(localStorage.getItem("leaseFileName"))
-		setIdFile(localStorage.getItem("IdFile"))
-		setIdFileName(localStorage.getItem("IdFileName"))
-		setUtmSource(localStorage.getItem("utmSource"))
-		setUtmCompaign(localStorage.getItem("utmCompaign"))
-		setUtmMedium(localStorage.getItem("utmMedium"))
-		const tenantsArray = JSON.parse(localStorage.getItem("tenants"))
-
-		if (tenantsArray.length > 0) {
-			let allTenants = tenantsArray.map((obj) => {
-				let myKey = Object.values(obj)
-				return {
-					last_name: myKey[3],
-					birthday: myKey[4],
-					nationality_id: myKey[5],
-					role_id: "1",
-					civility_id: myKey[1],
-					first_name: myKey[2]
-				}
-			})
-			setTenants(allTenants || [])
+		if(localStorage.length >0 ){
+			setData(JSON.parse(localStorage.getItem("data")))
+			setCivility(localStorage.getItem("civility"))
+			setFirstName(localStorage.getItem("firstName"))
+			setLastName(localStorage.getItem("lastName"))
+			setDob(localStorage.getItem("dob"))
+			setNationality(localStorage.getItem("nationality"))
+			setType(localStorage.getItem("type"))
+			setStreet(localStorage.getItem("street"))
+			setNo(localStorage.getItem("no"))
+			setZipCode(localStorage.getItem("zipCode"))
+			setLocality(localStorage.getItem("locality"))
+			setCountry(localStorage.getItem("country"))
+			setMobile(localStorage.getItem("mobile"))
+			setNumber(localStorage.getItem("number"))
+			setEmail(localStorage.getItem("email"))
+			setGuaranteeStreet(localStorage.getItem("guaranteeStreet"))
+			setGuaranteeNo(localStorage.getItem("guaranteeNo"))
+			setGuaranteeZipCode(localStorage.getItem("guaranteeZipCode"))
+			setGuaranteeLocality(localStorage.getItem("guaranteeLocality"))
+			setGuaranteeAmount(parseInt(localStorage.getItem("guaranteeAmount")))
+			setMoveInDate(localStorage.getItem("moveInDate"))
+			setPromoCode(localStorage.getItem("promoCode"))
+			setLeaseFile(localStorage.getItem("leaseFile"))
+			setLeaseFileName(localStorage.getItem("leaseFileName"))
+			setIdFile(localStorage.getItem("IdFile"))
+			setIdFileName(localStorage.getItem("IdFileName"))
+			setUtmSource(localStorage.getItem("utmSource"))
+			setUtmCompaign(localStorage.getItem("utmCompaign"))
+			setUtmMedium(localStorage.getItem("utmMedium"))
+			const tenantsArray = JSON.parse(localStorage.getItem("tenants"))
+	
+			if (tenantsArray.length > 0) {
+				let allTenants = tenantsArray.map((obj) => {
+					let myKey = Object.values(obj)
+					return {
+						last_name: myKey[3],
+						birthday: myKey[4],
+						nationality_id: myKey[5],
+						role_id: "1",
+						civility_id: myKey[1],
+						first_name: myKey[2]
+					}
+				})
+				setTenants(allTenants || [])
+			}
+		}
+		else {
+			navigate('/')
 		}
 	}, [])
 
@@ -128,6 +133,7 @@ const Confirmation = ({ language, content }) => {
 		if (data) {
 			// console.log(data)
 			const countryName = data.countries.find(c => c.value == country)
+			console.log()
 			const nationalityName = data.countries.find(c => c.value == nationality)
 			console.log(countryName?.label, 'dasdasdasx')
 			console.log(nationalityName?.label, 'dasdasdasy')
@@ -230,7 +236,7 @@ const Confirmation = ({ language, content }) => {
 					setSubmitLoader(false)
 				}
 			} catch (error) {
-				alert("Submission Failed")
+				alert("Data not correct")
 				setSubmitLoader(false)
 			}
 		} else {

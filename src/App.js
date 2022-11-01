@@ -100,15 +100,15 @@ function App() {
               content={content}
             />}
         />
-        <Route path={`/:language/signup/confirmation/:type`}
-          element={
-            <Confirmation
-              language={language}
-              content={content} />}
-        />
         <Route path={`/:language/signup/confirmed`}
           element={
             <ConfirmedPage
+              language={language}
+              content={content} />}
+        />
+        <Route path={`/:language/signup/confirmation/:type`}
+          element={
+            <Confirmation
               language={language}
               content={content} />}
         />
