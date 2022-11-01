@@ -52,13 +52,13 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 		}
 		getFormData()
 		let utmSource = urlParams.get('utm_source')
-    let utmCompaign = urlParams.get('utm_campaign')
-    let utmMedium = urlParams.get('utm_medium')
-    if (utmSource || utmCompaign || utmMedium) {
-      localStorage.setItem('utmSource', utmSource);
-      localStorage.setItem('utmCompaign', utmCompaign);
-      localStorage.setItem('utmMedium', utmMedium);
-    }
+		let utmCompaign = urlParams.get('utm_campaign')
+		let utmMedium = urlParams.get('utm_medium')
+		if (utmSource || utmCompaign || utmMedium) {
+			localStorage.setItem('utmSource', utmSource);
+			localStorage.setItem('utmCompaign', utmCompaign);
+			localStorage.setItem('utmMedium', utmMedium);
+		}
 		if (status == 'edit') {
 			setCivility(localStorage.getItem("civility"))
 			setFirstName(localStorage.getItem("firstName"))
@@ -72,6 +72,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			setCountry(localStorage.getItem("country"))
 			setNumber(localStorage.getItem("number"))
 			setEmail(localStorage.getItem("email"))
+			setGoogleAddresses(localStorage.getItem("street"))
 		}
 	}, [status])
 
@@ -292,7 +293,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			updateValidationArr(zipCode, true, `${content.zip_code} ${content.is_required_err}`, 'Zip Code')
 			return false
 		}
-		else if (!/^\d+$/.test(state)) {
+		else if (!/^[a-zA-Z0-9_ ]*$/.test(state)) {
 			updateValidationArr(zipCode, true, `${content.zip_code} ${content.only_numeric}`, 'Zip Code')
 			return false
 		}
@@ -301,12 +302,13 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 	}
 
 	const streetValidation = (state) => {
+		// console.log(state, 'dasdasdastate')
 		setGoogleAddresses(state)
 		if (state.length <= 0) {
 			updateValidationArr(street, true, `${content.street} ${content.is_required_err}`, 'Street')
 			return false
 		}
-		else if (!/^[a-zA-Z ]+$/.test(state)) {
+		else if (!/^[a-zA-Z_àáãạảăắằẳẵặâấầẩẫậèéẹẻẽêềếểễệđìíĩỉịòóõọỏôốồổỗộơớờởỡợùúũụủưứừửữựỳỵỷỹýÀÁÃẠẢĂẮẰẲẴẶÂẤẦẨẪẬÈÉẸẺẼÊỀẾỂỄỆĐÌÍĨỈỊÒÓÕỌỎÔỐỒỔỖỘƠỚỜỞỠỢÙÚŨỤỦƯỨỪỬỮỰỲỴỶỸÝ ]+$/.test(state)) {
 			updateValidationArr(street, true, `${content.street} ${content.only_alphabet}`, 'Street')
 			return false
 		}
@@ -338,7 +340,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			localStorage.setItem('lastName', lastName);
 			localStorage.setItem('dob', dob);
 			localStorage.setItem('nationality', nationality);
-			localStorage.setItem('street', street);
+			localStorage.setItem('street', googleAddress);
 			localStorage.setItem('no', no);
 			localStorage.setItem('zipCode', zipCode);
 			localStorage.setItem('locality', locality);
@@ -356,7 +358,6 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			textValidation(lastName, 'Last Name') &
 			textValidation(country, 'Country') &
 			textValidation(zipCode, 'Zip Code') &
-			textValidation(street, 'Street') &
 			textValidation(locality, 'Locality') &
 			textValidation(nationality, 'Nationality') &
 			textValidation(civility, 'Civility') &
@@ -366,11 +367,12 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			emailValidation(email) &
 			streetValidation(googleAddress)) {
 			localStorage.setItem('civility', civility);
+			localStorage.setItem('civility', civility);
 			localStorage.setItem('firstName', firstName);
 			localStorage.setItem('lastName', lastName);
 			localStorage.setItem('dob', dob);
 			localStorage.setItem('nationality', nationality);
-			localStorage.setItem('street', street);
+			localStorage.setItem('street', googleAddress);
 			localStorage.setItem('no', no);
 			localStorage.setItem('zipCode', zipCode);
 			localStorage.setItem('locality', locality);
@@ -382,7 +384,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 		}
 	}
 
-	const handleChange = (address,x,y) => {
+	const handleChange = (address, x, y) => {
 		streetValidation(address)
 	};
 

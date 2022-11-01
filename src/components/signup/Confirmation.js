@@ -320,7 +320,7 @@ const Confirmation = ({ language, content }) => {
 					<div className='detail-div mt-4 pl-5'>
 						<div className='d-flex justify-content-between'>
 							<p className='form-text1'>{content.conf_head4}</p>
-							<Link to={`/${language}/signup/edit/guarantee/`}>
+							<Link to={`/${language}/signup/edit/guarantee/${type}`}>
 								<EditIcon />
 							</Link>
 						</div>

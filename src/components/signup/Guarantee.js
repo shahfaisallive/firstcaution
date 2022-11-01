@@ -359,7 +359,7 @@ const Guarantee = ({ language, content }) => {
 			updateValidationArr(guaranteeZipCode, true, `Zip Code ${content.is_required_err}`, 'Zip Code')
 			return false
 		}
-		else if (!/^\d+$/.test(state)) {
+		else if (!/^[a-zA-Z0-9_ ]*$/.test(state)) {
 			updateValidationArr(guaranteeZipCode, true, `Zip Code ${content.only_numeric}`, 'Zip Code')
 			return false
 		}
@@ -387,7 +387,7 @@ const Guarantee = ({ language, content }) => {
 			updateValidationArr(guaranteeStreet, true, `Street ${content.is_required_err}`, 'Street')
 			return false
 		}
-		else if (!/^[a-zA-Z ,-]+$/.test(state)) {
+		else if (!/^[a-zA-Z_àáãạảăắằẳẵặâấầẩẫậèéẹẻẽêềếểễệđìíĩỉịòóõọỏôốồổỗộơớờởỡợùúũụủưứừửữựỳỵỷỹýÀÁÃẠẢĂẮẰẲẴẶÂẤẦẨẪẬÈÉẸẺẼÊỀẾỂỄỆĐÌÍĨỈỊÒÓÕỌỎÔỐỒỔỖỘƠỚỜỞỠỢÙÚŨỤỦƯỨỪỬỮỰỲỴỶỸÝ ,-]+$/.test(state)) {
 			updateValidationArr(guaranteeStreet, true, `Street ${content.only_alphabet}`, 'Street')
 			return false
 		}
@@ -682,7 +682,7 @@ const Guarantee = ({ language, content }) => {
 						<div className='row d-flex justify-content-start mt-1'>
 							<div className="form-group col-6">
 								<label htmlFor="zip" className='form-label'>{content.zip_code}</label>
-								<input value={guaranteeZipCode} type="text" className="form-control" maxLength={4} id="zip" onChange={(e => zipCodeValidation(e.target.value))} />
+								<input value={guaranteeZipCode} type="text" className="form-control" maxLength={10} id="zip" onChange={(e => zipCodeValidation(e.target.value))} />
 								<div id="emailHelp" className={validationArr[2].status ? 'form-text helper-text' : 'd-none'}>{validationArr[2].msg}</div>
 							</div>
 							<div className="form-group col-6">
