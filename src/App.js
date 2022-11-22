@@ -96,6 +96,7 @@ function App() {
           element={
             <Guarantee
               data={data}
+              changeLanguage={changeLanguage}
               language={language}
               content={content}
             />}

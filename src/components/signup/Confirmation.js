@@ -130,15 +130,17 @@ const Confirmation = ({ language, content }) => {
 	}, [])
 
 	useEffect(() => {
-		if (data) {
-			// console.log(data)
-			const countryName = data.countries.find(c => c.value == country)
-			console.log()
-			const nationalityName = data.countries.find(c => c.value == nationality)
-			console.log(countryName?.label, 'dasdasdasx')
-			console.log(nationalityName?.label, 'dasdasdasy')
-			setCountryName(countryName?.label)
-			setNationalityName(nationalityName?.label)
+		if(localStorage.length >0 ){
+			if (data) {
+				// console.log(data)
+				const countryName = data.countries.find(c => c.value == country)
+				console.log()
+				const nationalityName = data.countries.find(c => c.value == nationality)
+				console.log(countryName?.label, 'dasdasdasx')
+				console.log(nationalityName?.label, 'dasdasdasy')
+				setCountryName(countryName?.label)
+				setNationalityName(nationalityName?.label)
+			}
 		}
 	}, [data])
 
@@ -332,7 +334,7 @@ const Confirmation = ({ language, content }) => {
 								<p className='detail-text4'>{content.amount_in_guarantee}</p>
 								<p className='detail-text5'>CHF {guaranteeAmount}</p>
 
-								<p className='detail-text4'>{content.mone_in_date}</p>
+								<p className='detail-text4'>{content.move_in_date}</p>
 								<p className='detail-text5'>{moveInDate}</p>
 							</div>
 

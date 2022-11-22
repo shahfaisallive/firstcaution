@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import axios from 'axios';
 import { Link } from 'react-router-dom'
 import Breadcrumbs from './Breadcrumbs'
 import { ReactComponent as UploadIcon } from "../../media/upload-icon.svg";
@@ -8,10 +9,11 @@ import PhoneInput from 'react-phone-number-input'
 import ContactBox from '../ContactBox';
 import PlacesAutocomplete from 'react-places-autocomplete';
 
-const Guarantee = ({ language, content }) => {
+const Guarantee = ({ language, content, changeLanguage }) => {
 	const navigate = useNavigate()
 	const params = useParams()
 	const { status, type } = params
+	const langParam = params.language
 	// Form Input states
 	const [data, setData] = useState()
 	const [guaranteeStreet, setGuaranteeStreet] = useState("")
@@ -83,6 +85,32 @@ const Guarantee = ({ language, content }) => {
 		}
 	])
 
+	const [cmsContent, setCmsContent] = useState()
+
+	useEffect(() => {
+		changeLanguage(langParam)
+		const fetchData = async () => {
+			try {
+				let content
+				if (language == "en") {
+					content = await axios.get("https://firstcaution.strapi.datamonitors.io/api/landing")
+				} else if (language == "de") {
+					content = await axios.get("https://firstcaution.strapi.datamonitors.io/api/de-landing")
+				} else if (language == "fr") {
+					content = await axios.get("https://firstcaution.strapi.datamonitors.io/api/fr-landing")
+				} else if (language == "it") {
+					content = await axios.get("https://firstcaution.strapi.datamonitors.io/api/it-landing")
+				}
+				console.log(content.data.data.attributes,'attributes')
+				setCmsContent(content.data.data.attributes)
+				// console.log(content.data.data.attributes)
+			} catch (error) {
+				// setCmsContent(content)
+			}
+		}
+		fetchData()
+	}, [language])
+
 	useEffect(() => {
 		console.log(content,'dasdasdasd')
 		if (!data) {
@@ -126,7 +154,7 @@ const Guarantee = ({ language, content }) => {
 	const textValidation = (state, type) => {
 		// console.log(state,type)
 		if (state.length <= 0) {
-			updateValidationArr(state, true, `${type} ${content.is_required_err}`, type)
+			updateValidationArr(state, true, `${type} ${cmsContent?.is_required_err}`, type)
 			return false
 		}
 		else if (state.length > 20) {
@@ -187,11 +215,11 @@ const Guarantee = ({ language, content }) => {
 	const numberValidationTenant = (state, index, column, type) => {
 		let numberRegex = /^\+[1-9]\d{10,14}$/
 		if (state <= 0) {
-			handleChange(index, column, type, `${type} ${content.is_required_err}`, true)
+			handleChange(index, column, type, `${type} ${cmsContent?.is_required_err}`, true)
 			return false
 		}
 		else if (!numberRegex.test(state)) {
-			handleChange(index, column, type, `${type} ${content.is_invalid_err}`, true)
+			handleChange(index, column, type, `${type} ${cmsContent?.is_invalid_err}`, true)
 			return false
 		}
 		handleChange(index, column, type, '', false)
@@ -202,11 +230,11 @@ const Guarantee = ({ language, content }) => {
 		var ToDate = new Date();
 		// console.log(dob, 'dob')
 		if (state <= 0) {
-			handleChange(index, column, type, `${type} ${content.is_required_err}`, true)
+			handleChange(index, column, type, `${type} ${cmsContent?.is_required_err}`, true)
 			return false
 		}
 		if (new Date(state).getTime() > ToDate.getTime()) {
-			handleChange(index, column, type, `${content.dob_err}`, true)
+			handleChange(index, column, type, `${cmsContent?.dob_err}`, true)
 			return false
 		}
 		handleChange(index, column, type, '', false)
@@ -215,7 +243,7 @@ const Guarantee = ({ language, content }) => {
 
 	const textValidationTenant = (state, index, column, type) => {
 		if (state.length <= 0) {
-			handleChange(index, column, type, `${type} ${content.is_required_err}`, true)
+			handleChange(index, column, type, `${type} ${cmsContent?.is_required_err}`, true)
 			return false
 		}
 		else if (state.length > 20) {
@@ -229,11 +257,11 @@ const Guarantee = ({ language, content }) => {
 	const validateEmailTenant = (state, index, column, type) => {
 		let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 		if (state.length <= 0) {
-			handleChange(index, column, type, `Email ${content.is_required_err}`, true)
+			handleChange(index, column, type, `Email ${cmsContent?.is_required_err}`, true)
 			return false
 		}
 		else if (!emailRegex.test(state)) {
-			handleChange(index, column, type, `Email ${content.is_invalid_err}`, true)
+			handleChange(index, column, type, `Email ${cmsContent?.is_invalid_err}`, true)
 			return false
 		}
 		handleChange(index, column, type, '', false)
@@ -313,7 +341,7 @@ const Guarantee = ({ language, content }) => {
 
 	const validateLeaseFile = (state) => {
 		if (!state) {
-			updateValidationArr(leaseFile, true, `Lease ${content.is_required_err}`, 'Lease File')
+			updateValidationArr(leaseFile, true, `Lease ${cmsContent?.is_required_err}`, 'Lease File')
 			return false
 		}
 		updateValidationArr(leaseFile, false, '', 'Lease File')
@@ -322,7 +350,7 @@ const Guarantee = ({ language, content }) => {
 
 	const validateIdFile = (state) => {
 		if (!state) {
-			updateValidationArr(IdFile, true, `ID File ${content.is_required_err}`, 'ID File')
+			updateValidationArr(IdFile, true, `ID File ${cmsContent?.is_required_err}`, 'ID File')
 			return false
 		}
 		updateValidationArr(IdFile, false, '', 'ID File')
@@ -331,7 +359,7 @@ const Guarantee = ({ language, content }) => {
 
 	const validateFilesTenant = (state, index, column, type) => {
 		if (!state) {
-			handleChange(index, column, type, `${type} ${content.is_required_err}`, true)
+			handleChange(index, column, type, `${type} ${cmsContent?.is_required_err}`, true)
 			return false
 		}
 		handleChange(index, column, type, '', false)
@@ -342,12 +370,12 @@ const Guarantee = ({ language, content }) => {
 		setGuaranteeNo(state)
 		if (state.length <= 0) {
 			console.log('here1')
-			updateValidationArr(guaranteeNo, true, `Street Number ${content.is_required_err}`, 'No')
+			updateValidationArr(guaranteeNo, true, `Street Number ${cmsContent?.is_required_err}`, 'No')
 			return false
 		}
 		else if (!/^\d+$/.test(state)) {
 			console.log('here2')
-			updateValidationArr(guaranteeNo, true, `Street Number ${content.only_numeric}`, 'No')
+			updateValidationArr(guaranteeNo, true, `Street Number ${cmsContent?.only_numeric}`, 'No')
 		}
 		updateValidationArr(guaranteeNo, false, '', 'No')
 		return true
@@ -356,11 +384,11 @@ const Guarantee = ({ language, content }) => {
 	const zipCodeValidation = (state) => {
 		setGuaranteeZipCode(state)
 		if (state <= 0) {
-			updateValidationArr(guaranteeZipCode, true, `Zip Code ${content.is_required_err}`, 'Zip Code')
+			updateValidationArr(guaranteeZipCode, true, `Zip Code ${cmsContent?.is_required_err}`, 'Zip Code')
 			return false
 		}
 		else if (!/^[a-zA-Z0-9_ ]*$/.test(state)) {
-			updateValidationArr(guaranteeZipCode, true, `Zip Code ${content.only_numeric}`, 'Zip Code')
+			updateValidationArr(guaranteeZipCode, true, `Zip Code ${cmsContent?.only_numeric}`, 'Zip Code')
 			return false
 		}
 		updateValidationArr(guaranteeZipCode, false, '', 'Zip Code')
@@ -370,7 +398,7 @@ const Guarantee = ({ language, content }) => {
 	const amountValidation = (state) => {
 		setGuaranteeAmount(state)
 		if (state <= 0) {
-			updateValidationArr(guaranteeAmount, true, `Amount ${content.is_required_err}`, 'Amount')
+			updateValidationArr(guaranteeAmount, true, `Amount ${cmsContent?.is_required_err}`, 'Amount')
 			return false
 		}
 		updateValidationArr(guaranteeAmount, false, '', 'Amount')
@@ -384,11 +412,11 @@ const Guarantee = ({ language, content }) => {
 	const streetValidation = (state) => {
 		setGuaranteeStreet(state)
 		if (state <= 0) {
-			updateValidationArr(guaranteeStreet, true, `Street ${content.is_required_err}`, 'Street')
+			updateValidationArr(guaranteeStreet, true, `Street ${cmsContent?.is_required_err}`, 'Street')
 			return false
 		}
 		else if (!/^[a-zA-Z_àáãạảăắằẳẵặâấầẩẫậèéẹẻẽêềếểễệđìíĩỉịòóõọỏôốồổỗộơớờởỡợùúũụủưứừửữựỳỵỷỹýÀÁÃẠẢĂẮẰẲẴẶÂẤẦẨẪẬÈÉẸẺẼÊỀẾỂỄỆĐÌÍĨỈỊÒÓÕỌỎÔỐỒỔỖỘƠỚỜỞỠỢÙÚŨỤỦƯỨỪỬỮỰỲỴỶỸÝ ,-]+$/.test(state)) {
-			updateValidationArr(guaranteeStreet, true, `Street ${content.only_alphabet}`, 'Street')
+			updateValidationArr(guaranteeStreet, true, `Street ${cmsContent?.only_alphabet}`, 'Street')
 			return false
 		}
 		updateValidationArr(guaranteeStreet, false, '', 'Street')
@@ -399,11 +427,11 @@ const Guarantee = ({ language, content }) => {
 		setMoveInDate(state)
 		var ToDate = new Date();
 		if (state.length == 0) {
-			updateValidationArr(moveInDate, true, `Move In Date ${content.is_required_err}`, 'Move In Date')
+			updateValidationArr(moveInDate, true, `Move In Date ${cmsContent?.is_required_err}`, 'Move In Date')
 			return false
 		}
 		else if (new Date(state).getTime() <= ToDate.getTime()) {
-			updateValidationArr(moveInDate, true, content.move_in_err, 'Move In Date')
+			updateValidationArr(moveInDate, true, cmsContent?.move_in_err, 'Move In Date')
 			return false
 		}
 		updateValidationArr(moveInDate, false, '', 'Move In Date')
@@ -620,16 +648,16 @@ const Guarantee = ({ language, content }) => {
 			<Breadcrumbs level={3} content={content} />
 			{
 				status == 'new' &&
-				<Link to={`/${language}/signup/new/information/${type}`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
+				<Link to={`/${language}/signup/new/information/${type}`}><p className='previous-text'>&lt;  {cmsContent?.previous} </p></Link>
 			}
 			<div className='row'>
 				<div className='col-sm-8 form-div mt-3'>
 					<form >
-						<p className='form-text1'>{content.guar_head1}</p>
+						<p className='form-text1'>{cmsContent?.guar_head1}</p>
 
 						<div className='row d-flex justify-content-start mt-4'>
 							<div className="form-group col-8">
-								<label htmlFor="street" className='form-label'>{content.street}</label>
+								<label htmlFor="street" className='form-label'>{cmsContent?.street}</label>
 								{/* <input value={guaranteeStreet} type="text" className="form-control" id="street" onChange={(e => streetValidation(e.target.value))} /> */}
 								<PlacesAutocomplete
 									value={guaranteeStreet}
@@ -673,7 +701,7 @@ const Guarantee = ({ language, content }) => {
 								<div id="emailHelp" className={validationArr[0].status ? 'form-text helper-text' : 'd-none'}>{validationArr[0].msg}</div>
 							</div>
 							<div className="form-group col-4">
-								<label htmlFor="number" className='form-label'>{content.no}</label>
+								<label htmlFor="number" className='form-label'>{cmsContent?.no}</label>
 								<input value={guaranteeNo} type="number" className="form-control" id="number" onChange={(e => streetNoValidation(e.target.value))} />
 								<div id="emailHelp" className={validationArr[1].status ? 'form-text helper-text' : 'd-none'}>{validationArr[1].msg}</div>
 							</div>
@@ -681,73 +709,73 @@ const Guarantee = ({ language, content }) => {
 
 						<div className='row d-flex justify-content-start mt-1'>
 							<div className="form-group col-6">
-								<label htmlFor="zip" className='form-label'>{content.zip_code}</label>
+								<label htmlFor="zip" className='form-label'>{cmsContent?.zip_code}</label>
 								<input value={guaranteeZipCode} type="text" className="form-control" maxLength={10} id="zip" onChange={(e => zipCodeValidation(e.target.value))} />
 								<div id="emailHelp" className={validationArr[2].status ? 'form-text helper-text' : 'd-none'}>{validationArr[2].msg}</div>
 							</div>
 							<div className="form-group col-6">
-								<label htmlFor="locality" className='form-label'>{content.locality}</label>
+								<label htmlFor="locality" className='form-label'>{cmsContent?.locality}</label>
 								<input value={guaranteeLocality} type="text" className="form-control" id="locality" onChange={(e => localityValidation(e.target.value))} />
 								<div id="emailHelp" className={validationArr[3].status ? 'form-text helper-text' : 'd-none'}>{validationArr[3].msg}</div>
 							</div>
 						</div>
-						<p className='form-text1 mt-5'>{content.guar_head2}</p>
+						<p className='form-text1 mt-5'>{cmsContent?.guar_head2}</p>
 						<div className="form-group">
-							<label htmlFor="guaranteeAmount" className='form-label'>{content.amount_in_guarantee}</label>
+							<label htmlFor="guaranteeAmount" className='form-label'>{cmsContent?.amount_in_guarantee}</label>
 							<input value={guaranteeAmount} type="number" className="form-control" id="guaranteeAmount" onChange={(e => amountValidation(e.target.value))} />
 							<div id="emailHelp" className={validationArr[4].status ? 'form-text helper-text' : 'd-none'}>{validationArr[4].msg}</div>
 						</div>
 
 						<div className="form-group mt-1">
-							<label htmlFor="moveDate" className='form-label'>{content.mone_in_date}</label>
+							<label htmlFor="moveDate" className='form-label'>{cmsContent?.move_in_date}</label>
 							<input value={moveInDate} type="date" className="form-control" id="moveDate" onChange={(e => moveInDateValidation(e.target.value))} />
 							<div id="emailHelp" className={validationArr[5].status ? 'form-text helper-text' : 'd-none'}>{validationArr[5].msg}</div>
 						</div>
 
 						<div className="form-group mt-1 mb-5">
-							<label htmlFor="guaranteeAmount" className='form-label'>{content.promo_code}</label>
+							<label htmlFor="guaranteeAmount" className='form-label'>{cmsContent?.promo_code}</label>
 							<input value={promoCode} type="text" className="form-control" id="guaranteeAmount" onChange={(e => setPromoCode(e.target.value))} />
-							<label className='form-label'>{content.promo_validated}</label>
+							<label className='form-label'>{cmsContent?.promo_validated}</label>
 						</div>
 
 						{/* DOCUMENTS SECTIONS */}
-						<p className='form-text1 mt-5'>{content.guar_head3}</p>
-						<p className='form-text2'>{content.doc_subtext}</p>
+						<p className='form-text1 mt-5'>{cmsContent?.guar_head3}</p>
+						<p className='form-text2'>{cmsContent?.doc_subtext}</p>
 
 						<div className='row d-flex justify-content-start mt-1'>
 							<div className="form-group col-6">
 								<div className="upload-btn-wrapper">
-									<button type='button' className="upload-btn text-left">{content.lease_btn}</button>
+									<button type='button' className="upload-btn text-left">{cmsContent?.lease_btn}</button>
 									<UploadIcon className='upload-icon' />
 									<input type="file" className='upload-input' name="myfile" onChange={onLeaseFileChange} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
 								</div>
-								{leaseFileName ? <p>{leaseFileName}</p> : <p>{content.no_file_selected}</p>}
+								{leaseFileName ? <p>{leaseFileName}</p> : <p>{cmsContent?.no_file_selected}</p>}
 								<div id="emailHelp" className={validationArr[6].status ? 'form-text helper-text' : 'd-none'}>{validationArr[6].msg}</div>
 							</div>
 							<div className="form-group col-6">
 								<div className="upload-btn-wrapper">
-									<button type='button' className="upload-btn text-left">{content.id_doc}</button>
+									<button type='button' className="upload-btn text-left">{cmsContent?.id_doc}</button>
 									<UploadIcon className='upload-icon' />
 									<input type="file" className='upload-input' name="myfile" onChange={onIDFileChange} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
 								</div>
-								{IdFileName ? <p>{IdFileName}</p> : <p>{content.no_file_selected}</p>}
+								{IdFileName ? <p>{IdFileName}</p> : <p>{cmsContent?.no_file_selected}</p>}
 								<div id="emailHelp" className={validationArr[7].status ? 'form-text helper-text' : 'd-none'}>{validationArr[7].msg}</div>
 							</div>
 						</div>
-						<p className='form-text1 mt-5'>{content.guar_head4}</p>
+						<p className='form-text1 mt-5'>{cmsContent?.guar_head4}</p>
 						{tenants.map((tenant, index) => {
 							return (
 								<div key={index}>
 									<div className='row d-flex justify-content-start mt-5'>
 										<div className="form-group col-6">
-											<label htmlFor="type" className='form-label'>{content.type}</label>
+											<label htmlFor="type" className='form-label'>{cmsContent?.type}</label>
 											<select className="form-control" defaultValue={tenant.t_type || 'Tenant'} id="type" name='t_type' onChange={e => handleFormChange(index, e)}>
 												<option value="Guarantor">Guarantor</option>
 												<option value="Tenant">Tenant</option>
 											</select>
 										</div>
 										<div className="form-group col-6">
-											<label htmlFor="civility" className='form-label'>{content.civility}</label>
+											<label htmlFor="civility" className='form-label'>{cmsContent?.civility}</label>
 											<select className="form-control" id="civility" name='t_civility' defaultValue={'Mr.'} onChange={e => handleFormChange(index, e)}>
 												{data.civilities.map((civility) => <option value={civility.value} key={civility.value}>{civility.label}</option>
 												)}
@@ -757,28 +785,28 @@ const Guarantee = ({ language, content }) => {
 
 									<div className='row d-flex justify-content-start mt-1'>
 										<div className="form-group col-6">
-											<label htmlFor="firstname" className='form-label'>{content.first_name}</label>
+											<label htmlFor="firstname" className='form-label'>{cmsContent?.first_name}</label>
 											<input value={tenant.t_firstName} required type="text" className="form-control" id="type" name='t_firstName' onChange={e => handleFormChange(index, e)} />
-											<div id="emailHelp" className={tenantsValidationArr[index][2].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr[index][2].msg}</div>
+											<div id="emailHelp" className={tenantsValidationArr.length>0 && tenantsValidationArr[index][2].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr.length>0 && tenantsValidationArr[index][2].msg}</div>
 
 										</div>
 										<div className="form-group col-6">
-											<label htmlFor="lasttime" className='form-label'>{content.last_name}</label>
+											<label htmlFor="lasttime" className='form-label'>{cmsContent?.last_name}</label>
 											<input value={tenant.t_lastName} required type="text" className="form-control" id="lasttime" name='t_lastName' onChange={e => handleFormChange(index, e)} />
-											<div id="emailHelp" className={tenantsValidationArr[index][3].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr[index][3].msg}</div>
+											<div id="emailHelp" className={tenantsValidationArr.length>0 && tenantsValidationArr[index][3].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr.length>0 && tenantsValidationArr[index][3].msg}</div>
 
 										</div>
 									</div>
 
 									<div className='row d-flex justify-content-start mt-1'>
 										<div className="form-group col-6">
-											<label htmlFor="dob" className='form-label'>{content.date_of_birth}</label>
+											<label htmlFor="dob" className='form-label'>{cmsContent?.date_of_birth}</label>
 											<input value={tenant.t_dob} type="date" className="form-control" id="dob" name='t_dob' onChange={e => handleFormChange(index, e)} />
-											<div id="emailHelp" className={tenantsValidationArr[index][4].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr[index][4].msg}</div>
+											<div id="emailHelp" className={tenantsValidationArr.length>0 && tenantsValidationArr[index][4].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr.length>0 && tenantsValidationArr[index][4].msg}</div>
 
 										</div>
 										<div className="form-group col-6">
-											<label htmlFor="nationality" className='form-label'>{content.nationality}</label>
+											<label htmlFor="nationality" className='form-label'>{cmsContent?.nationality}</label>
 											<select className="form-control" defaultValue={tenant.nationality_id} id="nationality" name='t_nationality' onChange={e => handleFormChange(index, e)}>
 												{data.countries.map((country) => <option value={country.value} key={country.value}>{country.label}</option>
 												)}
@@ -788,36 +816,36 @@ const Guarantee = ({ language, content }) => {
 
 									<div className='row d-flex justify-content-start mt-1'>
 										<div className="form-group col-12">
-											<label htmlFor="num" className='form-label'>{content.number}</label>
+											<label htmlFor="num" className='form-label'>{cmsContent?.number}</label>
 											<PhoneInput
 												placeholder="Enter phone number"
 												value={tNum}
 												onChange={setTNum} className="phone-input-field" onFocus={() => setIndexForTNum(index)}
 											/>
-											<div id="emailHelp" className={tenantsValidationArr[index][8].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr[index][8].msg}</div>
+											<div id="emailHelp" className={tenantsValidationArr.length>0 && tenantsValidationArr[index][8].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr.length>0 && tenantsValidationArr[index][8].msg}</div>
 										</div>
 									</div>
 
 									<div className="form-group">
-										<label htmlFor="email" className='form-label'>{content.email}</label>
+										<label htmlFor="email" className='form-label'>{cmsContent?.email}</label>
 										<input value={tenant.t_email} type="email" className="form-control" id="email" name='t_email' onChange={e => handleFormChange(index, e)} />
-										<div id="emailHelp" className={tenantsValidationArr[index][6].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr[index][6].msg}</div>
+										<div id="emailHelp" className={tenantsValidationArr.length>0 && tenantsValidationArr[index][6].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr.length>0 && tenantsValidationArr[index][6].msg}</div>
 									</div>
 
 									<div className="upload-btn-wrapper mt-3">
-										<button type='button' className="upload-btn text-left ">{content.id_doc}</button>
+										<button type='button' className="upload-btn text-left ">{cmsContent?.id_doc}</button>
 										<UploadIcon className='upload-icon' />
 										<input type="file" className='upload-input' name="t_docFile" onChange={(e) => onDocFileChange(index, e)} accept="image/jpg, image/jpeg, image/png, file_extension/pdf" />
-										{tenant.t_docName ? <p>{tenant.t_docName}</p> : <p>{content.no_file_selected}</p>}
-										<div id="emailHelp" className={tenantsValidationArr[index][7].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr[index][7].msg}</div>
+										{tenant.t_docName ? <p>{tenant.t_docName}</p> : <p>{cmsContent?.no_file_selected}</p>}
+										<div id="emailHelp" className={tenantsValidationArr.length>0 && tenantsValidationArr[index][7].status ? 'form-text helper-text' : 'd-none'}>{tenantsValidationArr.length>0 && tenantsValidationArr[index][7].msg}</div>
 
 									</div>
 
-									<p className='delete-text mt-4' onClick={() => deleteTenant(index)}>{content.delete}</p>
+									<p className='delete-text mt-4' onClick={() => deleteTenant(index)}>{cmsContent?.delete}</p>
 								</div>
 							)
 						})}
-						<button className="btn toggle-btn mt-3" onClick={addNewTenant}>{content.yes_flatmate}</button>
+						<button className="btn toggle-btn mt-3" onClick={addNewTenant}>{cmsContent?.yes_flatmate}</button>
 						{
 							status == 'new' ?
 								<div className='row d-flex justify-content-center mt-4'>

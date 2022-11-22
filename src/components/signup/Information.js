@@ -32,6 +32,32 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 		value: "CH"
 	}])
 
+	const [cmsContent, setCmsContent] = useState()
+
+	useEffect(() => {
+		changeLanguage(langParam)
+		const fetchData = async () => {
+			try {
+				let content
+				if (language == "en") {
+					content = await axios.get("https://firstcaution.strapi.datamonitors.io/api/landing")
+				} else if (language == "de") {
+					content = await axios.get("https://firstcaution.strapi.datamonitors.io/api/de-landing")
+				} else if (language == "fr") {
+					content = await axios.get("https://firstcaution.strapi.datamonitors.io/api/fr-landing")
+				} else if (language == "it") {
+					content = await axios.get("https://firstcaution.strapi.datamonitors.io/api/it-landing")
+				}
+				console.log(content.data.data.attributes,'attributes')
+				setCmsContent(content.data.data.attributes)
+				// console.log(content.data.data.attributes)
+			} catch (error) {
+				setCmsContent(content)
+			}
+		}
+		fetchData()
+	}, [language])
+
 	useEffect(() => {
 		changeLanguage(langParam)
 		// console.log("1", language)
@@ -182,12 +208,12 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 
 	const validateFirstName = (e) => {
 		setFirstName(e.target.value)
-		textValidation(e.target.value, 'First Name', content.first_name)
+		textValidation(e.target.value, 'First Name', cmsContent?.first_name)
 	}
 
 	const validateLastName = (e) => {
 		setLastName(e.target.value)
-		textValidation(e.target.value, 'Last Name', content.last_name)
+		textValidation(e.target.value, 'Last Name', cmsContent?.last_name)
 	}
 
 	const validateDob = (e) => {
@@ -202,7 +228,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 
 	const validateZipCode = (e) => {
 		setZipCode(e.target.value)
-		textValidation(e.target.value, 'Zip Code', content.zip_code)
+		textValidation(e.target.value, 'Zip Code', cmsContent?.zip_code)
 	}
 
 	const updateValidationArr = (state, status, message, type) => {
@@ -223,11 +249,11 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 	const textValidation = (state, type, name) => {
 		// console.log(state,type)
 		if (state.length <= 0) {
-			updateValidationArr(state, true, `${name} ${content.is_required_err}`, type)
+			updateValidationArr(state, true, `${name} ${cmsContent?.is_required_err}`, type)
 			return false
 		}
 		else if (state.length > 20) {
-			updateValidationArr(state, true, `${name} ${content.limit_err}`, type)
+			updateValidationArr(state, true, `${name} ${cmsContent?.limit_err}`, type)
 			return false
 		}
 		updateValidationArr(state, false, '', type)
@@ -237,11 +263,11 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 	const numberValidation = (state) => {
 		if (number != undefined && number.length <= 0 && isTyping) {
 			setIsTyping(false)
-			updateValidationArr(number, true, `${content.number} ${content.is_required_err}`, 'Number')
+			updateValidationArr(number, true, `${cmsContent?.number} ${cmsContent?.is_required_err}`, 'Number')
 			return false
 		}
 		else if (!numberRegex.test(number) && isTyping) {
-			updateValidationArr(number, true, `Phone Number ${content.is_invalid_err}`, 'Number')
+			updateValidationArr(number, true, `Phone Number ${cmsContent?.is_invalid_err}`, 'Number')
 			return false
 		}
 		updateValidationArr(number, false, '', "Number")
@@ -253,11 +279,11 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 		var ToDate = new Date();
 		// console.log(dob, 'dob')
 		if (state.length <= 0) {
-			updateValidationArr(dob, true, `${content.date_of_birth} ${content.is_required_err}`, 'DoB')
+			updateValidationArr(dob, true, `${cmsContent?.date_of_birth} ${cmsContent?.is_required_err}`, 'DoB')
 			return false
 		}
 		if (new Date(state).getTime() > ToDate.getTime()) {
-			updateValidationArr(dob, true, content.dob_err, 'DoB')
+			updateValidationArr(dob, true, cmsContent?.dob_err, 'DoB')
 			return false
 		}
 		updateValidationArr(dob, false, '', 'DoB')
@@ -269,7 +295,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 		setEmail(state)
 		let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 		if (!emailRegex.test(state)) {
-			updateValidationArr(email, true, `${content.email} ${content.is_invalid_err}`, 'Email')
+			updateValidationArr(email, true, `${cmsContent?.email} ${cmsContent?.is_invalid_err}`, 'Email')
 			return false
 		}
 		updateValidationArr(email, false, '', "Email")
@@ -278,11 +304,11 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 
 	const streetNoValidation = (state) => {
 		if (state <= 0) {
-			updateValidationArr(no, true, `${content.no} ${content.is_required_err}`, 'No')
+			updateValidationArr(no, true, `${cmsContent?.no} ${cmsContent?.is_required_err}`, 'No')
 			return false
 		}
 		else if (!/^\d+$/.test(state)) {
-			updateValidationArr(no, true, `${content.no} ${content.only_numeric}`, 'No')
+			updateValidationArr(no, true, `${cmsContent?.no} ${cmsContent?.only_numeric}`, 'No')
 		}
 		updateValidationArr(no, false, '', 'No')
 		return true
@@ -290,11 +316,11 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 
 	const zipCodeValidation = (state) => {
 		if (state <= 0) {
-			updateValidationArr(zipCode, true, `${content.zip_code} ${content.is_required_err}`, 'Zip Code')
+			updateValidationArr(zipCode, true, `${cmsContent?.zip_code} ${cmsContent?.is_required_err}`, 'Zip Code')
 			return false
 		}
 		else if (!/^[a-zA-Z0-9_ ]*$/.test(state)) {
-			updateValidationArr(zipCode, true, `${content.zip_code} ${content.only_numeric}`, 'Zip Code')
+			updateValidationArr(zipCode, true, `${cmsContent?.zip_code} ${cmsContent?.only_numeric}`, 'Zip Code')
 			return false
 		}
 		updateValidationArr(zipCode, false, '', 'Zip Code')
@@ -305,11 +331,11 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 		// console.log(state, 'dasdasdastate')
 		setGoogleAddresses(state)
 		if (state.length <= 0) {
-			updateValidationArr(street, true, `${content.street} ${content.is_required_err}`, 'Street')
+			updateValidationArr(street, true, `${cmsContent?.street} ${cmsContent?.is_required_err}`, 'Street')
 			return false
 		}
 		else if (!/^[a-zA-Z_àáãạảăắằẳẵặâấầẩẫậèéẹẻẽêềếểễệđìíĩỉịòóõọỏôốồổỗộơớờởỡợùúũụủưứừửữựỳỵỷỹýÀÁÃẠẢĂẮẰẲẴẶÂẤẦẨẪẬÈÉẸẺẼÊỀẾỂỄỆĐÌÍĨỈỊÒÓÕỌỎÔỐỒỔỖỘƠỚỜỞỠỢÙÚŨỤỦƯỨỪỬỮỰỲỴỶỸÝ ]+$/.test(state)) {
-			updateValidationArr(street, true, `${content.street} ${content.only_alphabet}`, 'Street')
+			updateValidationArr(street, true, `${cmsContent?.street} ${cmsContent?.only_alphabet}`, 'Street')
 			return false
 		}
 		updateValidationArr(street, false, '', 'Street')
@@ -318,17 +344,17 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 
 	const localityValidation = (e) => {
 		setLocality(e.target.value)
-		textValidation(e.target.value, 'Locality', content.locality)
+		textValidation(e.target.value, 'Locality', cmsContent?.locality)
 	}
 
 	const nextPageHandler = (e) => {
 		e.preventDefault()
-		if (textValidation(firstName, 'First Name', content.first_name) &
-			textValidation(lastName, 'Last Name', content.last_name) &
-			textValidation(country, 'Country', content.country) &
-			textValidation(locality, 'Locality', content.locality) &
-			textValidation(nationality, 'Nationality', content.nationality) &
-			textValidation(civility, 'Civility', content.civility) &
+		if (textValidation(firstName, 'First Name', cmsContent?.first_name) &
+			textValidation(lastName, 'Last Name', cmsContent?.last_name) &
+			textValidation(country, 'Country', cmsContent?.country) &
+			textValidation(locality, 'Locality', cmsContent?.locality) &
+			textValidation(nationality, 'Nationality', cmsContent?.nationality) &
+			textValidation(civility, 'Civility', cmsContent?.civility) &
 			numberValidation(number) &
 			streetNoValidation(no) &
 			dobValidation(dob) &
@@ -466,15 +492,15 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 			<Breadcrumbs level={2} content={content} />
 			{
 				status == 'new' &&
-				<Link to={`/${language}/signup`}><p className='previous-text'>&lt;  {content.previous} </p></Link>
+				<Link to={`/${language}/signup`}><p className='previous-text'>&lt;  {cmsContent?.previous} </p></Link>
 			}
 			<div className='row'>
 				<div className='col-sm-8 form-div mt-3'>
-					<p className='form-text1'>{content.info_head1}</p>
+					<p className='form-text1'>{cmsContent?.info_head1}</p>
 					<form>
 						<div id='map'></div>
 						<div className="form-group mt-4">
-							<label htmlFor="civility" className='form-label'>{content.civility}</label>
+							<label htmlFor="civility" className='form-label'>{cmsContent?.civility}</label>
 							<select value={civility} className="form-control" id="civility" onChange={(e => setCivility(e.target.value))}>
 								{civilities.map((civility) => <option value={civility.value} key={civility.value}>{civility.label}</option>
 								)}
@@ -483,24 +509,24 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 						</div>
 						<div className='row d-flex justify-content-start mt-1'>
 							<div className="form-group col-6">
-								<label htmlFor="firstname" className='form-label'>{content.first_name}</label>
+								<label htmlFor="firstname" className='form-label'>{cmsContent?.first_name}</label>
 								<input value={firstName} type="text" className="form-control" id="firstname" onChange={(e => validateFirstName(e))} required />
 								<div id="emailHelp" className={validationArr[0].status ? 'form-text helper-text' : 'd-none'}>{validationArr[0].msg}</div>
 							</div>
 							<div className="form-group col-6">
-								<label htmlFor="lastname" className='form-label'>{content.last_name}</label>
+								<label htmlFor="lastname" className='form-label'>{cmsContent?.last_name}</label>
 								<input value={lastName} type="text" className="form-control" id="lastname" onChange={(e => validateLastName(e))} required />
 								<div id="emailHelp" className={validationArr[1].status ? 'form-text helper-text' : 'd-none'}>{validationArr[1].msg}</div>
 							</div>
 						</div>
 						<div className='row d-flex justify-content-start mt-1'>
 							<div className="form-group col-6">
-								<label htmlFor="dob" className='form-label'>{content.date_of_birth}</label>
+								<label htmlFor="dob" className='form-label'>{cmsContent?.date_of_birth}</label>
 								<input value={dob} type="date" className="form-control" id="dob" onChange={(e => validateDob(e))} required />
 								<div id="emailHelp" className={validationArr[2].status ? 'form-text helper-text' : 'd-none'}>{validationArr[2].msg}</div>
 							</div>
 							<div className="form-group col-6">
-								<label htmlFor="nationality" className='form-label'>{content.nationality}</label>
+								<label htmlFor="nationality" className='form-label'>{cmsContent?.nationality}</label>
 								<select defaultValue='CH' required className="form-control" id="nationality" onChange={(e => setNationality(e.target.value))}>
 									{countries.map((country) => <option value={country.value} key={country.value}>{country.label}</option>
 									)}
@@ -509,11 +535,11 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 							</div>
 						</div>
 
-						<p className='form-text1 mt-5'>{content.info_head2}</p>
+						<p className='form-text1 mt-5'>{cmsContent?.info_head2}</p>
 
 						<div className='row d-flex justify-content-start mt-1'>
 							<div className="form-group col-6">
-								<label htmlFor="street" className='form-label' >{content.street}</label>
+								<label htmlFor="street" className='form-label' >{cmsContent?.street}</label>
 								<PlacesAutocomplete
 									value={googleAddress}
 									onChange={handleChange}
@@ -557,7 +583,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 								<div id="emailHelp" className={validationArr[3].status ? 'form-text helper-text' : 'd-none'}>{validationArr[3].msg}</div>
 							</div>
 							<div className="form-group col-6">
-								<label htmlFor="number" className='form-label'>{content.no}</label>
+								<label htmlFor="number" className='form-label'>{cmsContent?.no}</label>
 								<input value={no} type="number" className="form-control" id="number" onChange={(e => validateNo(e))} />
 								<div id="emailHelp" className={validationArr[4].status ? 'form-text helper-text' : 'd-none'}>{validationArr[4].msg}</div>
 							</div>
@@ -565,19 +591,19 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 
 						<div className='row d-flex justify-content-start mt-1'>
 							<div className="form-group col-6">
-								<label htmlFor="zip" className='form-label'>{content.zip_code}</label>
+								<label htmlFor="zip" className='form-label'>{cmsContent?.zip_code}</label>
 								<input value={zipCode} type="text" className="form-control" maxLength={4} id="zip" onChange={(e => validateZipCode(e))} required />
 								<div id="emailHelp" className={validationArr[5].status ? 'form-text helper-text' : 'd-none'}>{validationArr[5].msg}</div>
 							</div>
 							<div className="form-group col-6">
-								<label htmlFor="locality" className='form-label'>{content.locality}</label>
+								<label htmlFor="locality" className='form-label'>{cmsContent?.locality}</label>
 								<input value={locality} type="text" className="form-control" id="locality" onChange={(e => localityValidation(e))} required />
 								<div id="emailHelp" className={validationArr[6].status ? 'form-text helper-text' : 'd-none'}>{validationArr[6].msg}</div>
 							</div>
 						</div>
 
 						<div className="form-group mt-1">
-							<label htmlFor="country" className='form-label'>{content.country}</label>
+							<label htmlFor="country" className='form-label'>{cmsContent?.country}</label>
 							<select defaultValue='CH' className="form-control" id="country" onChange={(e => setCountry(e.target.value))} required>
 								{countries.map((country) => <option value={country.value} key={country.value}>{country.label}</option>
 								)}
@@ -585,11 +611,11 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 							<div id="emailHelp" className={validationArr[8].status ? 'form-text helper-text' : 'd-none'}>{validationArr[8].msg}</div>
 						</div>
 
-						<p className='form-text1 mt-5'>{content.info_head3}</p>
+						<p className='form-text1 mt-5'>{cmsContent?.info_head3}</p>
 
 						<div className='row d-flex justify-content-start mt-1'>
 							<div className="form-group col-12">
-								<label htmlFor="num" className='form-label'>{content.number}</label>
+								<label htmlFor="num" className='form-label'>{cmsContent?.number}</label>
 								<PhoneInput
 									defaultCountry='CH'
 									placeholder="Enter phone number"
@@ -600,7 +626,7 @@ const Information = ({ setFormData, language, data, content, changeLanguage }) =
 						</div>
 
 						<div className="form-group">
-							<label htmlFor="email" className='form-label'>{content.email}</label>
+							<label htmlFor="email" className='form-label'>{cmsContent?.email}</label>
 							<input value={email} type="email" className="form-control" id="email" onChange={(e => emailValidation(e.target.value))} required />
 							<div id="emailHelp" className={validationArr[7].status ? 'form-text helper-text' : 'd-none'}>{validationArr[7].msg}</div>
 						</div>
